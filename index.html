@@ -712,9 +712,9 @@ function seedDemo(){
   ];
 
   CACHE.workOrders=[
-    {id:'w001',clientId:'c001',clientName:'Tata Consultancy Services',service:'Audit',      status:'In Progress',  assignedTo:'emp003',branch:'Mumbai HQ',       dueDate:ad(15), priority:'High',  holdReason:'',holdNote:'',fee:85000, recurring:'Annual',  description:'Annual statutory audit FY 2024-25',createdAt:now.toISOString()},
-    {id:'w002',clientId:'c002',clientName:'Infosys Technologies Ltd',  service:'ITR Filing', status:'Under Review', assignedTo:'emp003',branch:'Mumbai HQ',       dueDate:ad(7),  priority:'High',  holdReason:'',holdNote:'',fee:45000, recurring:'Annual',  description:'ITR-6 for FY 2024-25',createdAt:now.toISOString()},
-    {id:'w003',clientId:'c003',clientName:'Sunita Rao',                service:'ITR Filing', status:'On Hold',      assignedTo:'emp005',branch:'Mumbai HQ',       dueDate:ad(-3), priority:'Medium',holdReason:'Awaiting Documents',holdNote:'Form 16 pending',fee:5000,recurring:'Annual',description:'ITR-2 FY 2024-25',createdAt:now.toISOString()},
+    {id:'w001',clientId:'c001',clientName:'Tata Consultancy Services',service:'Audit',      status:'In Progress',  assignedTo:'emp003',branch:'Mumbai HQ',       dueDate:ad(15), priority:'High',  holdReason:'',holdNote:'',fee:85000, recurring:'Annual',  description:'Annual statutory audit FY 2025-26',createdAt:now.toISOString()},
+    {id:'w002',clientId:'c002',clientName:'Infosys Technologies Ltd',  service:'ITR Filing', status:'Under Review', assignedTo:'emp003',branch:'Mumbai HQ',       dueDate:ad(7),  priority:'High',  holdReason:'',holdNote:'',fee:45000, recurring:'Annual',  description:'ITR-6 for FY 2025-26',createdAt:now.toISOString()},
+    {id:'w003',clientId:'c003',clientName:'Sunita Rao',                service:'ITR Filing', status:'On Hold',      assignedTo:'emp005',branch:'Mumbai HQ',       dueDate:ad(-3), priority:'Medium',holdReason:'Awaiting Documents',holdNote:'Form 130 (salary TDS cert) pending from employer',fee:5000,recurring:'Annual',description:'ITR-2 FY 2025-26',createdAt:now.toISOString()},
     {id:'w004',clientId:'c004',clientName:'Delhi Textiles LLP',        service:'GST',        status:'Not Started',  assignedTo:'emp004',branch:'Delhi Branch',    dueDate:ad(5),  priority:'High',  holdReason:'',holdNote:'',fee:18000, recurring:'Monthly', description:'GSTR-9 Annual return',createdAt:now.toISOString()},
     {id:'w005',clientId:'c005',clientName:'Mahesh & Brothers',         service:'Bookkeeping',status:'In Progress',  assignedTo:'emp005',branch:'Mumbai HQ',       dueDate:ad(20), priority:'Low',   holdReason:'',holdNote:'',fee:12000, recurring:'Monthly', description:'Monthly bookkeeping',createdAt:now.toISOString()},
     {id:'w006',clientId:'c001',clientName:'Tata Consultancy Services', service:'TDS',        status:'Completed',    assignedTo:'emp003',branch:'Mumbai HQ',       dueDate:ad(-8), priority:'Medium',holdReason:'',holdNote:'',fee:22000, recurring:'Quarterly',description:'TDS Q4 returns',createdAt:now.toISOString()},
@@ -725,14 +725,14 @@ function seedDemo(){
 
   CACHE.tasks={
     'w001':[{id:'t1',text:'Gather trial balance',done:true},{id:'t2',text:'Bank reconciliation',done:true},{id:'t3',text:'Fixed assets review',done:false},{id:'t4',text:'Draft audit report',done:false}],
-    'w002':[{id:'t1',text:'Collect Form 26AS',done:true},{id:'t2',text:'Compute taxable income',done:true},{id:'t3',text:'Prepare ITR-6',done:false}],
+    'w002':[{id:'t1',text:'Collect Form 26AS & AIS (Annual Information Statement)',done:true},{id:'t2',text:'Compute taxable income — check old vs new regime',done:true},{id:'t3',text:'Prepare ITR-6 for FY 2025-26',done:false}],
     'w004':[{id:'t1',text:'Reconcile GSTR-1 vs 3B',done:false},{id:'t2',text:'Prepare GSTR-9 draft',done:false}],
   };
 
   CACHE.invoices=[
     {id:'inv001',clientId:'c001',clientName:'Tata Consultancy Services',workOrderId:'w006',amount:22000,gst:3960,total:25960,status:'Paid',   issueDate:ad(-8), dueDate:ad(7),  paidDate:ad(-2),invoiceNo:'INV-2025-001',description:'TDS Q4 Filing Charges',branch:'Mumbai HQ'},
     {id:'inv002',clientId:'c002',clientName:'Infosys Technologies Ltd',  workOrderId:'w008',amount:75000,gst:13500,total:88500,status:'Paid',  issueDate:ad(-12),dueDate:ad(3),  paidDate:ad(-5),invoiceNo:'INV-2025-002',description:'Transfer Pricing Advisory',branch:'Mumbai HQ'},
-    {id:'inv003',clientId:'c001',clientName:'Tata Consultancy Services', workOrderId:'w001',amount:85000,gst:15300,total:100300,status:'Unpaid',issueDate:ad(-2), dueDate:ad(13), paidDate:'',    invoiceNo:'INV-2025-003',description:'Statutory Audit FY 2024-25',branch:'Mumbai HQ'},
+    {id:'inv003',clientId:'c001',clientName:'Tata Consultancy Services', workOrderId:'w001',amount:85000,gst:15300,total:100300,status:'Unpaid',issueDate:ad(-2), dueDate:ad(13), paidDate:'',    invoiceNo:'INV-2025-003',description:'Statutory Audit FY 2025-26',branch:'Mumbai HQ'},
     {id:'inv004',clientId:'c005',clientName:'Mahesh & Brothers',         workOrderId:'w005',amount:12000,gst:2160,total:14160,status:'Overdue', issueDate:ad(-20),dueDate:ad(-5), paidDate:'',    invoiceNo:'INV-2025-004',description:'Bookkeeping Apr-Jun 2025',branch:'Mumbai HQ'},
   ];
 
@@ -760,7 +760,7 @@ function seedDemo(){
 
   CACHE.comments={
     'w001':[{id:'cm1',author:'emp002',authorName:'Priya Sharma',text:'Please ensure depreciation schedule matches last year.',ts:ad(-3)},{id:'cm2',author:'emp003',authorName:'Arjun Patel',text:'Noted. Will verify with client.',ts:ad(-2)}],
-    'w003':[{id:'cm1',author:'emp002',authorName:'Priya Sharma',text:'Follow up with Sunita for Form 16 urgently.',ts:ad(-1)}],
+    'w003':[{id:'cm1',author:'emp002',authorName:'Priya Sharma',text:'Follow up with Sunita for Form 130 (salary TDS cert) urgently — employer must issue by 15 Jun.',ts:ad(-1)}],
   };
 
   CACHE.documents={
@@ -789,6 +789,10 @@ function renderDashboard(){
   const bySvc={};active.forEach(w=>{bySvc[w.service]=(bySvc[w.service]||0)+1;});
   const pendingLeaves=CACHE.leaves.filter(l=>l.status==='Pending');
   document.getElementById('content').innerHTML=`
+    <div style="background:linear-gradient(90deg,#FEF3C7,#FFF9E6);border:1px solid #F59E0B;border-radius:10px;padding:11px 15px;font-size:12px;color:#78350F;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+      <div><b>⚡ IT Act 2025 Update (w.e.f. 1 Apr 2026):</b> New regime slabs · ₹12L tax-free · Form 16 → <b>Form 130</b> · Form 24Q → <b>Form 138</b> · ITR-3/4 deadline <b>31 Aug</b> · Sec 194C/J/I → <b>Sec 393</b> · Revised return → <b>31 Mar</b></div>
+      <button onclick="navigateTo('taxcalc')" style="background:#F59E0B;color:#fff;border:none;padding:5px 12px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap">Full Reference & Tax Calculator →</button>
+    </div>
     <div class="kpi-grid" style="grid-template-columns:repeat(2,1fr)">
       <div class="kpi-card kc-orange"><div class="kpi-val">${active.length}</div><div class="kpi-label">Active Orders</div></div>
       <div class="kpi-card kc-red"><div class="kpi-val">${overdue.length}</div><div class="kpi-label">Overdue</div><div class="kpi-sub ${overdue.length>0?'down':'up'}">${overdue.length>0?'Action needed':'All on track'}</div></div>
@@ -926,6 +930,9 @@ function openWorkModal(id,preClientId){
     <div class="form-row c2"><div class="form-group"><label class="form-label">Fee (₹)</label><input id="wf-fee" type="number" class="form-input" value="${w?.fee||''}"/></div><div class="form-group"><label class="form-label">Recurring</label><select id="wf-recur" class="form-input form-select"><option value="">None</option>${['Monthly','Quarterly','Annual'].map(r=>`<option ${w?.recurring===r?'selected':''}>${r}</option>`).join('')}</select></div></div>
     <div class="form-group"><label class="form-label">Description</label><textarea id="wf-desc" class="form-input">${w?.description||''}</textarea></div>
     ${!id?`<div style="font-size:11px;color:var(--text2);margin-top:4px">💡 Checklist template auto-applied from SOP library for selected service</div>`:''}
+    <div style="background:#FEF3C7;border-radius:7px;padding:8px 12px;font-size:11px;color:#92400E;margin-top:8px">
+      <b>⚡ IT Act 2025 reminder:</b> ITR Filing → use Form 130 (not Form 16) · ITR-3/4 due <b>31 Aug</b> · TDS → use Sec 393 (not 194C/194J) · <span onclick="closeModal();navigateTo('taxcalc')" style="cursor:pointer;text-decoration:underline;font-weight:700">Open Tax Calculator & Reference →</span>
+    </div>
   `,[{label:w?'Save':'Create Order',primary:true,action:()=>saveWork(id)}]);
 }
 function toggleHoldF(){const v=document.getElementById('wf-status').value;document.getElementById('hold-fields').style.display=v==='On Hold'?'':'none';}
@@ -1350,7 +1357,7 @@ function renderTaxCalc(){
   <div style="display:grid;gap:14px">
     <!-- Alert banner -->
     <div style="background:#FEF3C7;border:1px solid #F59E0B;border-radius:10px;padding:12px 16px;font-size:13px;color:#92400E">
-      <b>⚡ Updated for IT Act 2025 (effective 1 Apr 2026):</b> New regime slabs, ₹60,000 rebate u/s 87A, Form 130 replaces Form 16, Form 138 replaces Form 24Q, Section 393 replaces 194C/194J/194I, Section 194LD <b>removed</b>.
+      <b>⚡ Updated for IT Act 2025 (effective 1 Apr 2026):</b> New regime slabs, ₹60,000 rebate u/s 87A, Form 130 replaces Form 16, Form 138 replaces Form 24Q, Section 393 replaces 194C/194J/194I, Section 194LD <b>removed</b>. Surcharge + 4% cess fully included in calculator.
     </div>
 
     <!-- Calculator inputs -->
@@ -1442,8 +1449,100 @@ function renderTaxCalc(){
         </table>
       </div>
     </div>
+    <!-- ITR Form Selector -->
+    <div class="card">
+      <div class="card-header"><div class="card-title">🎯 ITR Form Selector — Which form for which client?</div></div>
+      <div class="card-body">
+        <div class="form-row c2">
+          <div class="form-group">
+            <label class="form-label">Client / Taxpayer Type</label>
+            <select id="itr-type" class="form-input form-select" onchange="suggestITR()">
+              <option value="">— Select —</option>
+              <option value="salaried_simple">Salaried — income only from salary + savings interest</option>
+              <option value="salaried_house">Salaried — has house property income</option>
+              <option value="salaried_capgains">Salaried — has capital gains (stocks, MF, property)</option>
+              <option value="salaried_foreign">Salaried — NRI or foreign income / assets</option>
+              <option value="business_presumptive">Business / Profession — wants presumptive taxation (Sec 44AD/44ADA)</option>
+              <option value="business_full">Business / Profession — full P&L books maintained</option>
+              <option value="company">Company (Pvt Ltd / Ltd)</option>
+              <option value="llp">LLP or Partnership Firm</option>
+              <option value="trust">Trust / AOP / BOI</option>
+            </select>
+          </div>
+          <div id="itr-result" style="display:flex;align-items:center"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- New Regime Slabs Reference -->
+    <div class="card">
+      <div class="card-header"><div class="card-title">📊 New Regime Slabs at a Glance — FY 2025-26</div></div>
+      <div class="card-body" style="padding:0">
+        <table style="width:100%;border-collapse:collapse;font-size:13px">
+          <thead><tr style="background:var(--gray-light)"><th style="padding:9px 12px;text-align:left;font-weight:600">Income Range</th><th style="padding:9px 12px;text-align:left;font-weight:600">Rate</th><th style="padding:9px 12px;text-align:left;font-weight:600">Tax on This Slab</th><th style="padding:9px 12px;text-align:left;font-weight:600">Note</th></tr></thead>
+          <tbody>
+            <tr style="border-top:1px solid #F3F4F6"><td style="padding:8px 12px">₹0 – ₹4,00,000</td><td style="padding:8px 12px"><b style="color:var(--green)">Nil</b></td><td style="padding:8px 12px">₹0</td><td style="padding:8px 12px">Basic exemption raised from ₹2.5L</td></tr>
+            <tr style="border-top:1px solid #F3F4F6;background:var(--gray-light)"><td style="padding:8px 12px">₹4,00,001 – ₹8,00,000</td><td style="padding:8px 12px"><b>5%</b></td><td style="padding:8px 12px">₹20,000</td><td style="padding:8px 12px">—</td></tr>
+            <tr style="border-top:1px solid #F3F4F6"><td style="padding:8px 12px">₹8,00,001 – ₹12,00,000</td><td style="padding:8px 12px"><b>10%</b></td><td style="padding:8px 12px">₹40,000</td><td style="padding:8px 12px">87A rebate makes this NIL</td></tr>
+            <tr style="border-top:1px solid #F3F4F6;background:var(--gray-light)"><td style="padding:8px 12px">₹12,00,001 – ₹16,00,000</td><td style="padding:8px 12px"><b>15%</b></td><td style="padding:8px 12px">₹60,000</td><td style="padding:8px 12px">—</td></tr>
+            <tr style="border-top:1px solid #F3F4F6"><td style="padding:8px 12px">₹16,00,001 – ₹20,00,000</td><td style="padding:8px 12px"><b>20%</b></td><td style="padding:8px 12px">₹80,000</td><td style="padding:8px 12px">—</td></tr>
+            <tr style="border-top:1px solid #F3F4F6;background:var(--gray-light)"><td style="padding:8px 12px">₹20,00,001 – ₹24,00,000</td><td style="padding:8px 12px"><b>25%</b></td><td style="padding:8px 12px">₹1,00,000</td><td style="padding:8px 12px">New slab — wasn't in old regime</td></tr>
+            <tr style="border-top:1px solid #F3F4F6"><td style="padding:8px 12px">Above ₹24,00,000</td><td style="padding:8px 12px"><b style="color:var(--red)">30%</b></td><td style="padding:8px 12px">30% on balance</td><td style="padding:8px 12px">+ 4% H&E cess on tax</td></tr>
+          </tbody>
+        </table>
+        <div style="padding:10px 14px;background:var(--green-light);font-size:12px;color:var(--navy);border-radius:0 0 10px 10px">
+          <b>Key benefit:</b> Section 87A rebate = ₹60,000 for income up to ₹12L → effective tax = ₹0 · Salaried employees get ₹75,000 standard deduction → income up to ₹12.75L is completely tax-free
+        </div>
+      </div>
+    </div>
+
+    <!-- Surcharge Reference Table -->
+    <div class="card">
+      <div class="card-header"><div class="card-title">⚡ Surcharge Rates — FY 2025-26 (now included in calculator above)</div></div>
+      <div class="card-body" style="padding:0">
+        <table style="width:100%;border-collapse:collapse;font-size:13px">
+          <thead><tr style="background:var(--gray-light)"><th style="padding:9px 12px;text-align:left;font-weight:600">Income Range</th><th style="padding:9px 12px;text-align:left;font-weight:600">Surcharge Rate</th><th style="padding:9px 12px;text-align:left;font-weight:600">New Regime</th><th style="padding:9px 12px;text-align:left;font-weight:600">Old Regime</th></tr></thead>
+          <tbody>
+            <tr style="border-top:1px solid #F3F4F6"><td style="padding:8px 12px">Up to ₹50 lakh</td><td style="padding:8px 12px"><b style="color:var(--green)">Nil</b></td><td style="padding:8px 12px">Nil</td><td style="padding:8px 12px">Nil</td></tr>
+            <tr style="border-top:1px solid #F3F4F6;background:var(--gray-light)"><td style="padding:8px 12px">₹50L – ₹1 Crore</td><td style="padding:8px 12px"><b>10%</b> on tax</td><td style="padding:8px 12px">10%</td><td style="padding:8px 12px">10%</td></tr>
+            <tr style="border-top:1px solid #F3F4F6"><td style="padding:8px 12px">₹1 Cr – ₹2 Crore</td><td style="padding:8px 12px"><b>15%</b> on tax</td><td style="padding:8px 12px">15%</td><td style="padding:8px 12px">15%</td></tr>
+            <tr style="border-top:1px solid #F3F4F6;background:var(--gray-light)"><td style="padding:8px 12px">₹2 Cr – ₹5 Crore</td><td style="padding:8px 12px"><b>25%</b> on tax</td><td style="padding:8px 12px">25%</td><td style="padding:8px 12px">25%</td></tr>
+            <tr style="border-top:1px solid #F3F4F6"><td style="padding:8px 12px">Above ₹5 Crore</td><td style="padding:8px 12px"><b style="color:var(--red)">37%</b> on tax</td><td style="padding:8px 12px"><b style="color:var(--green)">Capped at 25% ★</b></td><td style="padding:8px 12px" style="color:var(--red)">37%</td></tr>
+          </tbody>
+        </table>
+        <div style="padding:10px 14px;background:var(--amber-light);font-size:12px;color:#92400E;border-radius:0 0 10px 10px">
+          <b>★ New regime benefit for HNI clients:</b> Surcharge capped at 25% even above ₹5Cr income (old regime charges 37%). For very high income clients, new regime can save lakhs in surcharge alone. Always check marginal relief when income is just above ₹50L, ₹1Cr, ₹2Cr or ₹5Cr threshold.
+        </div>
+      </div>
+    </div>
   </div>`;
   calcTax();
+  suggestITR();
+}
+
+function suggestITR(){
+  const v=document.getElementById('itr-type')?.value;
+  const res=document.getElementById('itr-result');
+  if(!res)return;
+  const map={
+    'salaried_simple':      {form:'ITR-1',color:'var(--green)',   due:'31 Jul 2026', note:'Sahaj — simplest form · salary + one house + savings interest only'},
+    'salaried_house':       {form:'ITR-2',color:'var(--green)',   due:'31 Jul 2026', note:'Multiple house properties, capital gains excluded'},
+    'salaried_capgains':    {form:'ITR-2',color:'var(--green)',   due:'31 Jul 2026', note:'Includes capital gains from MF, shares, property sale'},
+    'salaried_foreign':     {form:'ITR-2',color:'var(--green)',   due:'31 Jul 2026', note:'NRI / foreign assets / foreign income must use ITR-2'},
+    'business_presumptive': {form:'ITR-4',color:'var(--orange)',  due:'31 Aug 2026', note:'Sugam — Sec 44AD (business) or 44ADA (profession) · ★ extended deadline'},
+    'business_full':        {form:'ITR-3',color:'var(--orange)',  due:'31 Aug 2026', note:'Full P&L + balance sheet required · ★ extended deadline'},
+    'company':              {form:'ITR-6',color:'var(--red)',     due:'31 Oct 2026', note:'All companies except Sec 11 exemption · audit mandatory'},
+    'llp':                  {form:'ITR-5',color:'var(--red)',     due:'31 Oct 2026', note:'LLP / Firm / AOP / BOI · audit if turnover > threshold'},
+    'trust':                {form:'ITR-7',color:'var(--purple)',  due:'31 Oct 2026', note:'Trust / charitable institution / political party / Sec 11 exempt'},
+  };
+  if(!v){res.innerHTML='';return;}
+  const m=map[v];
+  res.innerHTML=`<div style="background:var(--gray-light);border-radius:10px;padding:14px 18px;width:100%">
+    <div style="font-size:11px;color:var(--text2);font-weight:700;text-transform:uppercase;margin-bottom:4px">Recommended Form</div>
+    <div style="font-size:28px;font-weight:900;color:${m.color};margin-bottom:4px">${m.form}</div>
+    <div style="font-size:12px;font-weight:600;color:var(--navy);margin-bottom:2px">Due: ${m.due}</div>
+    <div style="font-size:12px;color:var(--text2)">${m.note}</div>
+  </div>`;
 }
 
 function calcTax(){
@@ -1455,46 +1554,92 @@ function calcTax(){
   if(!res)return;
   if(!income){res.innerHTML='';return;}
 
-  // ── Standard deduction ─────────────────────────────────
+  // ── Standard deduction ──────────────────────────────────
   const stdDed = isSalaried ? 75000 : 0;
 
-  // ── New Regime (FY 2025-26) ────────────────────────────
+  // ── Surcharge function (same rates for both regimes) ────
+  // 10% for income 50L–1Cr, 15% for 1Cr–2Cr, 25% for 2Cr–5Cr, 37% above 5Cr
+  // New regime: surcharge capped at 25% (37% slab removed w.e.f. FY 2023-24)
+  function getSurcharge(tax, inc, regime){
+    if(inc<=5000000) return 0;
+    let rate=0;
+    if(regime==='new'){
+      if(inc>50000000)       rate=0.25;
+      else if(inc>20000000)  rate=0.25;
+      else if(inc>10000000)  rate=0.15;
+      else if(inc>5000000)   rate=0.10;
+    } else {
+      if(inc>50000000)       rate=0.37;
+      else if(inc>20000000)  rate=0.25;
+      else if(inc>10000000)  rate=0.15;
+      else if(inc>5000000)   rate=0.10;
+    }
+    return Math.round(tax * rate);
+  }
+
+  // ── Marginal relief on surcharge ───────────────────────
+  // If surcharge makes total tax > threshold excess, cap it
+  function marginalRelief(tax, surcharge, income, threshold){
+    const excess = income - threshold;
+    const totalWithSurcharge = tax + surcharge;
+    if(totalWithSurcharge > tax + excess){
+      return Math.max(0, tax + excess - tax);
+    }
+    return surcharge;
+  }
+
+  // ── New Regime (FY 2025-26) ─────────────────────────────
   const newTaxable = Math.max(0, income - stdDed);
   function newSlabTax(t){
     if(t<=400000) return 0;
     let tx=0;
-    if(t>400000) tx+=Math.min(t-400000,400000)*0.05;
-    if(t>800000) tx+=Math.min(t-800000,400000)*0.10;
-    if(t>1200000)tx+=Math.min(t-1200000,400000)*0.15;
-    if(t>1600000)tx+=Math.min(t-1600000,400000)*0.20;
-    if(t>2000000)tx+=Math.min(t-2000000,400000)*0.25;
-    if(t>2400000)tx+=(t-2400000)*0.30;
+    if(t>400000)  tx+=Math.min(t-400000, 400000)*0.05;
+    if(t>800000)  tx+=Math.min(t-800000, 400000)*0.10;
+    if(t>1200000) tx+=Math.min(t-1200000,400000)*0.15;
+    if(t>1600000) tx+=Math.min(t-1600000,400000)*0.20;
+    if(t>2000000) tx+=Math.min(t-2000000,400000)*0.25;
+    if(t>2400000) tx+=(t-2400000)*0.30;
     return tx;
   }
   let newTax = newSlabTax(newTaxable);
   const rebate87A_new = newTaxable<=1200000 ? Math.min(newTax,60000) : 0;
   newTax = Math.max(0, newTax - rebate87A_new);
-  const cess_new = Math.round(newTax * 0.04);
-  const newTotal = Math.round(newTax + cess_new);
+  const newSurcharge = getSurcharge(newTax, income, 'new');
+  const newTaxPlusSurcharge = newTax + newSurcharge;
+  const cess_new = Math.round(newTaxPlusSurcharge * 0.04);
+  const newTotal = Math.round(newTaxPlusSurcharge + cess_new);
 
-  // ── Old Regime ─────────────────────────────────────────
+  // ── Old Regime ──────────────────────────────────────────
   const oldTaxable = Math.max(0, income - stdDed - deductions);
   const oldExempt = type==='supersenior'?500000:type==='senior'?300000:250000;
   function oldSlabTax(t, exempt){
     if(t<=exempt) return 0;
     let tx=0;
-    if(t>exempt)    tx+=Math.min(t-exempt, 500000-exempt)*0.05;
-    if(t>500000)    tx+=Math.min(t-500000,500000)*0.20;
-    if(t>1000000)   tx+=(t-1000000)*0.30;
+    if(t>exempt)   tx+=Math.min(t-exempt, 500000-exempt)*0.05;
+    if(t>500000)   tx+=Math.min(t-500000,500000)*0.20;
+    if(t>1000000)  tx+=(t-1000000)*0.30;
     return tx;
   }
   let oldTax = oldSlabTax(oldTaxable, oldExempt);
   const rebate87A_old = (oldTaxable<=500000 && type==='individual') ? Math.min(oldTax,12500) : 0;
   oldTax = Math.max(0, oldTax - rebate87A_old);
-  const cess_old = Math.round(oldTax * 0.04);
-  const oldTotal = Math.round(oldTax + cess_old);
+  const oldSurcharge = getSurcharge(oldTax, income, 'old');
+  const oldTaxPlusSurcharge = oldTax + oldSurcharge;
+  const cess_old = Math.round(oldTaxPlusSurcharge * 0.04);
+  const oldTotal = Math.round(oldTaxPlusSurcharge + cess_old);
 
-  // ── Recommendation ─────────────────────────────────────
+  // ── Surcharge label helpers ─────────────────────────────
+  function surchargeLabel(inc){
+    if(inc>50000000) return '37% surcharge (above ₹5Cr)';
+    if(inc>20000000) return '25% surcharge (₹2Cr–₹5Cr)';
+    if(inc>10000000) return '15% surcharge (₹1Cr–₹2Cr)';
+    if(inc>5000000)  return '10% surcharge (₹50L–₹1Cr)';
+    return null;
+  }
+  const surLabel = surchargeLabel(income);
+  const newSurLabel = income>5000000 ? (income>20000000?'25% surcharge (new regime cap)':surLabel) : null;
+
+  // ── Recommendation ──────────────────────────────────────
   const diff = Math.abs(oldTotal - newTotal);
   const betterNew = newTotal <= oldTotal;
   const saving = diff.toLocaleString('en-IN');
@@ -1503,33 +1648,45 @@ function calcTax(){
     ? `✅ New Regime saves ₹${saving} more tax for this client`
     : `✅ Old Regime saves ₹${saving} more tax for this client`;
 
+  // ── Effective rate ──────────────────────────────────────
+  const newEff = income>0 ? ((newTotal/income)*100).toFixed(2) : '0.00';
+  const oldEff = income>0 ? ((oldTotal/income)*100).toFixed(2) : '0.00';
+
   res.innerHTML=`
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:4px">
+
       <div style="padding:14px;border-radius:10px;background:${betterNew?'var(--green-light)':'var(--gray-light)'};border:2px solid ${betterNew?'var(--green)':'transparent'}">
-        <div style="font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;margin-bottom:6px">New Regime ${betterNew?'★ RECOMMENDED':''}  </div>
-        <div style="font-size:11px;color:var(--text2)">Taxable Income</div>
+        <div style="font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;margin-bottom:6px">New Regime ${betterNew?'★ RECOMMENDED':''}</div>
+        <div style="font-size:11px;color:var(--text2)">Taxable income</div>
         <div style="font-size:13px;font-weight:600">₹${newTaxable.toLocaleString('en-IN')}</div>
-        <div style="font-size:11px;color:var(--text2);margin-top:6px">Tax before rebate</div>
+        <div style="font-size:11px;color:var(--text2);margin-top:6px">Tax (slab)</div>
         <div style="font-size:13px">₹${Math.round(newTax+rebate87A_new).toLocaleString('en-IN')}</div>
         ${rebate87A_new>0?`<div style="font-size:11px;color:var(--green)">87A Rebate: −₹${rebate87A_new.toLocaleString('en-IN')}</div>`:''}
-        <div style="font-size:11px;color:var(--text2);margin-top:4px">4% Cess</div>
+        ${newSurcharge>0?`<div style="font-size:11px;color:var(--text2);margin-top:4px">${newSurLabel||'Surcharge'}</div><div style="font-size:13px">₹${newSurcharge.toLocaleString('en-IN')}</div>`:''}
+        <div style="font-size:11px;color:var(--text2);margin-top:4px">4% H&E Cess</div>
         <div style="font-size:13px">₹${cess_new.toLocaleString('en-IN')}</div>
         <div style="font-size:20px;font-weight:700;color:${betterNew?'var(--green)':'var(--navy)'};margin-top:8px">Total: ₹${newTotal.toLocaleString('en-IN')}</div>
+        <div style="font-size:11px;color:var(--text2);margin-top:2px">Effective rate: ${newEff}%</div>
       </div>
+
       <div style="padding:14px;border-radius:10px;background:${!betterNew?'var(--orange-light)':'var(--gray-light)'};border:2px solid ${!betterNew?'var(--orange)':'transparent'}">
         <div style="font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;margin-bottom:6px">Old Regime ${!betterNew?'★ RECOMMENDED':''}</div>
-        <div style="font-size:11px;color:var(--text2)">Taxable Income (after deductions)</div>
+        <div style="font-size:11px;color:var(--text2)">Taxable income (after deductions)</div>
         <div style="font-size:13px;font-weight:600">₹${oldTaxable.toLocaleString('en-IN')}</div>
         <div style="font-size:11px;color:var(--text2);margin-top:6px">Deductions claimed</div>
         <div style="font-size:13px">₹${(deductions+stdDed).toLocaleString('en-IN')}</div>
         ${rebate87A_old>0?`<div style="font-size:11px;color:var(--green)">87A Rebate: −₹${rebate87A_old.toLocaleString('en-IN')}</div>`:''}
-        <div style="font-size:11px;color:var(--text2);margin-top:4px">4% Cess</div>
+        ${oldSurcharge>0?`<div style="font-size:11px;color:var(--text2);margin-top:4px">${surLabel||'Surcharge'}</div><div style="font-size:13px">₹${oldSurcharge.toLocaleString('en-IN')}</div>`:''}
+        <div style="font-size:11px;color:var(--text2);margin-top:4px">4% H&E Cess</div>
         <div style="font-size:13px">₹${cess_old.toLocaleString('en-IN')}</div>
         <div style="font-size:20px;font-weight:700;color:${!betterNew?'var(--orange)':'var(--navy)'};margin-top:8px">Total: ₹${oldTotal.toLocaleString('en-IN')}</div>
+        <div style="font-size:11px;color:var(--text2);margin-top:2px">Effective rate: ${oldEff}%</div>
       </div>
+
     </div>
     <div style="margin-top:10px;padding:10px 14px;background:${betterNew?'var(--green-light)':'var(--orange-light)'};border-radius:8px;font-size:13px;font-weight:600;color:${recColor}">${recText}</div>
-    <div style="font-size:11px;color:var(--text2);margin-top:6px">* Surcharge not included. Verify with client's full computation. For reference only.</div>
+    ${surLabel?`<div style="margin-top:6px;padding:8px 12px;background:var(--amber-light);border-radius:7px;font-size:11px;color:#92400E"><b>⚡ HNI Client:</b> ${surLabel} applied. New regime surcharge capped at 25%. Verify marginal relief if income is just above ₹50L / ₹1Cr / ₹2Cr threshold with your tax advisor.</div>`:''}
+    <div style="font-size:11px;color:var(--text2);margin-top:6px">Includes surcharge + 4% cess · For reference only · Verify final computation before filing</div>
   `;
 }
 
@@ -1905,14 +2062,14 @@ function renderCPDocs(){
     <div class="cp-doc-upload" onclick="triggerCPUpload('${clientId}')">
       <div class="cp-doc-upload-icon">📤</div>
       <div class="cp-doc-upload-text">Upload a Document</div>
-      <div class="cp-doc-upload-sub">Form 16, Bank Statements, Investment Proofs, etc.</div>
+      <div class="cp-doc-upload-sub">Form 130 (salary TDS), AIS, Bank Statements, Investment Proofs, etc.</div>
     </div>
 
     <div style="display:flex;gap:8px;margin-bottom:14px">
       <select id="cp-doc-type" class="form-input form-select" style="width:160px">
-        ${['Select Type','Form 16','Form 26AS','Bank Statement','Investment Proof','Identity','Registration','Returns','Other'].map(t=>`<option>${t}</option>`).join('')}
+        ${['Select Type','Form 130 (Salary TDS)','Form 131 (Non-Salary TDS)','Form 26AS','AIS / TIS','Bank Statement','Investment Proof','Identity','Registration','Returns','Other'].map(t=>`<option>${t}</option>`).join('')}
       </select>
-      <input id="cp-doc-name" class="form-input" style="flex:1" placeholder="Document name e.g. Form 16 FY2024-25"/>
+      <input id="cp-doc-name" class="form-input" style="flex:1" placeholder="Document name e.g. Form 130 FY2025-26"/>
       <button class="btn btn-primary btn-sm" onclick="addCPDoc('${clientId}')">Add</button>
     </div>
 
@@ -1920,7 +2077,7 @@ function renderCPDocs(){
     <div class="card-body" style="padding:0">
       ${docs.length===0?'<div style="padding:20px;text-align:center;color:var(--text2);font-size:13px">No documents uploaded yet.<br>Use the form above to share documents with your CA firm.</div>':
       docs.map(d=>`<div class="doc-item" id="cp-doc-${d.id}" style="padding:10px 14px">
-        <div style="width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:${d.type==='Form 16'||d.type==='Returns'?'var(--green-light)':d.type==='Identity'||d.type==='Registration'?'var(--blue-light)':'var(--orange-light)'}">
+        <div style="width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:${d.type==='Form 130 (Salary TDS)'||d.type==='Form 131 (Non-Salary TDS)'||d.type==='Returns'?'var(--green-light)':d.type==='Identity'||d.type==='Registration'?'var(--blue-light)':'var(--orange-light)'}">
           ${si('M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z',14)}
         </div>
         <div style="flex:1">
@@ -1935,12 +2092,12 @@ function renderCPDocs(){
     </div></div>
 
     <div class="alert-box alert-blue" style="margin-top:12px">
-      <b>What to upload?</b> Your CA may need: Form 16, Form 26AS, bank statements, investment proofs (80C, 80D), rent receipts, GSTIN details, previous year returns, incorporation certificate, etc.
+      <b>What to upload?</b> Your CA may need: Form 130 (salary TDS cert — replaces Form 16), AIS/TIS from IT Portal, Form 26AS, bank statements, investment proofs (80C, 80D), rent receipts, GSTIN details, previous year returns, incorporation certificate, etc.
     </div>
   `;
 }
 function triggerCPUpload(clientId){
-  const name=prompt('Document name (e.g. Form 16 FY2024-25):');
+  const name=prompt('Document name (e.g. Form 130 FY2025-26):');
   if(!name) return;
   const type=document.getElementById('cp-doc-type')?.value||'Other';
   addCPDocDirect(clientId,name,type==='Select Type'?'Other':type);
