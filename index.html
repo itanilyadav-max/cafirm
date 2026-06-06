@@ -325,7 +325,7 @@ tr:hover td{background:#FAFAFA;cursor:pointer}
     <div class="form-group"><label class="form-label">Password</label><input type="password" id="auth-pass" class="form-input" placeholder="••••••••"/></div>
     <button class="btn btn-primary btn-full" onclick="doLogin()" id="login-btn">Sign In</button>
     <div id="auth-error" style="margin-top:8px;font-size:12px;color:var(--red);display:none"></div>
-    <div class="demo-accounts">
+    <div class="demo-accounts" style="display:none">
       <div class="demo-title">Demo Accounts</div>
       <div class="demo-row"><div><div class="demo-role">Admin</div><div class="demo-email">admin@cafirm.com</div></div><button class="demo-btn" onclick="fillDemo('admin@cafirm.com','admin123')">Use</button></div>
       <div class="demo-row"><div><div class="demo-role">Manager</div><div class="demo-email">manager@cafirm.com</div></div><button class="demo-btn" onclick="fillDemo('manager@cafirm.com','manager123')">Use</button></div>
@@ -392,7 +392,7 @@ tr:hover td{background:#FAFAFA;cursor:pointer}
     <div class="form-group"><label class="form-label">Password</label><input type="password" id="cp-pass" class="form-input" placeholder="••••••••"/></div>
     <button class="btn btn-primary btn-full" onclick="doClientLogin()" id="cp-login-btn">Sign In to Portal</button>
     <div id="cp-error" style="margin-top:8px;font-size:12px;color:var(--red);display:none"></div>
-    <div class="demo-accounts" style="margin-top:16px">
+    <div class="demo-accounts" style="display:none;margin-top:16px">
       <div class="demo-title">Demo Client Accounts</div>
       <div class="demo-row"><div><div class="demo-role">TCS Finance</div><div class="demo-email">portal@tcs.com</div></div><button class="demo-btn" onclick="fillCPDemo('portal@tcs.com','client123')">Use</button></div>
       <div class="demo-row"><div><div class="demo-role">Infosys Finance</div><div class="demo-email">portal@infosys.com</div></div><button class="demo-btn" onclick="fillCPDemo('portal@infosys.com','client123')">Use</button></div>
@@ -456,32 +456,39 @@ const PROSPECT_STAGES=['New Lead','Initial Contact','Proposal Sent','Negotiation
 const LEAVE_TYPES=['Casual Leave','Sick Leave','Privilege Leave','Compensatory Off','LOP'];
 
 const STATUTORY_DATES=[
+  // ── Monthly ──────────────────────────────────────────────
   {name:'GSTR-1 (Monthly)',day:11,type:'GST',recur:'monthly',color:'#3B82F6'},
   {name:'GSTR-3B',day:20,type:'GST',recur:'monthly',color:'#8B5CF6'},
-  {name:'TDS Deposit',day:7,type:'TDS',recur:'monthly',color:'#F59E0B'},
+  {name:'TDS Deposit (Sec 393)',day:7,type:'TDS',recur:'monthly',color:'#F59E0B'},
+  // ── Advance Tax ──────────────────────────────────────────
   {name:'Advance Tax Q1',month:5,day:15,type:'Tax',recur:'annual',color:'#E8690A'},
   {name:'Advance Tax Q2',month:8,day:15,type:'Tax',recur:'annual',color:'#E8690A'},
   {name:'Advance Tax Q3',month:11,day:15,type:'Tax',recur:'annual',color:'#E8690A'},
   {name:'Advance Tax Q4',month:2,day:15,type:'Tax',recur:'annual',color:'#E8690A'},
-  {name:'ITR Deadline (Non-Audit)',month:6,day:31,type:'ITR',recur:'annual',color:'#10B981'},
-  {name:'ITR Deadline (Audit)',month:9,day:31,type:'ITR',recur:'annual',color:'#10B981'},
+  // ── ITR Deadlines (updated per IT Act 2025 / Finance Act 2026) ──
+  {name:'ITR-1 & ITR-2 Deadline',month:6,day:31,type:'ITR',recur:'annual',color:'#10B981'},
+  {name:'ITR-3 & ITR-4 Deadline (Non-Audit) ★Extended',month:7,day:31,type:'ITR',recur:'annual',color:'#10B981'},
+  {name:'Tax Audit Report (Audit cases)',month:9,day:31,type:'ITR',recur:'annual',color:'#10B981'},
+  {name:'Revised Return Deadline ★New',month:2,day:31,type:'ITR',recur:'annual',color:'#059669'},
+  // ── GST / ROC ────────────────────────────────────────────
   {name:'GSTR-9 Annual',month:11,day:31,type:'GST',recur:'annual',color:'#3B82F6'},
   {name:'ROC AGM Filing',month:8,day:30,type:'ROC',recur:'annual',color:'#14B8A6'},
-  {name:'TDS Q1 Return',month:6,day:31,type:'TDS',recur:'annual',color:'#F59E0B'},
-  {name:'TDS Q2 Return',month:9,day:31,type:'TDS',recur:'annual',color:'#F59E0B'},
-  {name:'TDS Q3 Return',month:0,day:31,type:'TDS',recur:'annual',color:'#F59E0B'},
-  {name:'TDS Q4 Return',month:4,day:31,type:'TDS',recur:'annual',color:'#F59E0B'},
-  {name:'Form 16 Issue',month:5,day:15,type:'TDS',recur:'annual',color:'#F59E0B'},
   {name:'DIR-3 KYC',month:8,day:30,type:'ROC',recur:'annual',color:'#14B8A6'},
+  // ── TDS Returns (new section/form names w.e.f. 1 Apr 2026) ──
+  {name:'TDS Q1 Return — Form 138 (was 24Q)',month:6,day:31,type:'TDS',recur:'annual',color:'#F59E0B'},
+  {name:'TDS Q2 Return — Form 138 (was 24Q)',month:9,day:31,type:'TDS',recur:'annual',color:'#F59E0B'},
+  {name:'TDS Q3 Return — Form 138 (was 24Q)',month:0,day:31,type:'TDS',recur:'annual',color:'#F59E0B'},
+  {name:'TDS Q4 Return — Form 138 (was 24Q)',month:4,day:31,type:'TDS',recur:'annual',color:'#F59E0B'},
+  {name:'Form 130 Issue (was Form 16) ★Renamed',month:5,day:15,type:'TDS',recur:'annual',color:'#F59E0B'},
 ];
 
 const SVC_TEMPLATES={
   'Audit':['Obtain engagement letter','Collect trial balance','Verify cash book','Bank reconciliation','Fixed assets verification','Debtors confirmation','Stock verification','Statutory compliance check','Draft audit report','Partner review','Final signed report'],
-  'ITR Filing':['Collect Form 16/16A','Download Form 26AS','Collect bank statements','Collect investment proofs (80C/80D)','Compute income under all heads','Calculate tax liability','Verify TDS credits','Prepare ITR form','Client approval','E-file return','Download acknowledgment'],
+  'ITR Filing':['Collect Form 130/16A (salary TDS cert — was Form 16)','Download Form 26AS & AIS','Collect bank statements','Collect investment proofs (80C/80D)','Compute income under all heads','Check old vs new regime — pick lower tax','Calculate tax liability (new: 87A rebate ₹60,000 up to ₹12L)','Verify TDS credits (new section mapping: 392/393)','Select correct ITR form (ITR-1/2 due 31 Jul · ITR-3/4 due 31 Aug)','Prepare ITR form','Client approval','E-file return','Download acknowledgment'],
   'GST':['Collect purchase/sales data','Reconcile GSTR-2B','Prepare GSTR-1 data','File GSTR-1','Prepare GSTR-3B data','Compute tax payable','Client approval','File GSTR-3B','Download filed return','Update client'],
   'ROC':['Obtain board resolution','Prepare annual return','Draft directors report','Prepare financial statements','Auditor sign-off','File AOC-4','File MGT-7','Download SRN receipts'],
   'Bookkeeping':['Collect invoices/bills','Record sales entries','Record purchase entries','Bank reconciliation','Payroll entries','Depreciation entries','Prepare trial balance','Share MIS with client'],
-  'TDS':['Collect TDS deduction data','Verify PAN of deductees','Prepare TDS workings','Challan payment','Prepare return data','File TDS return','Generate Form 16/16A','Distribute to deductees'],
+  'TDS':['Collect TDS deduction data','Verify PAN of deductees','Identify correct section (Sec 392 = salary, Sec 393 = contractor/rent/professional)','Note: Sec 194LD removed — do not use after Mar 2026','Note: Sec 206AB & 206CCA removed — do not use from Apr 2025','Prepare TDS workings','Challan payment (update payment codes per new Act)','Prepare return data — use Form 138 for salary TDS (was Form 24Q)','For property TDS: use Form 141 (replaces 26QB/26QC/26QD/26QE)','File TDS return','Generate Form 130 (salary TDS cert — was Form 16)','Generate Form 131 for non-salary (verify deductee credit in AIS)','Distribute to deductees'],
   'Advisory':['Understand client requirement','Research relevant laws','Prepare advisory note','Internal review','Client presentation','Incorporate feedback','Final advisory letter'],
 };
 
@@ -544,8 +551,8 @@ async function doLogin(){
   err.style.display='none';btn.textContent='Signing in…';btn.disabled=true;
   const demo=DEMO_USERS[email];
   if(demo&&demo.pw===pw){currentUser={uid:demo.uid,email,role:demo.role,name:demo.name,branch:demo.branch};localStorage.setItem('ca_user',JSON.stringify(currentUser));document.getElementById('auth-screen').classList.add('hidden');showApp();btn.textContent='Sign In';btn.disabled=false;return;}
-  if(fbReady&&AUTH){try{const uc=await AUTH.signInWithEmailAndPassword(email,pw);const meta=JSON.parse(localStorage.getItem('ca_meta_'+uc.user.uid)||'{"role":"Staff","name":"User","branch":"Mumbai HQ"}');currentUser={uid:uc.user.uid,email,...meta};localStorage.setItem('ca_user',JSON.stringify(currentUser));document.getElementById('auth-screen').classList.add('hidden');showApp();}catch(e){err.textContent='Invalid credentials. Use demo accounts below.';err.style.display='block';}}
-  else{err.textContent='Invalid credentials. Try demo accounts.';err.style.display='block';}
+  if(fbReady&&AUTH){try{const uc=await AUTH.signInWithEmailAndPassword(email,pw);const meta=JSON.parse(localStorage.getItem('ca_meta_'+uc.user.uid)||'{"role":"Staff","name":"User","branch":"Mumbai HQ"}');currentUser={uid:uc.user.uid,email,...meta};localStorage.setItem('ca_user',JSON.stringify(currentUser));document.getElementById('auth-screen').classList.add('hidden');showApp();}catch(e){err.textContent='Invalid credentials. Please check your email and password.';err.style.display='block';}}
+  else{err.textContent='Invalid credentials. Please check your email and password.';err.style.display='block';}
   btn.textContent='Sign In';btn.disabled=false;
 }
 function doLogout(){localStorage.removeItem('ca_user');currentUser=null;if(fbReady&&AUTH)AUTH.signOut().catch(()=>{});const app=document.getElementById('app');app.classList.remove('visible');app.style.display='none';document.getElementById('auth-screen').classList.remove('hidden');showToast('Signed out');}
@@ -572,6 +579,7 @@ const NAV_GROUPS=[
   ]},
   {section:'Tools',items:[
     {id:'calendar', label:'Compliance Calendar',icon:'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z'},
+    {id:'taxcalc',  label:'Tax Calculator ★2025',icon:'M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 11h.01M12 11h.01M15 11h.01M12 7h.01M5 20h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v13a2 2 0 002 2z'},
     {id:'dsc',      label:'DSC Tracker',icon:'M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z',badge:'dscBadge'},
     {id:'knowledge',label:'SOP Library',icon:'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253'},
     {id:'more',     label:'Settings',icon:'M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z M15 12a3 3 0 11-6 0 3 3 0 016 0z'},
@@ -624,7 +632,7 @@ function buildNav(){
   });
 }
 
-const TAB_TITLES={dashboard:'Dashboard',clients:'Clients',work:'Work Orders',billing:'Billing & Invoices',timesheet:'Timesheets',profitability:'Profitability',team:'Team & Workload',leaves:'Leave & Attendance',prospects:'CRM / Leads',performance:'Performance Scorecard',calendar:'Compliance Calendar',dsc:'DSC Tracker',knowledge:'SOP Library',more:'Settings'};
+const TAB_TITLES={dashboard:'Dashboard',clients:'Clients',work:'Work Orders',billing:'Billing & Invoices',timesheet:'Timesheets',profitability:'Profitability',team:'Team & Workload',leaves:'Leave & Attendance',prospects:'CRM / Leads',performance:'Performance Scorecard',calendar:'Compliance Calendar',dsc:'DSC Tracker',knowledge:'SOP Library',taxcalc:'Tax Calculator — IT Act 2025',more:'Settings'};
 
 function navigateTo(tab){
   currentTab=tab;
@@ -633,7 +641,7 @@ function navigateTo(tab){
   const addBtn=document.getElementById('add-btn');
   const addTabs=['clients','work','billing','prospects','knowledge'];
   addBtn.style.display=addTabs.includes(tab)?'flex':'none';
-  const renders={dashboard:renderDashboard,clients:renderClients,work:renderWork,billing:renderBilling,timesheet:renderTimesheet,profitability:renderProfitability,team:renderTeam,leaves:renderLeaves,prospects:renderProspects,performance:renderPerformance,calendar:renderCalendar,dsc:renderDSC,knowledge:renderKnowledge,more:renderMore};
+  const renders={dashboard:renderDashboard,clients:renderClients,work:renderWork,billing:renderBilling,timesheet:renderTimesheet,profitability:renderProfitability,team:renderTeam,leaves:renderLeaves,prospects:renderProspects,performance:renderPerformance,calendar:renderCalendar,dsc:renderDSC,knowledge:renderKnowledge,taxcalc:renderTaxCalc,more:renderMore};
   if(renders[tab])renders[tab]();
 }
 function handleAdd(){const map={clients:openClientModal,work:openWorkModal,billing:openInvoiceModal,prospects:openProspectModal,knowledge:openSOPModal};if(map[currentTab])map[currentTab]();}
@@ -1282,6 +1290,9 @@ function renderCalendar(){
   }
   cal+=`</div>`;
   document.getElementById('content').innerHTML=`
+    <div style="background:#FEF3C7;border:1px solid #F59E0B;border-radius:10px;padding:11px 15px;font-size:12px;color:#92400E;margin-bottom:12px">
+      <b>⚡ IT Act 2025 — Effective 1 Apr 2026:</b> ITR-3/4 deadline extended to <b>31 Aug</b> · Revised return deadline extended to <b>31 Mar</b> · Form 16 → <b>Form 130</b> · Form 24Q → <b>Form 138</b> · Sec 194C/J/I → <b>Sec 393</b> · Sec 194LD <b>removed</b> · <span style="cursor:pointer;text-decoration:underline;font-weight:600" onclick="navigateTo('taxcalc')">Full reference →</span>
+    </div>
     <div class="card"><div class="card-header"><div class="card-title">📅 ${now.toLocaleString('en-IN',{month:'long',year:'numeric'})}</div><div style="display:flex;gap:5px"><span class="pill p-red" style="font-size:10px">● Past Due</span><span class="pill p-amber" style="font-size:10px">● Due Soon</span></div></div><div class="card-body">${cal}</div></div>
     <div class="card"><div class="card-header"><div class="card-title">🇮🇳 India Statutory Deadlines This Month</div></div><div class="card-body" style="padding:0">${statutory.map(s=>`<div style="display:flex;align-items:center;justify-content:space-between;padding:9px 13px;border-bottom:1px solid #F3F4F6"><div style="display:flex;align-items:center;gap:10px"><div style="width:3px;height:30px;border-radius:2px;background:${s.color};flex-shrink:0"></div><div><div style="font-size:13px;font-weight:600">${s.name}</div><div style="font-size:11px;color:var(--text2)">Type: ${s.type}</div></div></div><div style="font-size:12px;font-weight:700">${s.day}th ${now.toLocaleString('en-IN',{month:'short'})}</div></div>`).join('')||'<div style="padding:13px;color:var(--text2);font-size:13px">No major statutory deadlines this month</div>'}</div></div>
     <div class="card"><div class="card-header"><div class="card-title">Upcoming Client Deadlines</div></div>${allDl.slice(0,12).map(w=>{const d=diffDays(w.dueDate);const dotC=d<0?'var(--red)':d<=3?'var(--amber)':'var(--green)';const label=d<0?`${Math.abs(d)}d overdue`:d===0?'Today':d===1?'Tomorrow':`${d}d left`;return`<div style="display:flex;align-items:center;gap:10px;padding:9px 13px;border-bottom:1px solid #F3F4F6;cursor:pointer" onclick="openWorkDetail('${w.id}')"><div style="width:7px;height:7px;border-radius:50%;background:${dotC};flex-shrink:0"></div><div style="flex:1"><div style="font-size:13px;font-weight:600">${w.clientName}</div><div style="font-size:11px;color:var(--text2)">${w.service} · ${empName(w.assignedTo)}</div></div><div style="font-size:11px;font-weight:700;color:${dotC}">${label}</div></div>`;}).join('')||'<div style="padding:13px;color:var(--text2);font-size:13px;text-align:center">No upcoming deadlines ✓</div>'}</div>`;
@@ -1332,14 +1343,203 @@ function addSOPStep(){const v=document.getElementById('sop-new').value.trim();if
 async function saveSOP(){const svc=document.getElementById('sop-svc').value;const inputs=document.querySelectorAll('#sop-steps input');const steps=Array.from(inputs).map(inp=>({id:genId(),text:inp.value.trim()})).filter(s=>s.text);CACHE.templates[svc]=steps;saveLS();closeModal();renderKnowledge();showToast('SOP saved');}
 
 // ══════════════════════════════════════════
-//  SETTINGS
+//  TAX CALCULATOR (IT Act 2025 — FY 2025-26)
 // ══════════════════════════════════════════
+function renderTaxCalc(){
+  document.getElementById('content').innerHTML=`
+  <div style="display:grid;gap:14px">
+    <!-- Alert banner -->
+    <div style="background:#FEF3C7;border:1px solid #F59E0B;border-radius:10px;padding:12px 16px;font-size:13px;color:#92400E">
+      <b>⚡ Updated for IT Act 2025 (effective 1 Apr 2026):</b> New regime slabs, ₹60,000 rebate u/s 87A, Form 130 replaces Form 16, Form 138 replaces Form 24Q, Section 393 replaces 194C/194J/194I, Section 194LD <b>removed</b>.
+    </div>
+
+    <!-- Calculator inputs -->
+    <div class="card">
+      <div class="card-header"><div class="card-title">🧮 Old vs New Regime Comparator — FY 2025-26</div></div>
+      <div class="card-body">
+        <div class="form-row c2">
+          <div class="form-group">
+            <label class="form-label">Gross Annual Income (₹)</label>
+            <input id="tc-income" type="number" class="form-input" placeholder="e.g. 1500000" oninput="calcTax()"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Taxpayer Type</label>
+            <select id="tc-type" class="form-input form-select" onchange="calcTax()">
+              <option value="individual">Individual (below 60)</option>
+              <option value="senior">Senior Citizen (60–80)</option>
+              <option value="supersenior">Super Senior (80+)</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row c2">
+          <div class="form-group">
+            <label class="form-label">Salaried? (Standard Deduction ₹75,000)</label>
+            <select id="tc-salaried" class="form-input form-select" onchange="calcTax()">
+              <option value="yes">Yes — Salaried</option>
+              <option value="no">No — Business/Professional</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Total Deductions — Old Regime (80C+80D+HRA etc.) ₹</label>
+            <input id="tc-deductions" type="number" class="form-input" placeholder="e.g. 250000" oninput="calcTax()"/>
+          </div>
+        </div>
+        <div id="tc-result" style="margin-top:8px"></div>
+      </div>
+    </div>
+
+    <!-- TDS Section Reference -->
+    <div class="card">
+      <div class="card-header"><div class="card-title">📋 TDS Section Quick Reference — IT Act 2025 (w.e.f. 1 Apr 2026)</div></div>
+      <div class="card-body" style="padding:0">
+        <table style="width:100%;border-collapse:collapse;font-size:13px">
+          <thead><tr style="background:var(--gray-light)"><th style="padding:9px 12px;text-align:left;font-weight:600">Payment Type</th><th style="padding:9px 12px;text-align:left;font-weight:600">Old Section</th><th style="padding:9px 12px;text-align:left;font-weight:600">New Section (2025 Act)</th><th style="padding:9px 12px;text-align:left;font-weight:600">Rate</th></tr></thead>
+          <tbody>
+            <tr style="border-top:1px solid #F3F4F6"><td style="padding:8px 12px">Salary TDS</td><td style="padding:8px 12px;color:var(--text2)">Sec 192</td><td style="padding:8px 12px"><b>Sec 392</b></td><td style="padding:8px 12px">As per slab</td></tr>
+            <tr style="border-top:1px solid #F3F4F6;background:var(--gray-light)"><td style="padding:8px 12px">Contractor / Sub-contractor</td><td style="padding:8px 12px;color:var(--text2)">Sec 194C</td><td style="padding:8px 12px"><b>Sec 393</b></td><td style="padding:8px 12px">1% / 2%</td></tr>
+            <tr style="border-top:1px solid #F3F4F6"><td style="padding:8px 12px">Professional Fees</td><td style="padding:8px 12px;color:var(--text2)">Sec 194J</td><td style="padding:8px 12px"><b>Sec 393</b></td><td style="padding:8px 12px">10%</td></tr>
+            <tr style="border-top:1px solid #F3F4F6;background:var(--gray-light)"><td style="padding:8px 12px">Rent</td><td style="padding:8px 12px;color:var(--text2)">Sec 194I</td><td style="padding:8px 12px"><b>Sec 393</b></td><td style="padding:8px 12px">2% / 10%</td></tr>
+            <tr style="border-top:1px solid #F3F4F6"><td style="padding:8px 12px">Interest (bank/other)</td><td style="padding:8px 12px;color:var(--text2)">Sec 194A</td><td style="padding:8px 12px"><b>Sec 393</b></td><td style="padding:8px 12px">10%</td></tr>
+            <tr style="border-top:1px solid #F3F4F6;background:var(--gray-light)"><td style="padding:8px 12px">Commission / Brokerage</td><td style="padding:8px 12px;color:var(--text2)">Sec 194H</td><td style="padding:8px 12px"><b>Sec 393</b></td><td style="padding:8px 12px">2% / 5%</td></tr>
+            <tr style="border-top:1px solid #F3F4F6"><td style="padding:8px 12px">Higher TDS for non-filers</td><td style="padding:8px 12px;color:var(--red);font-weight:600">Sec 206AB ❌ REMOVED</td><td style="padding:8px 12px;color:var(--red)">Omitted Apr 2025</td><td style="padding:8px 12px;color:var(--red)">Do not use</td></tr>
+            <tr style="border-top:1px solid #F3F4F6;background:var(--gray-light)"><td style="padding:8px 12px">Higher TCS for non-filers</td><td style="padding:8px 12px;color:var(--red);font-weight:600">Sec 206CCA ❌ REMOVED</td><td style="padding:8px 12px;color:var(--red)">Omitted Apr 2025</td><td style="padding:8px 12px;color:var(--red)">Do not use</td></tr>
+            <tr style="border-top:1px solid #F3F4F6"><td style="padding:8px 12px">Govt securities interest (FII)</td><td style="padding:8px 12px;color:var(--red);font-weight:600">Sec 194LD ❌ REMOVED</td><td style="padding:8px 12px;color:var(--red)">Removed Apr 2026</td><td style="padding:8px 12px;color:var(--red)">Do not use</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Form Names Reference -->
+    <div class="card">
+      <div class="card-header"><div class="card-title">📄 TDS Form Name Changes — IT Act 2025</div></div>
+      <div class="card-body" style="padding:0">
+        <table style="width:100%;border-collapse:collapse;font-size:13px">
+          <thead><tr style="background:var(--gray-light)"><th style="padding:9px 12px;text-align:left;font-weight:600">Purpose</th><th style="padding:9px 12px;text-align:left;font-weight:600">Old Form Name</th><th style="padding:9px 12px;text-align:left;font-weight:600">New Form Name</th></tr></thead>
+          <tbody>
+            <tr style="border-top:1px solid #F3F4F6"><td style="padding:8px 12px">Salary TDS certificate (annual)</td><td style="padding:8px 12px;color:var(--text2)">Form 16</td><td style="padding:8px 12px"><b style="color:var(--green)">Form 130</b></td></tr>
+            <tr style="border-top:1px solid #F3F4F6;background:var(--gray-light)"><td style="padding:8px 12px">Quarterly salary TDS return</td><td style="padding:8px 12px;color:var(--text2)">Form 24Q</td><td style="padding:8px 12px"><b style="color:var(--green)">Form 138</b></td></tr>
+            <tr style="border-top:1px solid #F3F4F6"><td style="padding:8px 12px">Property / rent TDS (PAN-based)</td><td style="padding:8px 12px;color:var(--text2)">Forms 26QB / 26QC / 26QD / 26QE</td><td style="padding:8px 12px"><b style="color:var(--green)">Form 141 (single form)</b></td></tr>
+            <tr style="border-top:1px solid #F3F4F6;background:var(--gray-light)"><td style="padding:8px 12px">Quarterly TCS return</td><td style="padding:8px 12px;color:var(--text2)">Form 27EQ</td><td style="padding:8px 12px"><b style="color:var(--green)">Form 143</b></td></tr>
+            <tr style="border-top:1px solid #F3F4F6"><td style="padding:8px 12px">Non-salary TDS certificate</td><td style="padding:8px 12px;color:var(--text2)">Form 16A</td><td style="padding:8px 12px"><b style="color:var(--green)">Form 131</b></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Due Dates Reference -->
+    <div class="card">
+      <div class="card-header"><div class="card-title">📅 Updated ITR Due Dates — FY 2025-26 (AY 2026-27)</div></div>
+      <div class="card-body" style="padding:0">
+        <table style="width:100%;border-collapse:collapse;font-size:13px">
+          <thead><tr style="background:var(--gray-light)"><th style="padding:9px 12px;text-align:left;font-weight:600">ITR Type / Taxpayer</th><th style="padding:9px 12px;text-align:left;font-weight:600">Old Due Date</th><th style="padding:9px 12px;text-align:left;font-weight:600">New Due Date</th></tr></thead>
+          <tbody>
+            <tr style="border-top:1px solid #F3F4F6"><td style="padding:8px 12px">ITR-1 & ITR-2 (Salaried / Individuals)</td><td style="padding:8px 12px;color:var(--text2)">31 July</td><td style="padding:8px 12px"><b>31 July 2026</b> (unchanged)</td></tr>
+            <tr style="border-top:1px solid #F3F4F6;background:var(--gray-light)"><td style="padding:8px 12px">ITR-3 & ITR-4 (Non-audit businesses)</td><td style="padding:8px 12px;color:var(--text2)">31 July</td><td style="padding:8px 12px"><b style="color:var(--green)">31 August 2026 ★Extended</b></td></tr>
+            <tr style="border-top:1px solid #F3F4F6"><td style="padding:8px 12px">Tax Audit Report (Audit cases)</td><td style="padding:8px 12px;color:var(--text2)">30 September</td><td style="padding:8px 12px"><b>31 October 2026</b> (unchanged)</td></tr>
+            <tr style="border-top:1px solid #F3F4F6;background:var(--gray-light)"><td style="padding:8px 12px">Revised Return</td><td style="padding:8px 12px;color:var(--text2)">31 December (9 months)</td><td style="padding:8px 12px"><b style="color:var(--green)">31 March ★Extended (12 months)</b></td></tr>
+            <tr style="border-top:1px solid #F3F4F6"><td style="padding:8px 12px">Belated Return</td><td style="padding:8px 12px;color:var(--text2)">31 December</td><td style="padding:8px 12px"><b>31 December</b> (unchanged)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>`;
+  calcTax();
+}
+
+function calcTax(){
+  const income=+document.getElementById('tc-income')?.value||0;
+  const isSalaried=document.getElementById('tc-salaried')?.value==='yes';
+  const deductions=+document.getElementById('tc-deductions')?.value||0;
+  const type=document.getElementById('tc-type')?.value||'individual';
+  const res=document.getElementById('tc-result');
+  if(!res)return;
+  if(!income){res.innerHTML='';return;}
+
+  // ── Standard deduction ─────────────────────────────────
+  const stdDed = isSalaried ? 75000 : 0;
+
+  // ── New Regime (FY 2025-26) ────────────────────────────
+  const newTaxable = Math.max(0, income - stdDed);
+  function newSlabTax(t){
+    if(t<=400000) return 0;
+    let tx=0;
+    if(t>400000) tx+=Math.min(t-400000,400000)*0.05;
+    if(t>800000) tx+=Math.min(t-800000,400000)*0.10;
+    if(t>1200000)tx+=Math.min(t-1200000,400000)*0.15;
+    if(t>1600000)tx+=Math.min(t-1600000,400000)*0.20;
+    if(t>2000000)tx+=Math.min(t-2000000,400000)*0.25;
+    if(t>2400000)tx+=(t-2400000)*0.30;
+    return tx;
+  }
+  let newTax = newSlabTax(newTaxable);
+  const rebate87A_new = newTaxable<=1200000 ? Math.min(newTax,60000) : 0;
+  newTax = Math.max(0, newTax - rebate87A_new);
+  const cess_new = Math.round(newTax * 0.04);
+  const newTotal = Math.round(newTax + cess_new);
+
+  // ── Old Regime ─────────────────────────────────────────
+  const oldTaxable = Math.max(0, income - stdDed - deductions);
+  const oldExempt = type==='supersenior'?500000:type==='senior'?300000:250000;
+  function oldSlabTax(t, exempt){
+    if(t<=exempt) return 0;
+    let tx=0;
+    if(t>exempt)    tx+=Math.min(t-exempt, 500000-exempt)*0.05;
+    if(t>500000)    tx+=Math.min(t-500000,500000)*0.20;
+    if(t>1000000)   tx+=(t-1000000)*0.30;
+    return tx;
+  }
+  let oldTax = oldSlabTax(oldTaxable, oldExempt);
+  const rebate87A_old = (oldTaxable<=500000 && type==='individual') ? Math.min(oldTax,12500) : 0;
+  oldTax = Math.max(0, oldTax - rebate87A_old);
+  const cess_old = Math.round(oldTax * 0.04);
+  const oldTotal = Math.round(oldTax + cess_old);
+
+  // ── Recommendation ─────────────────────────────────────
+  const diff = Math.abs(oldTotal - newTotal);
+  const betterNew = newTotal <= oldTotal;
+  const saving = diff.toLocaleString('en-IN');
+  const recColor = betterNew ? 'var(--green)' : '#E8690A';
+  const recText  = betterNew
+    ? `✅ New Regime saves ₹${saving} more tax for this client`
+    : `✅ Old Regime saves ₹${saving} more tax for this client`;
+
+  res.innerHTML=`
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:4px">
+      <div style="padding:14px;border-radius:10px;background:${betterNew?'var(--green-light)':'var(--gray-light)'};border:2px solid ${betterNew?'var(--green)':'transparent'}">
+        <div style="font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;margin-bottom:6px">New Regime ${betterNew?'★ RECOMMENDED':''}  </div>
+        <div style="font-size:11px;color:var(--text2)">Taxable Income</div>
+        <div style="font-size:13px;font-weight:600">₹${newTaxable.toLocaleString('en-IN')}</div>
+        <div style="font-size:11px;color:var(--text2);margin-top:6px">Tax before rebate</div>
+        <div style="font-size:13px">₹${Math.round(newTax+rebate87A_new).toLocaleString('en-IN')}</div>
+        ${rebate87A_new>0?`<div style="font-size:11px;color:var(--green)">87A Rebate: −₹${rebate87A_new.toLocaleString('en-IN')}</div>`:''}
+        <div style="font-size:11px;color:var(--text2);margin-top:4px">4% Cess</div>
+        <div style="font-size:13px">₹${cess_new.toLocaleString('en-IN')}</div>
+        <div style="font-size:20px;font-weight:700;color:${betterNew?'var(--green)':'var(--navy)'};margin-top:8px">Total: ₹${newTotal.toLocaleString('en-IN')}</div>
+      </div>
+      <div style="padding:14px;border-radius:10px;background:${!betterNew?'var(--orange-light)':'var(--gray-light)'};border:2px solid ${!betterNew?'var(--orange)':'transparent'}">
+        <div style="font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;margin-bottom:6px">Old Regime ${!betterNew?'★ RECOMMENDED':''}</div>
+        <div style="font-size:11px;color:var(--text2)">Taxable Income (after deductions)</div>
+        <div style="font-size:13px;font-weight:600">₹${oldTaxable.toLocaleString('en-IN')}</div>
+        <div style="font-size:11px;color:var(--text2);margin-top:6px">Deductions claimed</div>
+        <div style="font-size:13px">₹${(deductions+stdDed).toLocaleString('en-IN')}</div>
+        ${rebate87A_old>0?`<div style="font-size:11px;color:var(--green)">87A Rebate: −₹${rebate87A_old.toLocaleString('en-IN')}</div>`:''}
+        <div style="font-size:11px;color:var(--text2);margin-top:4px">4% Cess</div>
+        <div style="font-size:13px">₹${cess_old.toLocaleString('en-IN')}</div>
+        <div style="font-size:20px;font-weight:700;color:${!betterNew?'var(--orange)':'var(--navy)'};margin-top:8px">Total: ₹${oldTotal.toLocaleString('en-IN')}</div>
+      </div>
+    </div>
+    <div style="margin-top:10px;padding:10px 14px;background:${betterNew?'var(--green-light)':'var(--orange-light)'};border-radius:8px;font-size:13px;font-weight:600;color:${recColor}">${recText}</div>
+    <div style="font-size:11px;color:var(--text2);margin-top:6px">* Surcharge not included. Verify with client's full computation. For reference only.</div>
+  `;
+}
+
 function renderMore(){
   document.getElementById('content').innerHTML=`
     <div class="card"><div class="card-header"><div class="card-title">⚙ Settings & Tools</div></div><div class="card-body">
       <div style="display:grid;gap:9px;margin-bottom:20px">
         ${currentUser.role==='Admin'?`<button class="btn btn-secondary" onclick="openEmpModal()">+ Add Team Member</button>`:''}
         <button class="btn btn-secondary" onclick="exportData()">📤 Export All Data (JSON)</button>
+        <button class="btn btn-secondary" onclick="navigateTo('taxcalc')">🧮 Tax Calculator & IT Act 2025 Reference</button>
         <button class="btn btn-secondary" onclick="navigateTo('knowledge')">📚 Manage SOP Templates</button>
         ${currentUser.role==='Admin'?`<button class="btn btn-danger btn-sm" onclick="resetDemo()">🔄 Reset Demo Data</button>`:''}
       </div>
@@ -1488,7 +1688,7 @@ function doClientLogin(){
     btn.textContent='Sign In to Portal'; btn.disabled=false;
     return;
   }
-  err.textContent='Invalid credentials. Use the demo accounts above.';
+  err.textContent='Invalid credentials. Please check your email and password.';
   err.style.display='block';
   btn.textContent='Sign In to Portal'; btn.disabled=false;
 }
