@@ -577,7 +577,22 @@ const NAV_GROUPS=[
     {id:'prospects',label:'CRM / Leads',icon:'M13 7h8m0 0v8m0-8l-8 8-4-4-6 6',badge:'prospectBadge'},
     {id:'performance',label:'Performance',icon:'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z'},
   ]},
+  {section:'Transparency',items:[
+    {id:'filingstatus',label:'Filing Status Tracker',icon:'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4'},
+    {id:'approvals',   label:'Approval Workflow',icon:'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z',badge:'approvalBadge'},
+    {id:'analytics',   label:'Firm Analytics',icon:'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z'},
+    {id:'handover',    label:'Staff Handover',icon:'M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4'},
+  ]},
+  {section:'Advanced & AI',items:[
+    {id:'advtax',    label:'Advance Tax Planner',    icon:'M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 11h.01M12 11h.01M15 11h.01M12 7h.01M5 20h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v13a2 2 0 002 2z'},
+    {id:'autogen',   label:'Compliance Auto-Generator',icon:'M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15'},
+    {id:'engagement',label:'Engagement Letters',     icon:'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z'},
+    {id:'gstr9',     label:'GSTR-9 Prep Tool',       icon:'M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z'},
+    {id:'aismatch',  label:'26AS / AIS Mismatch',    icon:'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4'},
+    {id:'networth',  label:'Client Net Worth Tracker',icon:'M13 7h8m0 0v8m0-8l-8 8-4-4-6 6'},
+  ]},
   {section:'Tools',items:[
+    {id:'alerts',   label:'🔔 Alerts & Automation',icon:'M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.437L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9',badge:'alertBadge'},
     {id:'calendar', label:'Compliance Calendar',icon:'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z'},
     {id:'taxcalc',  label:'Tax Calculator ★2025',icon:'M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 11h.01M12 11h.01M15 11h.01M12 7h.01M5 20h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v13a2 2 0 002 2z'},
     {id:'dsc',      label:'DSC Tracker',icon:'M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z',badge:'dscBadge'},
@@ -600,6 +615,8 @@ function getBadges(){
     leaveBadge:CACHE.leaves.filter(l=>l.status==='Pending').length||0,
     dscBadge:CACHE.clients.filter(c=>{if(!c.dscExpiry)return false;const d=diffDays(c.dscExpiry);return d>=0&&d<=30;}).length||0,
     prospectBadge:CACHE.prospects.filter(p=>p.followUpDate&&new Date(p.followUpDate)<=now&&!['Won','Lost'].includes(p.stage)).length||0,
+    alertBadge:ALERTS.filter(a=>!a.dismissed).length||0,
+    approvalBadge:(()=>{if(!CACHE.approvals)return 0;const role=currentUser.role;return visOrders().filter(w=>{const a=CACHE.approvals[w.id];if(!a)return false;if(role==='Staff')return['manager_rejected','admin_rejected'].includes(a.stage);if(role==='Manager')return a.stage==='staff_submitted';if(role==='Admin')return['manager_approved','staff_submitted'].includes(a.stage);return false;}).length;})(),
   };
 }
 
@@ -608,7 +625,9 @@ function showApp(){
   document.getElementById('sb-name').textContent=currentUser.name||currentUser.email;
   document.getElementById('sb-role').textContent=currentUser.role||'Staff';
   document.getElementById('sb-branch').textContent=currentUser.branch||'';
-  buildNav();navigateTo('dashboard');
+  buildNav();
+  setTimeout(()=>{buildAlerts();buildNav();},300); // build alerts after data loads
+  navigateTo('dashboard');
 }
 
 function buildNav(){
@@ -632,7 +651,7 @@ function buildNav(){
   });
 }
 
-const TAB_TITLES={dashboard:'Dashboard',clients:'Clients',work:'Work Orders',billing:'Billing & Invoices',timesheet:'Timesheets',profitability:'Profitability',team:'Team & Workload',leaves:'Leave & Attendance',prospects:'CRM / Leads',performance:'Performance Scorecard',calendar:'Compliance Calendar',dsc:'DSC Tracker',knowledge:'SOP Library',taxcalc:'Tax Calculator — IT Act 2025',more:'Settings'};
+const TAB_TITLES={dashboard:'Dashboard',clients:'Clients',work:'Work Orders',billing:'Billing & Invoices',timesheet:'Timesheets',profitability:'Profitability',team:'Team & Workload',leaves:'Leave & Attendance',prospects:'CRM / Leads',performance:'Performance Scorecard',calendar:'Compliance Calendar',dsc:'DSC Tracker',knowledge:'SOP Library',taxcalc:'Tax Calculator — IT Act 2025',alerts:'Alerts & Automation',filingstatus:'Filing Status Tracker',handover:'Staff Handover',analytics:'Firm Analytics',approvals:'Approval Workflow',advtax:'Advance Tax Planner',autogen:'Compliance Auto-Generator',engagement:'Engagement Letters',gstr9:'GSTR-9 Auto-Preparation',aismatch:'26AS / AIS Mismatch Detector',networth:'Client Net Worth Tracker',more:'Settings'};
 
 function navigateTo(tab){
   currentTab=tab;
@@ -641,7 +660,7 @@ function navigateTo(tab){
   const addBtn=document.getElementById('add-btn');
   const addTabs=['clients','work','billing','prospects','knowledge'];
   addBtn.style.display=addTabs.includes(tab)?'flex':'none';
-  const renders={dashboard:renderDashboard,clients:renderClients,work:renderWork,billing:renderBilling,timesheet:renderTimesheet,profitability:renderProfitability,team:renderTeam,leaves:renderLeaves,prospects:renderProspects,performance:renderPerformance,calendar:renderCalendar,dsc:renderDSC,knowledge:renderKnowledge,taxcalc:renderTaxCalc,more:renderMore};
+  const renders={dashboard:renderDashboard,clients:renderClients,work:renderWork,billing:renderBilling,timesheet:renderTimesheet,profitability:renderProfitability,team:renderTeam,leaves:renderLeaves,prospects:renderProspects,performance:renderPerformance,calendar:renderCalendar,dsc:renderDSC,knowledge:renderKnowledge,taxcalc:renderTaxCalc,alerts:renderAlerts,filingstatus:renderFilingStatus,handover:renderHandover,analytics:renderAnalytics,approvals:renderApprovals,advtax:renderAdvTax,autogen:renderAutoGen,engagement:renderEngagement,gstr9:renderGSTR9,aismatch:renderAISMatch,networth:renderNetWorth,more:renderMore};
   if(renders[tab])renders[tab]();
 }
 function handleAdd(){const map={clients:openClientModal,work:openWorkModal,billing:openInvoiceModal,prospects:openProspectModal,knowledge:openSOPModal};if(map[currentTab])map[currentTab]();}
@@ -652,10 +671,12 @@ function handleAdd(){const map={clients:openClientModal,work:openWorkModal,billi
 function loadLS(){
   ['clients','workOrders','employees','invoices','timesheets','leaves','prospects'].forEach(k=>{const d=localStorage.getItem('ca_'+k);if(d)try{CACHE[k]=JSON.parse(d);}catch(e){}});
   ['tasks','comments','documents','templates'].forEach(k=>{const d=localStorage.getItem('ca_'+k);if(d)try{CACHE[k]=JSON.parse(d);}catch(e){}});
+  const ap=localStorage.getItem('ca_approvals');if(ap)try{CACHE.approvals=JSON.parse(ap);}catch(e){}
 }
 function saveLS(){
   ['clients','workOrders','employees','invoices','timesheets','leaves','prospects'].forEach(k=>localStorage.setItem('ca_'+k,JSON.stringify(CACHE[k])));
   ['tasks','comments','documents','templates'].forEach(k=>localStorage.setItem('ca_'+k,JSON.stringify(CACHE[k])));
+  if(CACHE.approvals)localStorage.setItem('ca_approvals',JSON.stringify(CACHE.approvals));
 }
 async function fsSet(col,id,data){
   if(fbReady&&DB){try{await DB.collection(col).doc(id).set(data,{merge:true});}catch(e){}}
@@ -790,8 +811,15 @@ function renderDashboard(){
   const pendingLeaves=CACHE.leaves.filter(l=>l.status==='Pending');
   document.getElementById('content').innerHTML=`
     <div style="background:linear-gradient(90deg,#FEF3C7,#FFF9E6);border:1px solid #F59E0B;border-radius:10px;padding:11px 15px;font-size:12px;color:#78350F;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
-      <div><b>⚡ IT Act 2025 Update (w.e.f. 1 Apr 2026):</b> New regime slabs · ₹12L tax-free · Form 16 → <b>Form 130</b> · Form 24Q → <b>Form 138</b> · ITR-3/4 deadline <b>31 Aug</b> · Sec 194C/J/I → <b>Sec 393</b> · Revised return → <b>31 Mar</b></div>
-      <button onclick="navigateTo('taxcalc')" style="background:#F59E0B;color:#fff;border:none;padding:5px 12px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap">Full Reference & Tax Calculator →</button>
+      <div><b>⚡ IT Act 2025:</b> Form 16 → <b>Form 130</b> · Form 24Q → <b>Form 138</b> · ITR-3/4 due <b>31 Aug</b> · Sec 194C/J/I → <b>Sec 393</b></div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <button onclick="navigateTo('alerts')"       style="background:#EF4444;color:#fff;border:none;padding:5px 10px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer" id="dash-alert-btn">🔔 Alerts</button>
+        <button onclick="navigateTo('filingstatus')" style="background:#3B82F6;color:#fff;border:none;padding:5px 10px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer">📊 Status</button>
+        <button onclick="navigateTo('approvals')"    style="background:#7C3AED;color:#fff;border:none;padding:5px 10px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer">✅ Approvals</button>
+        <button onclick="navigateTo('analytics')"    style="background:#059669;color:#fff;border:none;padding:5px 10px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer">📈 Analytics</button>
+        <button onclick="navigateTo('advtax')"       style="background:#E8690A;color:#fff;border:none;padding:5px 10px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer">📅 Adv Tax</button>
+        <button onclick="navigateTo('aismatch')"     style="background:#DC2626;color:#fff;border:none;padding:5px 10px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer">🔍 AIS Match</button>
+      </div>
     </div>
     <div class="kpi-grid" style="grid-template-columns:repeat(2,1fr)">
       <div class="kpi-card kc-orange"><div class="kpi-val">${active.length}</div><div class="kpi-label">Active Orders</div></div>
@@ -1690,6 +1718,785 @@ function calcTax(){
   `;
 }
 
+// ══════════════════════════════════════════════════════════════
+//  SPRINT 1 — AUTOMATION & ALERTS ENGINE
+//  Feature 1 — Auto document request + follow-up reminders
+//  Feature 2 — Smart compliance deadline alerts (T-7, T-3, T-1)
+//  Feature 3 — Auto invoice draft when work order → Completed
+//  Feature 4 — Automated payment follow-up (7/14/21 day)
+// ══════════════════════════════════════════════════════════════
+
+let ALERTS=[];
+
+function buildAlerts(){
+  ALERTS=[];
+  const now=new Date();
+
+  // Feature 1 — Document follow-ups
+  CACHE.workOrders.filter(w=>
+    !['Completed','Billed','Cancelled'].includes(w.status)&&
+    (w.holdReason?.toLowerCase().includes('document')||
+     w.holdReason?.toLowerCase().includes('await')||
+     w.status==='On Hold')
+  ).forEach(w=>{
+    const daysSince=Math.floor((now-new Date(w.createdAt||w.updatedAt||now))/86400000);
+    const daysDue=w.dueDate?Math.ceil((new Date(w.dueDate)-now)/86400000):999;
+    let level='info',sub='';
+    if(daysDue<=1)      {level='red';  sub='🚨 Due TOMORROW — chase client urgently';}
+    else if(daysDue<=3) {level='red';  sub=`⚠️ Due in ${daysDue} days — send final reminder`;}
+    else if(daysDue<=7) {level='amber';sub=`📋 Due in ${daysDue} days — remind client`;}
+    else if(daysSince>=7){level='amber';sub=`Documents awaited for ${daysSince} days`;}
+    else{sub='Awaiting client documents';}
+    ALERTS.push({id:'doc-'+w.id,type:'document',level,title:`📂 ${w.clientName} — ${w.service}`,sub,woId:w.id,clientId:w.clientId,actionLabel:'Send Reminder',actionFn:`sendDocReminder('${w.id}')`,dismissed:false});
+  });
+
+  // Feature 2 — Compliance deadline alerts T-7/T-3/T-1
+  const yr=now.getFullYear();
+  STATUTORY_DATES.forEach(sd=>{
+    const month=sd.recur==='monthly'?now.getMonth():(sd.month??-1);
+    if(month<0)return;
+    const deadline=new Date(yr,month,sd.day);
+    if(deadline<now)return;
+    const daysLeft=Math.ceil((deadline-now)/86400000);
+    if(daysLeft>7)return;
+    const svcMap={GST:['GST'],TDS:['TDS'],ITR:['ITR Filing'],ROC:['ROC'],Tax:['ITR Filing','Advisory']};
+    const keywords=svcMap[sd.type]||[];
+    const pending=CACHE.workOrders.filter(w=>keywords.some(k=>w.service?.includes(k))&&!['Completed','Billed','Cancelled'].includes(w.status));
+    const level=daysLeft<=3?'red':'amber';
+    const icon=daysLeft<=1?'🚨':daysLeft<=3?'⚠️':'🔔';
+    ALERTS.push({id:'comp-'+sd.name.replace(/\s/g,'-')+'-'+month,type:'compliance',level,
+      title:`${icon} ${sd.name}`,
+      sub:`Due ${deadline.toLocaleDateString('en-IN',{day:'numeric',month:'short'})} — ${daysLeft<=1?'TODAY/TOMORROW':`${daysLeft} days left`} · ${pending.length} work order${pending.length!==1?'s':''} pending`,
+      actionLabel:'View Calendar',actionFn:`navigateTo('calendar')`,dismissed:false});
+  });
+
+  // Feature 3 — Auto invoice alerts for completed orders
+  CACHE.workOrders.filter(w=>
+    w.status==='Completed'&&w.fee>0&&
+    !CACHE.invoices.some(i=>i.workOrderId===w.id)
+  ).forEach(w=>{
+    ALERTS.push({id:'inv-'+w.id,type:'invoice',level:'green',
+      title:`🧾 Invoice ready — ${w.clientName}`,
+      sub:`${w.service} completed · Fee: ${fmtMoney(w.fee)} · Invoice not yet generated`,
+      woId:w.id,clientId:w.clientId,
+      actionLabel:'Generate Invoice',actionFn:`autoGenerateInvoice('${w.id}')`,dismissed:false});
+  });
+
+  // Feature 4 — Payment follow-up 7/14/21 days
+  CACHE.invoices.filter(i=>['Unpaid','Overdue'].includes(i.status)&&i.dueDate).forEach(inv=>{
+    const daysPast=Math.floor((now-new Date(inv.dueDate))/86400000);
+    if(daysPast<0)return;
+    let level='info',urgency='';
+    if(daysPast>=21)     {level='red';  urgency=`🚨 ${daysPast} days overdue — escalate to partner`;}
+    else if(daysPast>=14){level='red';  urgency=`⚠️ 14+ days overdue — send firm reminder`;}
+    else if(daysPast>=7) {level='amber';urgency=`📬 7+ days overdue — send follow-up`;}
+    else                 {urgency=`Due today — send gentle reminder`;}
+    ALERTS.push({id:'pay-'+inv.id,type:'payment',level,
+      title:`💰 ${inv.clientName} — ${inv.invoiceNo}`,
+      sub:`${fmtMoney(inv.total)} outstanding · ${urgency}`,
+      actionLabel:'Mark Paid',actionFn:`markPaid('${inv.id}');buildAlerts();renderAlerts()`,dismissed:false});
+  });
+
+  // Feature 12 — KYC alerts when client fills onboarding data
+  CACHE.clients.forEach(c=>{
+    const kycData=JSON.parse(localStorage.getItem('ca_kyc_'+c.id)||'{}');
+    const filled=KYC_FIELDS?.filter(f=>kycData[f.id]).length||0;
+    const docs=(CACHE.documents[c.id]||[]).filter(d=>d.kycDocId).length;
+    if((filled>0||docs>0)&&!kycData._reviewed){
+      ALERTS.push({id:'kyc-'+c.id,type:'kyc',level:'green',
+        title:`👤 KYC Submitted — ${c.name}`,
+        sub:`Client filled ${filled} info fields + uploaded ${docs} document(s). Review and mark as verified.`,
+        actionLabel:'Review & Verify',actionFn:`markKYCReviewed('${c.id}')`,dismissed:false});
+    }
+  });
+
+  updateAlertBadge();
+}
+
+function markKYCReviewed(cId){
+  const stored=JSON.parse(localStorage.getItem('ca_kyc_'+cId)||'{}');
+  stored._reviewed=true;
+  localStorage.setItem('ca_kyc_'+cId,JSON.stringify(stored));
+  showToast('✅ KYC marked as reviewed for this client');
+  buildAlerts();renderAlerts();
+}
+
+function updateAlertBadge(){
+  const n=ALERTS.filter(a=>!a.dismissed).length;
+  const b=document.getElementById('alert-badge');
+  if(b){b.textContent=n;b.style.display=n?'flex':'none';}
+}
+
+function sendDocReminder(woId){
+  const w=CACHE.workOrders.find(x=>x.id===woId);if(!w)return;
+  const dueStr=w.dueDate?new Date(w.dueDate).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}):'soon';
+  const msg=`Dear ${w.clientName},\n\nThis is a reminder that we are awaiting documents for your ${w.service} (due: ${dueStr}).\n\nKindly share the required documents at the earliest to complete your filing on time and avoid any penalties.\n\nFor any queries, please contact our office.\n\nRegards,\n${currentUser.name||'CA Firm'}`;
+  openModal(`📂 Document Reminder — ${w.clientName}`,`
+    <div style="background:var(--gray-light);border-radius:8px;padding:11px 14px;font-size:13px;margin-bottom:12px">
+      <b>Work Order:</b> ${w.service} &nbsp;·&nbsp; <b>Due:</b> ${dueStr} &nbsp;·&nbsp; <b>Status:</b> ${w.status}${w.holdNote?` &nbsp;·&nbsp; <b>Note:</b> ${w.holdNote}`:''}
+    </div>
+    <div class="form-group">
+      <label class="form-label">Reminder Message — copy & share via WhatsApp or Email</label>
+      <textarea id="reminder-msg" class="form-input" rows="9" style="font-size:13px;line-height:1.6">${msg}</textarea>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
+      <button class="btn btn-secondary btn-sm" onclick="navigator.clipboard?.writeText(document.getElementById('reminder-msg').value).then(()=>showToast('✅ Copied!')).catch(()=>showToast('Select text manually'))">📋 Copy</button>
+      <a href="https://wa.me/?text=${encodeURIComponent(msg)}" target="_blank" class="btn btn-success btn-sm">💬 Open in WhatsApp</a>
+    </div>
+  `,[{label:'✅ Mark Reminder Sent',primary:true,action:()=>{
+    const a=ALERTS.find(x=>x.woId===woId&&x.type==='document');
+    if(a)a.dismissed=true;
+    closeModal();showToast('Reminder marked as sent');
+    updateAlertBadge();renderAlerts();
+  }}]);
+}
+
+async function autoGenerateInvoice(woId){
+  const w=CACHE.workOrders.find(x=>x.id===woId);if(!w)return;
+  const nextNo='INV-'+new Date().getFullYear()+'-'+String(CACHE.invoices.length+1).padStart(3,'0');
+  const gst=Math.round(w.fee*0.18);
+  const due=new Date();due.setDate(due.getDate()+30);
+  const data={clientId:w.clientId,clientName:w.clientName,workOrderId:w.id,
+    invoiceNo:nextNo,amount:w.fee,gst,total:w.fee+gst,status:'Unpaid',
+    issueDate:new Date().toISOString(),dueDate:due.toISOString(),
+    description:`${w.service} — ${w.description||'Professional Services'}`,
+    branch:w.branch,createdAt:new Date().toISOString(),updatedAt:new Date().toISOString()};
+  await fsSet('invoices',genId(),data);
+  const a=ALERTS.find(x=>x.woId===woId&&x.type==='invoice');
+  if(a)a.dismissed=true;
+  buildNav();showToast(`✅ Invoice ${nextNo} created — ${fmtMoney(w.fee+gst)}`);
+  buildAlerts();renderAlerts();
+}
+
+function renderAlerts(){
+  buildAlerts();
+  const active=ALERTS.filter(a=>!a.dismissed);
+  const byType={
+    compliance:active.filter(a=>a.type==='compliance'),
+    document:  active.filter(a=>a.type==='document'),
+    invoice:   active.filter(a=>a.type==='invoice'),
+    payment:   active.filter(a=>a.type==='payment'),
+    kyc:       active.filter(a=>a.type==='kyc'),
+  };
+  const borderMap={red:'var(--red)',amber:'#F59E0B',green:'var(--green)',info:'var(--blue)',purple:'#7C3AED'};
+
+  function alertBlock(title,icon,alerts,emptyMsg){
+    return`<div class="card" style="margin-bottom:12px">
+      <div class="card-header">
+        <div class="card-title">${icon} ${title}</div>
+        ${alerts.length?`<span class="pill ${alerts.some(a=>a.level==='red')?'p-red':'p-amber'}" style="font-size:11px">${alerts.length} pending</span>`:`<span class="pill p-green" style="font-size:11px">✅ All clear</span>`}
+      </div>
+      ${alerts.length===0?`<div class="card-body"><div style="color:var(--text2);font-size:13px">${emptyMsg}</div></div>`:`
+      <div class="card-body" style="padding:0">
+        ${alerts.map(a=>`
+          <div style="display:grid;grid-template-columns:4px 1fr auto;gap:0 12px;align-items:center;padding:12px 14px;border-bottom:0.5px solid #F3F4F6">
+            <div style="align-self:stretch;background:${borderMap[a.level]||'#E5E7EB'};border-radius:2px;min-height:40px"></div>
+            <div>
+              <div style="font-size:13px;font-weight:600;color:var(--navy)">${a.title}</div>
+              <div style="font-size:12px;color:var(--text2);margin-top:2px">${a.sub}</div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:5px;align-items:flex-end;flex-shrink:0">
+              <button class="btn btn-primary btn-sm" onclick="${a.actionFn}" style="font-size:11px;white-space:nowrap">${a.actionLabel}</button>
+              <button onclick="ALERTS.find(x=>x.id==='${a.id}').dismissed=true;updateAlertBadge();renderAlerts()" style="font-size:10px;color:var(--text2);background:none;border:none;cursor:pointer;padding:0">Dismiss</button>
+            </div>
+          </div>`).join('')}
+      </div>`}
+    </div>`;
+  }
+
+  const redCount=active.filter(a=>a.level==='red').length;
+  document.getElementById('content').innerHTML=`
+    ${redCount?`<div style="background:#FEE2E2;border:1px solid var(--red);border-radius:10px;padding:11px 16px;font-size:13px;color:var(--red);font-weight:600;margin-bottom:12px">🚨 ${redCount} urgent alert${redCount>1?'s':''} need immediate attention</div>`:''}
+    <div class="kpi-grid" style="grid-template-columns:repeat(5,1fr);margin-bottom:14px">
+      <div class="kpi-card kc-blue">  <div class="kpi-val">${byType.compliance.length}</div><div class="kpi-label">Compliance</div></div>
+      <div class="kpi-card kc-amber"> <div class="kpi-val">${byType.document.length}</div>  <div class="kpi-label">Docs Awaited</div></div>
+      <div class="kpi-card kc-green"> <div class="kpi-val">${byType.invoice.length}</div>   <div class="kpi-label">Invoice Ready</div></div>
+      <div class="kpi-card kc-purple"><div class="kpi-val">${byType.payment.length}</div>   <div class="kpi-label">Payment Overdue</div></div>
+      <div class="kpi-card kc-orange"><div class="kpi-val">${byType.kyc.length}</div>        <div class="kpi-label">KYC Pending</div></div>
+    </div>
+    ${alertBlock('Compliance Deadlines','🔔',byType.compliance,'No deadlines in next 7 days — you are ahead!')}
+    ${alertBlock('Document Follow-ups','📂',byType.document,'No work orders awaiting documents right now.')}
+    ${alertBlock('Invoices Ready to Generate','🧾',byType.invoice,'All completed work orders have been invoiced.')}
+    ${alertBlock('Payment Follow-ups','💰',byType.payment,'No overdue invoices. Excellent collection!')}
+    ${alertBlock('KYC Submissions','👤',byType.kyc,'No pending KYC reviews from clients.')}
+    <div style="text-align:right;margin-top:6px">
+      <button class="btn btn-secondary btn-sm" onclick="ALERTS.forEach(a=>a.dismissed=true);updateAlertBadge();renderAlerts()">Dismiss All</button>
+    </div>`;
+}
+
+// Hook: when work order marked Completed → instantly trigger alert rebuild
+const _origQuickStatus=quickStatus;
+window.quickStatus=async function(wId,status){
+  await _origQuickStatus(wId,status);
+  if(status==='Completed'){buildAlerts();updateAlertBadge();showToast('✅ Completed — check Alerts for invoice');}
+};
+
+// ══════════════════════════════════════════════════════════════
+//  SPRINT 2 — TRANSPARENCY & TRACKING
+//  Feature 5  — Real-time filing status tracker per client
+//  Feature 6  — Staff handover module
+//  Feature 7  — Firm-wide analytics dashboard (Admin only)
+//  Feature 8  — 2-step review & approval workflow
+// ══════════════════════════════════════════════════════════════
+
+// ─────────────────────────────────────────
+//  FEATURE 5 — CLIENT FILING STATUS TRACKER
+// ─────────────────────────────────────────
+const STATUS_ICON={
+  'Completed':'✅','Billed':'✅',
+  'In Progress':'🔄','Under Review':'🔍',
+  'On Hold':'⏳','Not Started':'❌',
+  'none':'⬜'
+};
+const STATUS_COLOR={
+  'Completed':'var(--green)','Billed':'var(--green)',
+  'In Progress':'var(--blue)','Under Review':'#7C3AED',
+  'On Hold':'var(--amber)','Not Started':'var(--red)',
+  'none':'#D1D5DB'
+};
+const KEY_SERVICES=['GST','ITR Filing','TDS','ROC','Audit','Bookkeeping'];
+
+function renderFilingStatus(){
+  const clients=visClients();
+  const orders=visOrders();
+
+  // Build per-client service status map
+  const cMap=clients.map(c=>{
+    const cOrds=orders.filter(w=>w.clientId===c.id);
+    const svcStatus={};
+    KEY_SERVICES.forEach(svc=>{
+      const matches=cOrds.filter(w=>w.service===svc||w.service.includes(svc.split(' ')[0]));
+      if(!matches.length){svcStatus[svc]='none';}
+      else{
+        // Pick the most relevant: prioritise active over completed
+        const active=matches.find(w=>!['Completed','Billed'].includes(w.status));
+        svcStatus[svc]=(active||matches[matches.length-1]).status;
+      }
+    });
+    const totalActive=cOrds.filter(w=>!['Completed','Billed'].includes(w.status)).length;
+    const overdue=cOrds.filter(w=>!['Completed','Billed'].includes(w.status)&&w.dueDate&&new Date(w.dueDate)<new Date()).length;
+    const completed=cOrds.filter(w=>['Completed','Billed'].includes(w.status)).length;
+    return{...c,svcStatus,totalActive,overdue,completed,totalOrders:cOrds.length};
+  });
+
+  // Filter
+  const fsF=window._fsFilter||'all';
+  let filtered=cMap;
+  if(fsF==='overdue')filtered=cMap.filter(c=>c.overdue>0);
+  if(fsF==='pending')filtered=cMap.filter(c=>c.totalActive>0);
+  if(fsF==='clear')  filtered=cMap.filter(c=>c.totalActive===0);
+
+  document.getElementById('content').innerHTML=`
+    <div class="kpi-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:12px">
+      <div class="kpi-card kc-blue" ><div class="kpi-val">${clients.length}</div><div class="kpi-label">Total Clients</div></div>
+      <div class="kpi-card kc-amber"><div class="kpi-val">${cMap.reduce((a,c)=>a+c.totalActive,0)}</div><div class="kpi-label">Active Work Orders</div></div>
+      <div class="kpi-card kc-red"  ><div class="kpi-val">${cMap.reduce((a,c)=>a+c.overdue,0)}</div><div class="kpi-label">Overdue Items</div></div>
+      <div class="kpi-card kc-green"><div class="kpi-val">${cMap.reduce((a,c)=>a+c.completed,0)}</div><div class="kpi-label">Completed</div></div>
+    </div>
+    <div class="filter-bar" style="margin-bottom:10px">
+      ${[['all','All Clients'],['overdue','⚠ Overdue'],['pending','🔄 Pending'],['clear','✅ All Clear']].map(([v,l])=>`<div class="fc ${fsF===v?'active':''}" onclick="window._fsFilter='${v}';renderFilingStatus()">${l}</div>`).join('')}
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Client Filing Status Matrix</div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;font-size:11px;color:var(--text2)">
+          <span>✅ Done</span><span>🔄 In Progress</span><span>⏳ On Hold</span><span>❌ Not Started</span><span>⬜ No Service</span>
+        </div>
+      </div>
+      <div class="card-body" style="padding:0;overflow-x:auto">
+        <table style="width:100%;border-collapse:collapse;font-size:13px;min-width:700px">
+          <thead>
+            <tr style="background:var(--gray-light)">
+              <th style="padding:10px 14px;text-align:left;font-weight:600;position:sticky;left:0;background:var(--gray-light)">Client</th>
+              ${KEY_SERVICES.map(s=>`<th style="padding:10px 10px;text-align:center;font-weight:600;font-size:11px">${s}</th>`).join('')}
+              <th style="padding:10px 12px;text-align:center;font-weight:600">Active</th>
+              <th style="padding:10px 12px;text-align:center;font-weight:600">Overdue</th>
+              <th style="padding:10px 12px;text-align:left;font-weight:600"></th>
+            </tr>
+          </thead>
+          <tbody>
+            ${filtered.map((c,i)=>`
+              <tr style="border-top:0.5px solid #F3F4F6;${i%2?'background:var(--gray-light)/30':''}" onclick="window._fsFilter='all';navigateTo('work')">
+                <td style="padding:10px 14px;font-weight:600;position:sticky;left:0;background:${i%2?'#FAFAFA':'white'};cursor:pointer">
+                  <div>${c.name.substring(0,20)}</div>
+                  <div style="font-size:10px;color:var(--text2);font-weight:400">${c.type||''} · ${c.branch||''}</div>
+                </td>
+                ${KEY_SERVICES.map(svc=>{
+                  const st=c.svcStatus[svc];
+                  const icon=STATUS_ICON[st]||'⬜';
+                  const label=st==='none'?'—':st;
+                  return`<td style="padding:10px;text-align:center;cursor:pointer" title="${svc}: ${label}">
+                    <span style="font-size:16px">${icon}</span>
+                    <div style="font-size:9px;color:${STATUS_COLOR[st]||'#999'};font-weight:600;margin-top:2px;line-height:1.2">${st==='none'?'—':st==='Completed'||st==='Billed'?'Done':st}</div>
+                  </td>`;}).join('')}
+                <td style="padding:10px 12px;text-align:center"><span class="pill ${c.totalActive>0?'p-blue':'p-gray'}">${c.totalActive}</span></td>
+                <td style="padding:10px 12px;text-align:center">${c.overdue>0?`<span class="pill p-red">${c.overdue}</span>`:`<span style="color:var(--green);font-size:13px">—</span>`}</td>
+                <td style="padding:10px 12px"><button class="btn btn-secondary btn-sm" onclick="event.stopPropagation();showClientFilingDetail('${c.id}')">Details</button></td>
+              </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>`;
+}
+
+function showClientFilingDetail(cId){
+  const c=CACHE.clients.find(x=>x.id===cId);if(!c)return;
+  const orders=visOrders().filter(w=>w.clientId===cId).sort((a,b)=>new Date(b.updatedAt||b.createdAt)-new Date(a.updatedAt||a.createdAt));
+  const now=new Date();
+  openModal(`📊 ${c.name} — Filing Status`,
+    orders.length===0
+      ?`<div class="empty-state"><h3>No work orders for this client</h3></div>`
+      :`<div class="table-wrap"><table><thead><tr><th>Service</th><th>Status</th><th>Due</th><th>Assigned</th><th>Tasks</th></tr></thead><tbody>
+        ${orders.map(w=>{
+          const tasks=CACHE.tasks[w.id]||[];const done=tasks.filter(t=>t.done).length;
+          const od=!['Completed','Billed'].includes(w.status)&&w.dueDate&&new Date(w.dueDate)<now;
+          return`<tr onclick="closeModal();openWorkDetail('${w.id}')">
+            <td><span class="pill p-blue">${w.service}</span></td>
+            <td>${statusBadge(w.status)}${w.status==='On Hold'?`<div style="font-size:10px;color:var(--amber)">${w.holdReason}</div>`:''}</td>
+            <td style="${od?'color:var(--red);font-weight:600':''}">${fmtDate(w.dueDate)}</td>
+            <td style="font-size:12px">${empName(w.assignedTo)}</td>
+            <td style="font-size:12px">${tasks.length?`${done}/${tasks.length}`:'—'}</td>
+          </tr>`;}).join('')}
+        </tbody></table></div>`
+  ,[]);
+}
+
+// ─────────────────────────────────────────
+//  FEATURE 6 — STAFF HANDOVER MODULE
+// ─────────────────────────────────────────
+function renderHandover(){
+  const emps=visEmps();
+  document.getElementById('content').innerHTML=`
+    <div style="background:#FEF3C7;border:1px solid #F59E0B;border-radius:10px;padding:11px 15px;font-size:13px;color:#92400E;margin-bottom:14px">
+      <b>📋 Staff Handover Tool:</b> Select the leaving employee and replacement. All work orders, client relationships, and open items are reassigned in one click. A full handover report is generated.
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-title">🔄 Initiate Staff Handover</div></div>
+      <div class="card-body">
+        <div class="form-row c2">
+          <div class="form-group">
+            <label class="form-label">Leaving Employee *</label>
+            <select id="ho-from" class="form-input form-select" onchange="previewHandover()">
+              <option value="">— Select —</option>
+              ${emps.map(e=>`<option value="${e.id}">${e.name} (${e.role} · ${e.branch})</option>`).join('')}
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Replacement / Receiving Employee *</label>
+            <select id="ho-to" class="form-input form-select" onchange="previewHandover()">
+              <option value="">— Select —</option>
+              ${emps.map(e=>`<option value="${e.id}">${e.name} (${e.role} · ${e.branch})</option>`).join('')}
+            </select>
+          </div>
+        </div>
+        <div id="ho-preview" style="margin-top:8px"></div>
+      </div>
+    </div>`;
+}
+
+function previewHandover(){
+  const fromId=document.getElementById('ho-from')?.value;
+  const toId=document.getElementById('ho-to')?.value;
+  const preview=document.getElementById('ho-preview');
+  if(!fromId||!toId||fromId===toId){
+    if(preview)preview.innerHTML=fromId===toId?`<div class="alert-box alert-amber">Cannot handover to the same employee.</div>`:'';
+    return;
+  }
+  const fromEmp=CACHE.employees.find(e=>e.id===fromId);
+  const toEmp=CACHE.employees.find(e=>e.id===toId);
+  const activeOrders=CACHE.workOrders.filter(w=>w.assignedTo===fromId&&!['Completed','Billed','Cancelled'].includes(w.status));
+  const allOrders=CACHE.workOrders.filter(w=>w.assignedTo===fromId);
+  const overdueOrders=activeOrders.filter(w=>w.dueDate&&new Date(w.dueDate)<new Date());
+  const clientsAffected=[...new Set(activeOrders.map(w=>w.clientId))].length;
+  const openTimesheets=CACHE.timesheets.filter(t=>t.empId===fromId);
+
+  preview.innerHTML=`
+    <div style="background:var(--gray-light);border-radius:10px;padding:14px 16px;margin-bottom:12px">
+      <div style="font-size:13px;font-weight:600;color:var(--navy);margin-bottom:10px">📊 Handover Summary: ${fromEmp?.name} → ${toEmp?.name}</div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:12px">
+        <div style="text-align:center;padding:10px;background:white;border-radius:8px">
+          <div style="font-size:22px;font-weight:700;color:var(--blue)">${activeOrders.length}</div>
+          <div style="font-size:11px;color:var(--text2)">Active Work Orders</div>
+        </div>
+        <div style="text-align:center;padding:10px;background:white;border-radius:8px">
+          <div style="font-size:22px;font-weight:700;color:var(--red)">${overdueOrders.length}</div>
+          <div style="font-size:11px;color:var(--text2)">Overdue Orders</div>
+        </div>
+        <div style="text-align:center;padding:10px;background:white;border-radius:8px">
+          <div style="font-size:22px;font-weight:700;color:var(--amber)">${clientsAffected}</div>
+          <div style="font-size:11px;color:var(--text2)">Clients Affected</div>
+        </div>
+        <div style="text-align:center;padding:10px;background:white;border-radius:8px">
+          <div style="font-size:22px;font-weight:700;color:var(--navy)">${openTimesheets.length}</div>
+          <div style="font-size:11px;color:var(--text2)">Timesheet Entries</div>
+        </div>
+      </div>
+      ${overdueOrders.length>0?`<div style="background:#FEE2E2;border-radius:7px;padding:8px 12px;font-size:12px;color:var(--red);margin-bottom:10px">⚠️ <b>${overdueOrders.length} overdue order${overdueOrders.length>1?'s':''}</b> — ${overdueOrders.map(w=>w.clientName+' ('+w.service+')').join(', ')}</div>`:''}
+      ${activeOrders.length>0?`<div class="table-wrap" style="max-height:180px;overflow-y:auto"><table style="font-size:12px"><thead><tr><th>Client</th><th>Service</th><th>Status</th><th>Due</th></tr></thead><tbody>${activeOrders.map(w=>`<tr><td><b>${w.clientName.substring(0,16)}</b></td><td>${w.service}</td><td>${statusBadge(w.status)}</td><td style="${w.dueDate&&new Date(w.dueDate)<new Date()?'color:var(--red);font-weight:600':''}">${fmtDate(w.dueDate)}</td></tr>`).join('')}</tbody></table></div>`:'<div style="color:var(--green);font-size:13px">✅ No active work orders to transfer.</div>'}
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn btn-primary" onclick="executeHandover('${fromId}','${toId}')">✅ Execute Handover — Reassign All to ${toEmp?.name||'Replacement'}</button>
+      <button class="btn btn-secondary" onclick="printHandoverReport('${fromId}','${toId}')">🖨️ Print Handover Report</button>
+    </div>`;
+}
+
+async function executeHandover(fromId, toId){
+  if(!confirm('This will reassign ALL active work orders from this employee to the replacement. This cannot be undone. Continue?'))return;
+  const fromEmp=CACHE.employees.find(e=>e.id===fromId);
+  const toEmp=CACHE.employees.find(e=>e.id===toId);
+  const toReassign=CACHE.workOrders.filter(w=>w.assignedTo===fromId&&!['Completed','Billed','Cancelled'].includes(w.status));
+  let count=0;
+  for(const w of toReassign){
+    await fsSet('workOrders',w.id,{...w,assignedTo:toId,handoverFrom:fromId,handoverNote:`Reassigned from ${fromEmp?.name} on ${new Date().toLocaleDateString('en-IN')}`,updatedAt:new Date().toISOString()});
+    count++;
+  }
+  // Add handover note as comment on each work order
+  for(const w of toReassign){
+    if(!CACHE.comments[w.id])CACHE.comments[w.id]=[];
+    CACHE.comments[w.id].push({id:genId(),author:currentUser.uid||'admin',authorName:currentUser.name||'Admin',text:`📋 Handover: Reassigned from ${fromEmp?.name} to ${toEmp?.name} by ${currentUser.name||'Admin'} on ${new Date().toLocaleDateString('en-IN')}`,ts:new Date().toISOString()});
+  }
+  saveLS();
+  showToast(`✅ ${count} work orders reassigned to ${toEmp?.name}`);
+  buildAlerts();
+  renderHandover();
+}
+
+function printHandoverReport(fromId, toId){
+  const fromEmp=CACHE.employees.find(e=>e.id===fromId);
+  const toEmp=CACHE.employees.find(e=>e.id===toId);
+  const orders=CACHE.workOrders.filter(w=>w.assignedTo===fromId&&!['Completed','Billed','Cancelled'].includes(w.status));
+  const now=new Date();
+  const w=window.open('','_blank');
+  w.document.write(`<html><head><title>Handover Report</title><style>body{font-family:sans-serif;padding:32px;color:#111}h2{color:#E8690A}table{width:100%;border-collapse:collapse;margin:16px 0}th,td{padding:8px 12px;border:1px solid #E5E7EB;text-align:left;font-size:13px}th{background:#F9FAFB;font-weight:600}.meta{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}.meta-box{padding:12px;background:#F9FAFB;border-radius:8px}</style></head><body>
+    <h2>Staff Handover Report</h2>
+    <p>Generated: ${now.toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit'})}</p>
+    <div class="meta">
+      <div class="meta-box"><b>Leaving Employee:</b><br>${fromEmp?.name||'—'}<br>${fromEmp?.role||''} · ${fromEmp?.branch||''}</div>
+      <div class="meta-box"><b>Receiving Employee:</b><br>${toEmp?.name||'—'}<br>${toEmp?.role||''} · ${toEmp?.branch||''}</div>
+    </div>
+    <h3>Active Work Orders to Transfer (${orders.length})</h3>
+    <table><thead><tr><th>Client</th><th>Service</th><th>Status</th><th>Due Date</th><th>Fee</th><th>Tasks Done</th></tr></thead><tbody>
+    ${orders.map(o=>{const tasks=CACHE.tasks[o.id]||[];const done=tasks.filter(t=>t.done).length;return`<tr><td><b>${o.clientName}</b></td><td>${o.service}</td><td>${o.status}</td><td>${fmtDate(o.dueDate)}</td><td>₹${o.fee.toLocaleString('en-IN')}</td><td>${done}/${tasks.length}</td></tr>`}).join('')}
+    </tbody></table>
+    <h3>Handover Checklist</h3>
+    <table><thead><tr><th>Item</th><th>Done</th></tr></thead><tbody>
+    ${['Share all client passwords / portal logins with replacement','Brief replacement on each client\'s special requirements','Transfer DSC tokens / devices','Handover physical files and working papers','Inform clients about staff change','Update assignment in firm records','Return firm assets (laptop, ID card etc.)'].map(i=>`<tr><td>${i}</td><td style="text-align:center">☐</td></tr>`).join('')}
+    </tbody></table>
+    <p style="margin-top:24px;color:#6B7280;font-size:12px">Prepared by ${currentUser.name||'Admin'} · ${now.toLocaleDateString('en-IN')}</p>
+  </body></html>`);
+  w.document.close();w.print();
+}
+
+// ─────────────────────────────────────────
+//  FEATURE 7 — FIRM-WIDE ANALYTICS (ADMIN)
+// ─────────────────────────────────────────
+function renderAnalytics(){
+  if(currentUser.role!=='Admin'){
+    document.getElementById('content').innerHTML=`<div class="empty-state"><div class="empty-state-icon">🔒</div><h3>Admin Only</h3><p>This dashboard is only visible to Admin users.</p></div>`;
+    return;
+  }
+  const now=new Date();const mn=now.getMonth();const yr=now.getFullYear();
+  const orders=CACHE.workOrders;
+  const invoices=CACHE.invoices;
+
+  // Revenue by month (last 6 months)
+  const months=[];
+  for(let i=5;i>=0;i--){const d=new Date(yr,mn-i,1);months.push({label:d.toLocaleString('en-IN',{month:'short'}),mn:d.getMonth(),yr:d.getFullYear()});}
+  const revByMonth=months.map(m=>{
+    const paid=invoices.filter(i=>i.status==='Paid'&&new Date(i.paidDate||i.issueDate).getMonth()===m.mn&&new Date(i.paidDate||i.issueDate).getFullYear()===m.yr);
+    return{...m,rev:paid.reduce((a,i)=>a+i.total,0),count:paid.length};
+  });
+  const maxRev=Math.max(...revByMonth.map(m=>m.rev),1);
+
+  // Revenue by service
+  const bySvc={};
+  orders.forEach(w=>{if(!bySvc[w.service])bySvc[w.service]={fee:0,count:0,completed:0};bySvc[w.service].fee+=w.fee;bySvc[w.service].count++;if(['Completed','Billed'].includes(w.status))bySvc[w.service].completed++;});
+  const svcRows=Object.entries(bySvc).sort((a,b)=>b[1].fee-a[1].fee).slice(0,6);
+  const maxSvcFee=Math.max(...svcRows.map(r=>r[1].fee),1);
+
+  // Top 10 clients by revenue
+  const byClient={};
+  invoices.forEach(i=>{if(!byClient[i.clientId])byClient[i.clientId]={name:i.clientName,total:0,paid:0,unpaid:0};byClient[i.clientId].total+=i.total;if(i.status==='Paid')byClient[i.clientId].paid+=i.total;else byClient[i.clientId].unpaid+=i.total;});
+  const topClients=Object.values(byClient).sort((a,b)=>b.total-a.total).slice(0,8);
+
+  // Staff productivity
+  const emps=CACHE.employees;
+  const staffScores=emps.map(e=>{
+    const myOrds=orders.filter(w=>w.assignedTo===e.id);
+    const completed=myOrds.filter(w=>['Completed','Billed'].includes(w.status));
+    const active=myOrds.filter(w=>!['Completed','Billed'].includes(w.status));
+    const overdue=active.filter(w=>w.dueDate&&new Date(w.dueDate)<now);
+    const hrs=CACHE.timesheets.filter(t=>t.empId===e.id&&new Date(t.date).getMonth()===mn).reduce((a,t)=>a+t.hours,0);
+    const onTime=completed.filter(w=>w.dueDate&&new Date(w.updatedAt||w.dueDate)<=new Date(w.dueDate));
+    const rate=completed.length>0?Math.round((onTime.length/completed.length)*100):100;
+    const score=Math.max(0,Math.min(100,rate-(overdue.length*5)+(completed.filter(w=>new Date(w.dueDate).getMonth()===mn).length*3)));
+    return{...e,completed:completed.length,active:active.length,overdue:overdue.length,hrs,score,rate};
+  }).sort((a,b)=>b.score-a.score);
+
+  // Invoice aging
+  const aging={current:0,d7:0,d14:0,d30:0,d30p:0};
+  invoices.filter(i=>['Unpaid','Overdue'].includes(i.status)&&i.dueDate).forEach(i=>{
+    const d=Math.floor((now-new Date(i.dueDate))/86400000);
+    if(d<0)aging.current+=i.total;
+    else if(d<7)aging.d7+=i.total;
+    else if(d<14)aging.d14+=i.total;
+    else if(d<30)aging.d30+=i.total;
+    else aging.d30p+=i.total;
+  });
+
+  // Compliance hit rate
+  const compRate=orders.length>0?Math.round((orders.filter(w=>['Completed','Billed'].includes(w.status)).length/orders.length)*100):0;
+  const totalFee=invoices.reduce((a,i)=>a+i.total,0);
+  const totalPaid=invoices.filter(i=>i.status==='Paid').reduce((a,i)=>a+i.total,0);
+  const collectionRate=totalFee>0?Math.round((totalPaid/totalFee)*100):0;
+  const avgCompTime=orders.filter(w=>['Completed','Billed'].includes(w.status)&&w.createdAt&&w.updatedAt).reduce((a,w,_,arr)=>{return a+(new Date(w.updatedAt)-new Date(w.createdAt))/(arr.length*86400000);},0);
+
+  document.getElementById('content').innerHTML=`
+    <!-- KPI strip -->
+    <div class="kpi-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:14px">
+      <div class="kpi-card kc-green"><div class="kpi-val">${fmtMoney(totalPaid)}</div><div class="kpi-label">Revenue Collected</div><div class="kpi-sub">${collectionRate}% collection rate</div></div>
+      <div class="kpi-card kc-orange"><div class="kpi-val">${fmtMoney(totalFee-totalPaid)}</div><div class="kpi-label">Outstanding</div><div class="kpi-sub">${invoices.filter(i=>['Unpaid','Overdue'].includes(i.status)).length} invoices</div></div>
+      <div class="kpi-card kc-blue"><div class="kpi-val">${compRate}%</div><div class="kpi-label">Compliance Hit Rate</div><div class="kpi-sub">${orders.filter(w=>['Completed','Billed'].includes(w.status)).length} of ${orders.length} orders</div></div>
+      <div class="kpi-card kc-purple"><div class="kpi-val">${avgCompTime.toFixed(1)}d</div><div class="kpi-label">Avg Completion Time</div><div class="kpi-sub">Per work order</div></div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
+
+      <!-- Revenue by month bar chart -->
+      <div class="card">
+        <div class="card-header"><div class="card-title">📈 Revenue — Last 6 Months</div></div>
+        <div class="card-body">
+          <div style="display:flex;align-items:flex-end;gap:8px;height:120px;margin-bottom:8px">
+            ${revByMonth.map(m=>`
+              <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px">
+                <div style="font-size:10px;color:var(--text2);font-weight:600">${m.rev>0?fmtMoney(m.rev).replace('₹',''):''}</div>
+                <div style="width:100%;background:${m.rev>0?'var(--orange)':'var(--gray-light)'};border-radius:4px 4px 0 0;height:${m.rev>0?Math.max(12,Math.round((m.rev/maxRev)*90)):4}px;transition:height .3s"></div>
+                <div style="font-size:10px;color:var(--text2)">${m.label}</div>
+              </div>`).join('')}
+          </div>
+        </div>
+      </div>
+
+      <!-- Revenue by service -->
+      <div class="card">
+        <div class="card-header"><div class="card-title">📊 Revenue by Service</div></div>
+        <div class="card-body">
+          ${svcRows.map(([svc,d])=>`
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:9px">
+              <div style="width:80px;font-size:11px;color:var(--text2);flex-shrink:0">${svc.substring(0,12)}</div>
+              <div style="flex:1"><div class="pw"><div class="pf g" style="width:${Math.round((d.fee/maxSvcFee)*100)}%"></div></div></div>
+              <div style="font-size:12px;font-weight:700;width:70px;text-align:right">${fmtMoney(d.fee)}</div>
+              <div style="font-size:10px;color:var(--text2);width:30px">${d.count} orders</div>
+            </div>`).join('')}
+        </div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
+
+      <!-- Top clients -->
+      <div class="card">
+        <div class="card-header"><div class="card-title">🏆 Top Clients by Revenue</div></div>
+        <div class="card-body" style="padding:0">
+          ${topClients.map((c,i)=>`
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 14px;border-bottom:0.5px solid #F3F4F6">
+              <div style="display:flex;align-items:center;gap:10px">
+                <span style="font-size:11px;font-weight:700;color:var(--text2);width:16px">#${i+1}</span>
+                <div>
+                  <div style="font-size:13px;font-weight:600">${c.name.substring(0,20)}</div>
+                  <div style="font-size:11px;color:var(--green)">Paid: ${fmtMoney(c.paid)} ${c.unpaid>0?`<span style="color:var(--red)">· Unpaid: ${fmtMoney(c.unpaid)}</span>`:''}</div>
+                </div>
+              </div>
+              <div style="font-size:15px;font-weight:700;color:var(--navy)">${fmtMoney(c.total)}</div>
+            </div>`).join('')}
+        </div>
+      </div>
+
+      <!-- Invoice aging -->
+      <div class="card">
+        <div class="card-header"><div class="card-title">⏰ Invoice Aging</div></div>
+        <div class="card-body">
+          ${[['Not yet due','current','var(--green)',aging.current],['1–7 days overdue','d7','var(--amber)',aging.d7],['8–14 days overdue','d14','#F59E0B',aging.d14],['15–30 days overdue','d30','var(--orange)',aging.d30],['30+ days overdue','d30p','var(--red)',aging.d30p]].map(([label,,color,val])=>`
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:0.5px solid #F3F4F6">
+              <div style="display:flex;align-items:center;gap:8px">
+                <div style="width:10px;height:10px;border-radius:50%;background:${color};flex-shrink:0"></div>
+                <span style="font-size:12px;color:var(--text2)">${label}</span>
+              </div>
+              <span style="font-size:13px;font-weight:700;color:${val>0?color:'var(--text2)'}">${val>0?fmtMoney(val):'—'}</span>
+            </div>`).join('')}
+        </div>
+      </div>
+    </div>
+
+    <!-- Staff productivity -->
+    <div class="card">
+      <div class="card-header"><div class="card-title">👥 Staff Productivity Scorecard</div></div>
+      <div class="card-body" style="padding:0">
+        <div class="table-wrap"><table><thead><tr><th>Employee</th><th>Role</th><th>Score</th><th>On-Time Rate</th><th>Completed</th><th>Active</th><th>Overdue</th><th>Hours (this month)</th></tr></thead><tbody>
+          ${staffScores.map(e=>`
+            <tr>
+              <td><div style="display:flex;align-items:center;gap:8px"><div class="wl-av">${e.name.split(' ').map(n=>n[0]).slice(0,2).join('')}</div><b>${e.name}</b></div></td>
+              <td><span class="pill p-gray" style="font-size:10px">${e.role}</span></td>
+              <td><div style="display:flex;align-items:center;gap:6px"><div class="pw" style="width:50px"><div class="pf ${e.score>=80?'g':e.score>=60?'a':'r'}" style="width:${e.score}%"></div></div><b style="font-size:13px">${e.score}</b></div></td>
+              <td><span class="pill ${e.rate>=80?'p-green':e.rate>=60?'p-amber':'p-red'}">${e.rate}%</span></td>
+              <td style="font-weight:600;color:var(--green)">${e.completed}</td>
+              <td style="font-weight:600">${e.active}</td>
+              <td style="${e.overdue>0?'color:var(--red);font-weight:600':''}">${e.overdue||'—'}</td>
+              <td>${e.hrs}h</td>
+            </tr>`).join('')}
+        </tbody></table></div>
+      </div>
+    </div>`;
+}
+
+// ─────────────────────────────────────────
+//  FEATURE 8 — 2-STEP REVIEW & APPROVAL WORKFLOW
+// ─────────────────────────────────────────
+// Approval states per work order stored in CACHE.approvals = {woId: {stage, history[]}}
+// Stages: draft → staff_submitted → manager_approved / manager_rejected → admin_approved / admin_rejected → client_signed
+const APPROVAL_STAGES=['draft','staff_submitted','manager_approved','manager_rejected','admin_approved','admin_rejected','client_signed'];
+const APPROVAL_LABELS={
+  draft:'Draft',staff_submitted:'Submitted for Review',
+  manager_approved:'Manager Approved',manager_rejected:'Manager Rejected',
+  admin_approved:'Partner Approved',admin_rejected:'Partner Rejected',
+  client_signed:'Client Signed Off ✅'
+};
+const APPROVAL_COLORS={
+  draft:'var(--text2)',staff_submitted:'var(--blue)',
+  manager_approved:'var(--amber)',manager_rejected:'var(--red)',
+  admin_approved:'var(--orange)',admin_rejected:'var(--red)',
+  client_signed:'var(--green)'
+};
+
+function getApproval(woId){
+  if(!CACHE.approvals)CACHE.approvals={};
+  return CACHE.approvals[woId]||{stage:'draft',history:[]};
+}
+
+function renderApprovals(){
+  if(!CACHE.approvals)CACHE.approvals={};
+  const orders=visOrders().filter(w=>!['Cancelled'].includes(w.status));
+  const role=currentUser.role;
+
+  // Filter by what's relevant to this role
+  let relevant=orders;
+  if(role==='Staff'){
+    relevant=orders.filter(w=>{const a=getApproval(w.id);return['draft','manager_rejected','admin_rejected'].includes(a.stage);});
+  } else if(role==='Manager'){
+    relevant=orders.filter(w=>{const a=getApproval(w.id);return['staff_submitted','manager_rejected'].includes(a.stage);});
+  } else if(role==='Admin'){
+    relevant=orders.filter(w=>{const a=getApproval(w.id);return['manager_approved','admin_rejected','staff_submitted'].includes(a.stage);});
+  }
+
+  const allWithApproval=orders.map(w=>({...w,approval:getApproval(w.id)}));
+  const pending=allWithApproval.filter(w=>!['draft','client_signed'].includes(w.approval.stage)&&!['admin_approved','admin_rejected'].includes(w.approval.stage)||w.approval.stage==='manager_approved');
+  const signed=allWithApproval.filter(w=>w.approval.stage==='client_signed');
+  const rejected=allWithApproval.filter(w=>['manager_rejected','admin_rejected'].includes(w.approval.stage));
+
+  document.getElementById('content').innerHTML=`
+    <div style="background:#EDE9FE;border:1px solid #7C3AED;border-radius:10px;padding:11px 15px;font-size:12px;color:#5B21B6;margin-bottom:14px">
+      <b>📋 Approval Workflow:</b> Staff submits → Manager reviews → Partner approves → Client signs off. Nothing gets filed without the full chain completed. All rejections require a reason.
+    </div>
+    <div class="kpi-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:14px">
+      <div class="kpi-card kc-blue"><div class="kpi-val">${relevant.length}</div><div class="kpi-label">Needs Your Action</div></div>
+      <div class="kpi-card kc-amber"><div class="kpi-val">${pending.length}</div><div class="kpi-label">In Review Chain</div></div>
+      <div class="kpi-card kc-red"><div class="kpi-val">${rejected.length}</div><div class="kpi-label">Rejected / Revision</div></div>
+      <div class="kpi-card kc-green"><div class="kpi-val">${signed.length}</div><div class="kpi-label">Client Signed Off</div></div>
+    </div>
+
+    ${relevant.length>0?`
+    <div class="card" style="margin-bottom:12px">
+      <div class="card-header"><div class="card-title">⚡ Needs Your Action (${relevant.length})</div></div>
+      <div class="card-body" style="padding:0">
+        ${relevant.map(w=>{const a=getApproval(w.id);return`
+          <div style="display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;padding:12px 14px;border-bottom:0.5px solid #F3F4F6">
+            <div>
+              <div style="font-size:13px;font-weight:600">${w.clientName} — ${w.service}</div>
+              <div style="font-size:11px;color:var(--text2);margin-top:2px">Due: ${fmtDate(w.dueDate)} · Assigned: ${empName(w.assignedTo)}</div>
+              <div style="margin-top:5px"><span style="font-size:11px;font-weight:600;color:${APPROVAL_COLORS[a.stage]||'var(--text2)'}">● ${APPROVAL_LABELS[a.stage]||a.stage}</span></div>
+              ${a.history?.length?`<div style="font-size:10px;color:var(--text2);margin-top:3px">Last: ${a.history[a.history.length-1]?.note||''}</div>`:''}
+            </div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end">
+              ${approvalActions(w.id,a.stage,role)}
+            </div>
+          </div>`;}).join('')}
+      </div>
+    </div>`:''}
+
+    <div class="card">
+      <div class="card-header"><div class="card-title">📋 All Work Orders — Approval Status</div></div>
+      <div class="card-body" style="padding:0">
+        <div class="table-wrap"><table><thead><tr><th>Client</th><th>Service</th><th>Work Status</th><th>Approval Stage</th><th>Actions</th></tr></thead><tbody>
+          ${allWithApproval.map(w=>`
+            <tr>
+              <td><b>${w.clientName.substring(0,16)}</b></td>
+              <td><span class="pill p-blue">${w.service}</span></td>
+              <td>${statusBadge(w.status)}</td>
+              <td><span style="font-size:11px;font-weight:600;color:${APPROVAL_COLORS[w.approval.stage]||'var(--text2)'}">● ${APPROVAL_LABELS[w.approval.stage]||w.approval.stage}</span></td>
+              <td><div style="display:flex;gap:4px;flex-wrap:wrap">${approvalActions(w.id,w.approval.stage,role)}</div></td>
+            </tr>`).join('')}
+        </tbody></table></div>
+      </div>
+    </div>`;
+}
+
+function approvalActions(woId,stage,role){
+  const btns=[];
+  if(role==='Staff'&&stage==='draft')
+    btns.push(`<button class="btn btn-primary btn-sm" onclick="setApproval('${woId}','staff_submitted','Submitted for manager review')">Submit for Review</button>`);
+  if(role==='Staff'&&(stage==='manager_rejected'||stage==='admin_rejected'))
+    btns.push(`<button class="btn btn-primary btn-sm" onclick="setApproval('${woId}','staff_submitted','Resubmitted after revision')">Resubmit</button>`);
+  if(role==='Manager'&&stage==='staff_submitted'){
+    btns.push(`<button class="btn btn-success btn-sm" onclick="setApproval('${woId}','manager_approved','Manager reviewed and approved')">Approve</button>`);
+    btns.push(`<button class="btn btn-danger btn-sm" onclick="promptReject('${woId}','manager_rejected')">Reject</button>`);
+  }
+  if(role==='Admin'&&(stage==='manager_approved'||stage==='staff_submitted')){
+    btns.push(`<button class="btn btn-success btn-sm" onclick="setApproval('${woId}','admin_approved','Partner approved — ready for client sign-off')">Partner Approve</button>`);
+    btns.push(`<button class="btn btn-danger btn-sm" onclick="promptReject('${woId}','admin_rejected')">Reject</button>`);
+  }
+  if(role==='Admin'&&stage==='admin_approved')
+    btns.push(`<button class="btn btn-primary btn-sm" onclick="setApproval('${woId}','client_signed','Client has reviewed and signed off')">Mark Client Signed</button>`);
+  if(btns.length===0)
+    btns.push(`<span style="font-size:11px;color:var(--text2)">${stage==='client_signed'?'✅ Complete':stage==='draft'?'Awaiting submission':'—'}</span>`);
+  return btns.join('');
+}
+
+function promptReject(woId,newStage){
+  openModal('Reject & Request Revision',`
+    <div style="font-size:13px;color:var(--text2);margin-bottom:12px">Please provide a reason for rejection. This will be visible to the assigned staff member.</div>
+    <div class="form-group">
+      <label class="form-label">Rejection Reason *</label>
+      <textarea id="reject-note" class="form-input" rows="4" placeholder="e.g. TDS figures don't match Form 26AS, please recheck and resubmit…"></textarea>
+    </div>
+  `,[{label:'Confirm Rejection',primary:true,action:()=>{
+    const note=document.getElementById('reject-note')?.value?.trim();
+    if(!note){showToast('Rejection reason required');return;}
+    setApproval(woId,newStage,note);
+    closeModal();
+  }}]);
+}
+
+function setApproval(woId,stage,note){
+  if(!CACHE.approvals)CACHE.approvals={};
+  const prev=CACHE.approvals[woId]||{stage:'draft',history:[]};
+  const entry={stage,note,by:currentUser.name||currentUser.email,ts:new Date().toISOString()};
+  CACHE.approvals[woId]={stage,history:[...prev.history,entry]};
+  if(!CACHE.comments[woId])CACHE.comments[woId]=[];
+  CACHE.comments[woId].push({id:genId(),author:currentUser.uid||'',authorName:currentUser.name||'',text:`📋 Approval: ${APPROVAL_LABELS[stage]||stage} — ${note}`,ts:new Date().toISOString()});
+  saveLS();
+  showToast(`✅ ${APPROVAL_LABELS[stage]||stage}`);
+  buildAlerts();
+  renderApprovals();
+}
+
+function clientSignOff(woId){
+  const w=CACHE.workOrders.find(x=>x.id===woId);if(!w)return;
+  if(!confirm(`I, ${cpCurrentUser?.name||'Client'}, confirm that I have reviewed and approve the ${w.service} work prepared by the CA team. Click OK to sign off.`))return;
+  setApproval(woId,'client_signed',`Client ${cpCurrentUser?.name||''} signed off via client portal on ${new Date().toLocaleDateString('en-IN')}`);
+  showToast('✅ Signed off successfully! Your CA team has been notified.');
+  renderCPDash();
+}
+
 function renderMore(){
   document.getElementById('content').innerHTML=`
     <div class="card"><div class="card-header"><div class="card-title">⚙ Settings & Tools</div></div><div class="card-body">
@@ -1697,6 +2504,16 @@ function renderMore(){
         ${currentUser.role==='Admin'?`<button class="btn btn-secondary" onclick="openEmpModal()">+ Add Team Member</button>`:''}
         <button class="btn btn-secondary" onclick="exportData()">📤 Export All Data (JSON)</button>
         <button class="btn btn-secondary" onclick="navigateTo('taxcalc')">🧮 Tax Calculator & IT Act 2025 Reference</button>
+        <button class="btn btn-secondary" onclick="navigateTo('filingstatus')">📊 Filing Status Tracker</button>
+        <button class="btn btn-secondary" onclick="navigateTo('approvals')">✅ Approval Workflow</button>
+        ${currentUser.role==='Admin'?`<button class="btn btn-secondary" onclick="navigateTo('analytics')">📈 Firm Analytics Dashboard</button>`:''}
+        <button class="btn btn-secondary" onclick="navigateTo('handover')">🔄 Staff Handover Tool</button>
+        <button class="btn btn-secondary" onclick="navigateTo('advtax')">📅 Advance Tax Planner</button>
+        <button class="btn btn-secondary" onclick="navigateTo('autogen')">⚙ Compliance Auto-Generator</button>
+        <button class="btn btn-secondary" onclick="navigateTo('engagement')">📝 Engagement Letters</button>
+        <button class="btn btn-secondary" onclick="navigateTo('gstr9')">📊 GSTR-9 Prep Tool</button>
+        <button class="btn btn-secondary" onclick="navigateTo('aismatch')">🔍 26AS / AIS Mismatch Detector</button>
+        <button class="btn btn-secondary" onclick="navigateTo('networth')">📈 Client Net Worth Tracker</button>
         <button class="btn btn-secondary" onclick="navigateTo('knowledge')">📚 Manage SOP Templates</button>
         ${currentUser.role==='Admin'?`<button class="btn btn-danger btn-sm" onclick="resetDemo()">🔄 Reset Demo Data</button>`:''}
       </div>
@@ -1792,18 +2609,23 @@ window.addEventListener('DOMContentLoaded',init);
 
 // Portal nav config
 const CP_NAV=[
-  {id:'cp-dash',    label:'My Dashboard',  icon:'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6'},
-  {id:'cp-orders',  label:'My Work Orders',icon:'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01'},
-  {id:'cp-invoices',label:'My Invoices',   icon:'M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2z'},
-  {id:'cp-docs',    label:'My Documents',  icon:'M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z'},
-  {id:'cp-messages',label:'Messages',      icon:'M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z'},
+  {id:'cp-dash',    label:'My Dashboard',   icon:'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6'},
+  {id:'cp-history', label:'Filing History',  icon:'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z'},
+  {id:'cp-orders',  label:'Work Orders',     icon:'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01'},
+  {id:'cp-invoices',label:'My Invoices',     icon:'M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2z'},
+  {id:'cp-docs',    label:'My Documents',    icon:'M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z'},
+  {id:'cp-messages',label:'Messages',        icon:'M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z'},
+  {id:'cp-gstr',    label:'GST Reconcile',   icon:'M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 11h.01M12 11h.01M15 11h.01M12 7h.01M5 20h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v13a2 2 0 002 2z'},
+  {id:'cp-advtax',  label:'Advance Tax',     icon:'M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 11h.01M12 11h.01M15 11h.01M12 7h.01M5 20h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v13a2 2 0 002 2z'},
+  {id:'cp-networth',label:'My Net Worth',    icon:'M13 7h8m0 0v8m0-8l-8 8-4-4-6 6'},
+  {id:'cp-kyc',     label:'My KYC',          icon:'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z'},
 ];
 const CP_BNAV=[
-  {id:'cp-dash',    label:'Home',     icon:'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6'},
-  {id:'cp-orders',  label:'Work',     icon:'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01'},
-  {id:'cp-invoices',label:'Invoices', icon:'M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2z'},
-  {id:'cp-docs',    label:'Docs',     icon:'M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z'},
-  {id:'cp-messages',label:'Messages', icon:'M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z'},
+  {id:'cp-dash',    label:'Home',    icon:'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6'},
+  {id:'cp-history', label:'History', icon:'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z'},
+  {id:'cp-docs',    label:'Docs',    icon:'M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z'},
+  {id:'cp-messages',label:'Chat',    icon:'M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z'},
+  {id:'cp-kyc',     label:'KYC',     icon:'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z'},
 ];
 
 // ── Portal login / logout ──────────────────────────────
@@ -1887,14 +2709,36 @@ function buildCPNav(){
   });
 }
 
-const CP_TITLES={'cp-dash':'My Dashboard','cp-orders':'My Work Orders','cp-invoices':'My Invoices','cp-docs':'My Documents','cp-messages':'Messages with CA Firm'};
+const CP_TITLES={
+  'cp-dash'    :'My Dashboard',
+  'cp-history' :'Filing History & Download Centre',
+  'cp-orders'  :'My Work Orders',
+  'cp-invoices':'My Invoices',
+  'cp-docs'    :'My Documents',
+  'cp-messages':'Messages with CA Team',
+  'cp-gstr'    :'GSTR-2B Reconciliation Tool',
+  'cp-advtax'  :'My Advance Tax Schedule',
+  'cp-networth':'My Financial Health',
+  'cp-kyc'     :'My KYC & Onboarding',
+};
 
 function cpNavigateTo(tab){
   document.querySelectorAll('[data-cptab]').forEach(el=>el.classList.toggle('active',el.dataset.cptab===tab));
   document.getElementById('cp-topbar-title').textContent=CP_TITLES[tab]||tab;
   const client=CACHE.clients.find(c=>c.id===clientPortalUser?.clientId);
   document.getElementById('cp-topbar-sub').textContent=client?.name||'';
-  const renders={'cp-dash':renderCPDash,'cp-orders':renderCPOrders,'cp-invoices':renderCPInvoices,'cp-docs':renderCPDocs,'cp-messages':renderCPMessages};
+  const renders={
+    'cp-dash'    :renderCPDash,
+    'cp-history' :renderCPHistory,
+    'cp-orders'  :renderCPOrders,
+    'cp-invoices':renderCPInvoices,
+    'cp-docs'    :renderCPDocs,
+    'cp-messages':renderCPMessages,
+    'cp-gstr'    :renderCPGSTR,
+    'cp-advtax'  :renderCPAdvTax,
+    'cp-networth':renderCPNetWorth,
+    'cp-kyc'     :renderCPKYC,
+  };
   if(renders[tab]) renders[tab]();
 }
 
@@ -1933,6 +2777,7 @@ function renderCPDash(){
       <div class="cp-kpi ck-green"><div class="cp-kpi-val">${completed.length}</div><div class="cp-kpi-label">Completed</div></div>
       <div class="cp-kpi ck-${unpaidAmt>0?'red':'green'}"><div class="cp-kpi-val">${fmtMoney(unpaidAmt)}</div><div class="cp-kpi-label">Amount Due</div></div>
       <div class="cp-kpi ck-blue"><div class="cp-kpi-val">${myDocs().length}</div><div class="cp-kpi-label">Documents on File</div></div>
+      <div class="cp-kpi ck-${(()=>{const k=JSON.parse(localStorage.getItem('ca_kyc_'+myClientId())||'{}');const f=(KYC_FIELDS||[]).filter(x=>k[x.id]).length;return f>=(KYC_FIELDS||[]).length?'green':'amber';})()}"><div class="cp-kpi-val">${(()=>{const k=JSON.parse(localStorage.getItem('ca_kyc_'+myClientId())||'{}');const f=(KYC_FIELDS||[]).filter(x=>k[x.id]).length;return f+'/'+(KYC_FIELDS||[]).length;})()}</div><div class="cp-kpi-label">KYC Fields</div></div>
     </div>
 
     ${dscD!==null&&dscD<=30?`<div class="cp-action-needed"><div class="cp-action-title">⚠ Your DSC Certificate Expiring</div><div class="cp-action-text">Your Digital Signature (${client.dscHolder||'DSC'}) expires in <b>${dscD>=0?dscD+'d':'—'}</b>. Please contact us to renew it before filings are blocked.</div></div>`:''}
@@ -1940,6 +2785,41 @@ function renderCPDash(){
     ${pendingActions.length>0?`<div class="cp-action-needed"><div class="cp-action-title">📋 Action Required from You</div>${pendingActions.map(a=>`<div class="cp-action-text" style="margin-bottom:5px">• ${a}</div>`).join('')}<button class="btn btn-primary btn-sm" style="margin-top:8px" onclick="cpNavigateTo('cp-docs')">Upload Documents →</button></div>`:''}
 
     ${overdue.length>0?`<div class="alert-box alert-red"><b>⚠ ${overdue.length} filing(s) are overdue</b> — please contact your CA team.</div>`:''}
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px">
+      <button class="btn btn-primary" onclick="cpNavigateTo('cp-history')" style="padding:12px;font-size:13px">📂 Filing History & Downloads</button>
+      <button class="btn btn-secondary" onclick="cpNavigateTo('cp-kyc')" style="padding:12px;font-size:13px">👤 My KYC & Onboarding</button>
+      <button class="btn btn-secondary" onclick="cpNavigateTo('cp-messages')" style="padding:12px;font-size:13px">💬 Message CA Team</button>
+      <button class="btn btn-secondary" onclick="cpNavigateTo('cp-gstr')" style="padding:12px;font-size:13px">📊 GST Reconciliation</button>
+      <button class="btn btn-secondary" onclick="cpNavigateTo('cp-advtax')" style="padding:12px;font-size:13px">📅 Advance Tax Schedule</button>
+      <button class="btn btn-secondary" onclick="cpNavigateTo('cp-networth')" style="padding:12px;font-size:13px">📈 My Financial Health</button>
+    </div>
+    <div class="card"><div class="card-header"><div class="card-title">📊 Your Filing Status at a Glance</div><button class="btn btn-sm btn-secondary" onclick="cpNavigateTo('cp-history')">Full History →</button></div>
+    <div class="card-body" style="padding:0;overflow-x:auto">
+      <table style="width:100%;border-collapse:collapse;font-size:13px;min-width:400px">
+        <thead><tr style="background:var(--gray-light)">${KEY_SERVICES.map(s=>`<th style="padding:8px 10px;text-align:center;font-size:11px;font-weight:600">${s}</th>`).join('')}</tr></thead>
+        <tbody><tr>
+          ${KEY_SERVICES.map(svc=>{
+            const cId=myClientId();
+            const matches=(CACHE.workOrders||[]).filter(w=>w.clientId===cId&&(w.service===svc||w.service.includes(svc.split(' ')[0])));
+            const st=matches.length===0?'none':(matches.find(w=>!['Completed','Billed'].includes(w.status))||matches[matches.length-1])?.status||'none';
+            return`<td style="padding:10px;text-align:center">
+              <span style="font-size:20px">${STATUS_ICON[st]||'⬜'}</span>
+              <div style="font-size:10px;color:${STATUS_COLOR[st]||'#999'};font-weight:600;margin-top:2px">${st==='none'?'—':st==='Completed'||st==='Billed'?'Done':st}</div>
+            </td>`;}).join('')}
+        </tr></tbody>
+      </table>
+    </div></div>
+
+    ${orders.some(w=>{const a=getApproval(w.id);return a.stage==='admin_approved';})?`
+    <div class="cp-action-needed" style="background:#EDE9FE;border-color:#7C3AED">
+      <div class="cp-action-title" style="color:#5B21B6">✍️ Your Sign-Off Required</div>
+      ${orders.filter(w=>getApproval(w.id).stage==='admin_approved').map(w=>`
+        <div class="cp-action-text" style="margin-bottom:6px">
+          <b>${w.service}</b> — reviewed and approved by our team. Your sign-off needed before filing.
+          <button class="btn btn-primary btn-sm" style="margin-left:8px" onclick="clientSignOff('${w.id}')">✅ I Approve — Sign Off</button>
+        </div>`).join('')}
+    </div>`:''}
 
     <div class="card"><div class="card-header"><div class="card-title">Active Work in Progress</div><button class="btn btn-sm btn-secondary" onclick="cpNavigateTo('cp-orders')">View All</button></div>
     ${active.length===0?'<div class="card-body" style="color:var(--text2);font-size:13px">No active work orders right now.</div>':active.slice(0,4).map(w=>{
@@ -2221,6 +3101,1570 @@ function checkClientPortalSession(){
     return true;
   }
   return false;
+}
+
+// ══════════════════════════════════════════════════════════════
+//  SPRINT 3 — CLIENT EXPERIENCE
+//  Feature 9  — Filing history & download centre
+//  Feature 10 — GSTR-2B reconciliation tool
+//  Feature 11 — In-app messaging tied to work orders (enhanced)
+//  Feature 12 — Digital KYC & onboarding checklist
+// ══════════════════════════════════════════════════════════════
+
+// ─────────────────────────────────────────────────────────────
+//  FEATURE 9 — FILING HISTORY & DOWNLOAD CENTRE
+// ─────────────────────────────────────────────────────────────
+function renderCPHistory(){
+  const orders=myOrders().sort((a,b)=>new Date(b.updatedAt||b.createdAt)-new Date(a.updatedAt||a.createdAt));
+  const docs=myDocs();
+  const invoices=myInvoices();
+  const cId=myClientId();
+
+  // Group completed orders by FY (derive from dueDate or updatedAt)
+  function getFY(dateStr){
+    const d=new Date(dateStr);if(isNaN(d))return'—';
+    const yr=d.getFullYear();const mn=d.getMonth();
+    return mn>=3?`FY ${yr}-${String(yr+1).slice(2)}`:`FY ${yr-1}-${String(yr).slice(2)}`;
+  }
+  const completed=orders.filter(w=>['Completed','Billed'].includes(w.status));
+  const byFY={};
+  completed.forEach(w=>{
+    const fy=getFY(w.updatedAt||w.dueDate||w.createdAt);
+    if(!byFY[fy])byFY[fy]=[];
+    byFY[fy].push(w);
+  });
+
+  // CA-shared documents (uploaded by CA — type 'Returns' or marked sharedByCA)
+  const sharedDocs=docs.filter(d=>d.sharedByCA||d.type==='Returns'||d.type==='Form 130 (Salary TDS)'||d.type==='Form 131 (Non-Salary TDS)');
+
+  document.getElementById('cp-content').innerHTML=`
+    <div style="background:#EDE9FE;border:1px solid #7C3AED;border-radius:10px;padding:11px 15px;font-size:12px;color:#5B21B6;margin-bottom:14px">
+      <b>📂 Your complete filing history</b> — all completed returns, certificates and documents. Download any item anytime without calling your CA.
+    </div>
+
+    <!-- Summary KPIs -->
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px">
+      <div class="cp-kpi ck-blue"><div class="cp-kpi-val">${completed.length}</div><div class="cp-kpi-label">Returns Filed</div></div>
+      <div class="cp-kpi ck-green"><div class="cp-kpi-val">${sharedDocs.length}</div><div class="cp-kpi-label">Certs & Documents</div></div>
+      <div class="cp-kpi ck-orange"><div class="cp-kpi-val">${Object.keys(byFY).length}</div><div class="cp-kpi-label">Financial Years</div></div>
+    </div>
+
+    <!-- By FY accordion -->
+    ${Object.keys(byFY).sort().reverse().map((fy,fi)=>`
+      <div class="card" style="margin-bottom:10px">
+        <div class="card-header" style="cursor:pointer" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">
+          <div class="card-title">📅 ${fy} <span class="pill p-blue" style="font-size:11px">${byFY[fy].length} filings</span></div>
+          <span style="font-size:11px;color:var(--text2)">${fi===0?'▲ current':'▼ expand'}</span>
+        </div>
+        <div style="${fi===0?'':'display:none'}">
+          <div class="card-body" style="padding:0">
+            ${byFY[fy].map(w=>{
+              const relDocs=docs.filter(d=>d.workOrderId===w.id||(d.tags||[]).includes(w.id));
+              const approval=getApproval(w.id);
+              return`<div style="display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;padding:12px 16px;border-bottom:0.5px solid #F3F4F6">
+                <div>
+                  <div style="font-size:13px;font-weight:600;color:var(--navy)">${w.service}</div>
+                  <div style="font-size:11px;color:var(--text2);margin-top:2px">
+                    ${w.description||'—'} · Completed ${fmtDate(w.updatedAt||w.dueDate)}
+                    ${w.assignedTo?` · CA: ${empName(w.assignedTo)}`:''}
+                  </div>
+                  <div style="margin-top:4px;display:flex;gap:6px;flex-wrap:wrap">
+                    <span class="pill p-green" style="font-size:10px">✅ Filed</span>
+                    ${approval.stage==='client_signed'?`<span class="pill p-purple" style="font-size:10px">✍ Signed off</span>`:''}
+                    ${relDocs.map(d=>`<span class="pill p-blue" style="font-size:10px">📎 ${d.name.substring(0,18)}</span>`).join('')}
+                  </div>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:5px;align-items:flex-end">
+                  <button class="btn btn-secondary btn-sm" onclick="printFilingRecord('${w.id}')">⬇ Download</button>
+                  <button class="btn btn-secondary btn-sm" onclick="cpNavigateTo('cp-messages');openCPChat('${w.id}')">💬 Query</button>
+                </div>
+              </div>`;}).join('')}
+          </div>
+        </div>
+      </div>`).join('')||`<div class="empty-state"><div class="empty-state-icon">📂</div><h3>No completed filings yet</h3><p>Completed returns will appear here.</p></div>`}
+
+    <!-- All shared documents download centre -->
+    ${sharedDocs.length>0?`
+    <div class="card" style="margin-top:4px">
+      <div class="card-header"><div class="card-title">📥 Certificates & Documents from CA Team</div></div>
+      <div class="card-body" style="padding:0">
+        ${sharedDocs.map(d=>`
+          <div style="display:grid;grid-template-columns:36px 1fr auto;gap:10px;align-items:center;padding:11px 14px;border-bottom:0.5px solid #F3F4F6">
+            <div style="width:34px;height:34px;background:var(--green-light);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px">📄</div>
+            <div>
+              <div style="font-size:13px;font-weight:600">${d.name}</div>
+              <div style="font-size:11px;color:var(--text2)">${d.type} · ${fmtDate(d.date)}</div>
+            </div>
+            <button class="btn btn-primary btn-sm" onclick="showToast('Download ready — ${d.name}')">⬇ Download</button>
+          </div>`).join('')}
+      </div>
+    </div>`:''}
+  `;
+}
+
+function printFilingRecord(woId){
+  const w=CACHE.workOrders.find(x=>x.id===woId);if(!w)return;
+  const client=CACHE.clients.find(c=>c.id===w.clientId)||{};
+  const tasks=CACHE.tasks[woId]||[];
+  const approval=getApproval(woId);
+  const win=window.open('','_blank');
+  win.document.write(`<html><head><title>Filing Record — ${w.service}</title>
+    <style>body{font-family:sans-serif;padding:32px;color:#111;max-width:700px;margin:0 auto}h2{color:#E8690A}table{width:100%;border-collapse:collapse;margin:12px 0}th,td{padding:7px 10px;border:1px solid #E5E7EB;font-size:13px;text-align:left}th{background:#F9FAFB;font-weight:600}.badge{display:inline-block;padding:2px 8px;border-radius:8px;font-size:11px;background:#D1FAE5;color:#065F46;font-weight:600}</style>
+  </head><body>
+    <h2>Filing Record — ${w.service}</h2>
+    <table>
+      <tr><th>Client</th><td>${client.name||w.clientName}</td><th>PAN</th><td>${client.pan||'—'}</td></tr>
+      <tr><th>Service</th><td>${w.service}</td><th>Description</th><td>${w.description||'—'}</td></tr>
+      <tr><th>Status</th><td><span class="badge">✅ ${w.status}</span></td><th>CA Assigned</th><td>${empName(w.assignedTo)}</td></tr>
+      <tr><th>Due Date</th><td>${fmtDate(w.dueDate)}</td><th>Completed</th><td>${fmtDate(w.updatedAt)}</td></tr>
+      <tr><th>Approval Stage</th><td colspan="3">${APPROVAL_LABELS[approval.stage]||approval.stage}</td></tr>
+    </table>
+    <h3>Checklist Completed</h3>
+    <table><thead><tr><th>Step</th><th>Done</th></tr></thead><tbody>
+      ${tasks.map(t=>`<tr><td>${t.text}</td><td style="text-align:center">${t.done?'✅':'—'}</td></tr>`).join('')}
+    </tbody></table>
+    <h3>Approval Trail</h3>
+    <table><thead><tr><th>Stage</th><th>By</th><th>Date</th><th>Note</th></tr></thead><tbody>
+      ${(approval.history||[]).map(h=>`<tr><td>${APPROVAL_LABELS[h.stage]||h.stage}</td><td>${h.by||'—'}</td><td>${fmtDate(h.ts)}</td><td>${h.note||'—'}</td></tr>`).join('')||'<tr><td colspan="4" style="color:#999">No approval history</td></tr>'}
+    </tbody></table>
+    <p style="margin-top:24px;font-size:11px;color:#999">Generated ${new Date().toLocaleDateString('en-IN')} · CA Firm Client Portal</p>
+  </body></html>`);
+  win.document.close();win.print();
+}
+
+// ─────────────────────────────────────────────────────────────
+//  FEATURE 10 — GSTR-2B RECONCILIATION TOOL
+// ─────────────────────────────────────────────────────────────
+let gstrReconData={gstr2b:[],books:[],result:[]};
+
+function renderCPGSTR(){
+  document.getElementById('cp-content').innerHTML=`
+    <div style="background:#FEF3C7;border:1px solid #F59E0B;border-radius:10px;padding:11px 15px;font-size:12px;color:#92400E;margin-bottom:14px">
+      <b>📊 GSTR-2B Reconciliation Tool:</b> Upload your purchase register (CSV) and GSTR-2B data. The tool highlights mismatches so your CA can claim the correct ITC and avoid GST notices.
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
+
+      <!-- Books upload -->
+      <div class="card">
+        <div class="card-header"><div class="card-title">📤 Step 1 — Upload Purchase Register (CSV)</div></div>
+        <div class="card-body">
+          <div style="font-size:12px;color:var(--text2);margin-bottom:10px">CSV format: <code>supplier_name, gstin, invoice_no, invoice_date, taxable_amount, igst, cgst, sgst</code></div>
+          <input type="file" id="books-csv" accept=".csv" style="display:none" onchange="parseBooksCSV(this)"/>
+          <button class="btn btn-primary" onclick="document.getElementById('books-csv').click()">📂 Upload Purchase Register CSV</button>
+          <div id="books-status" style="margin-top:8px;font-size:12px;color:var(--text2)"></div>
+          <div style="margin-top:10px;font-size:11px;color:var(--text2)">Or try with sample data:</div>
+          <button class="btn btn-secondary btn-sm" style="margin-top:4px" onclick="loadSampleBooks()">Load Sample Data</button>
+        </div>
+      </div>
+
+      <!-- GSTR-2B -->
+      <div class="card">
+        <div class="card-header"><div class="card-title">📥 Step 2 — Enter GSTR-2B Data (CSV)</div></div>
+        <div class="card-body">
+          <div style="font-size:12px;color:var(--text2);margin-bottom:10px">Same format as above — from your GSTN portal GSTR-2B download.</div>
+          <input type="file" id="gstr2b-csv" accept=".csv" style="display:none" onchange="parseGSTR2BCSV(this)"/>
+          <button class="btn btn-primary" onclick="document.getElementById('gstr2b-csv').click()">📂 Upload GSTR-2B CSV</button>
+          <div id="gstr2b-status" style="margin-top:8px;font-size:12px;color:var(--text2)"></div>
+          <button class="btn btn-secondary btn-sm" style="margin-top:10px" onclick="loadSampleGSTR2B()">Load Sample Data</button>
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align:center;margin-bottom:14px">
+      <button class="btn btn-primary" style="padding:12px 32px;font-size:14px" onclick="runReconciliation()">⚡ Run Reconciliation</button>
+    </div>
+
+    <div id="recon-result"></div>
+  `;
+}
+
+function parseCSVData(text){
+  const rows=text.trim().split('\n').slice(1); // skip header
+  return rows.map(r=>{
+    const cols=r.split(',').map(c=>c.trim().replace(/^"|"$/g,''));
+    return{supplier:cols[0]||'',gstin:(cols[1]||'').toUpperCase(),invoiceNo:cols[2]||'',date:cols[3]||'',taxable:+cols[4]||0,igst:+cols[5]||0,cgst:+cols[6]||0,sgst:+cols[7]||0};
+  }).filter(r=>r.gstin||r.invoiceNo);
+}
+
+function parseBooksCSV(input){
+  const file=input.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    gstrReconData.books=parseCSVData(e.target.result);
+    document.getElementById('books-status').innerHTML=`<span style="color:var(--green);font-weight:600">✅ Loaded ${gstrReconData.books.length} purchase entries</span>`;
+  };
+  reader.readAsText(file);
+}
+
+function parseGSTR2BCSV(input){
+  const file=input.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    gstrReconData.gstr2b=parseCSVData(e.target.result);
+    document.getElementById('gstr2b-status').innerHTML=`<span style="color:var(--green);font-weight:600">✅ Loaded ${gstrReconData.gstr2b.length} GSTR-2B entries</span>`;
+  };
+  reader.readAsText(file);
+}
+
+function loadSampleBooks(){
+  const csv=`supplier_name,gstin,invoice_no,invoice_date,taxable_amount,igst,cgst,sgst
+Tata Steel Ltd,27AAACT2727Q1ZW,INV-001,2025-11-05,100000,18000,0,0
+Reliance Industries,27AAACR5055K1ZV,INV-002,2025-11-10,50000,0,4500,4500
+Infosys BPM Ltd,29AAACI1681G1ZR,INV-003,2025-11-15,75000,13500,0,0
+Local Supplier,27AAABS1234F1Z1,INV-004,2025-11-18,20000,0,1800,1800
+Wipro Limited,29AAACW0786E1ZR,INV-005,2025-11-20,60000,0,5400,5400
+Missing Supplier,27ABCDE1234F1Z1,INV-006,2025-11-22,30000,5400,0,0`;
+  gstrReconData.books=parseCSVData(csv);
+  document.getElementById('books-status').innerHTML=`<span style="color:var(--green);font-weight:600">✅ Loaded ${gstrReconData.books.length} sample entries</span>`;
+}
+
+function loadSampleGSTR2B(){
+  const csv=`supplier_name,gstin,invoice_no,invoice_date,taxable_amount,igst,cgst,sgst
+Tata Steel Ltd,27AAACT2727Q1ZW,INV-001,2025-11-05,100000,18000,0,0
+Reliance Industries,27AAACR5055K1ZV,INV-002,2025-11-10,50000,0,4500,4500
+Infosys BPM Ltd,29AAACI1681G1ZR,INV-003,2025-11-15,70000,12600,0,0
+Wipro Limited,29AAACW0786E1ZR,INV-005,2025-11-20,60000,0,5400,5400`;
+  gstrReconData.gstr2b=parseCSVData(csv);
+  document.getElementById('gstr2b-status').innerHTML=`<span style="color:var(--green);font-weight:600">✅ Loaded ${gstrReconData.gstr2b.length} sample entries</span>`;
+}
+
+function runReconciliation(){
+  const books=gstrReconData.books;
+  const gstr2b=gstrReconData.gstr2b;
+  if(!books.length&&!gstr2b.length){showToast('Load both datasets first');return;}
+  const results=[];
+  const matchedInvoices=new Set();
+
+  // Match books entries against GSTR-2B
+  books.forEach(b=>{
+    const match=gstr2b.find(g=>g.gstin===b.gstin&&g.invoiceNo===b.invoiceNo);
+    if(match){
+      matchedInvoices.add(match.invoiceNo+'|'+match.gstin);
+      const taxDiff=(b.igst+b.cgst+b.sgst)-(match.igst+match.cgst+match.sgst);
+      const amtDiff=b.taxable-match.taxable;
+      results.push({...b,status:Math.abs(taxDiff)<1&&Math.abs(amtDiff)<1?'matched':'mismatch',taxDiff,amtDiff,g2bIgst:match.igst,g2bCgst:match.cgst,g2bSgst:match.sgst,g2bTaxable:match.taxable});
+    } else {
+      results.push({...b,status:'books_only',taxDiff:b.igst+b.cgst+b.sgst,amtDiff:b.taxable,g2bIgst:0,g2bCgst:0,g2bSgst:0,g2bTaxable:0});
+    }
+  });
+
+  // GSTR-2B entries not in books
+  gstr2b.filter(g=>!matchedInvoices.has(g.invoiceNo+'|'+g.gstin)).forEach(g=>{
+    results.push({...g,status:'gstr2b_only',taxDiff:-(g.igst+g.cgst+g.sgst),amtDiff:-g.taxable,g2bIgst:g.igst,g2bCgst:g.cgst,g2bSgst:g.sgst,g2bTaxable:g.taxable});
+  });
+
+  const matched=results.filter(r=>r.status==='matched');
+  const mismatches=results.filter(r=>r.status==='mismatch');
+  const booksOnly=results.filter(r=>r.status==='books_only');
+  const gstrOnly=results.filter(r=>r.status==='gstr2b_only');
+  const totalITC=results.reduce((a,r)=>a+(r.g2bIgst+r.g2bCgst+r.g2bSgst),0);
+  const totalClaimed=books.reduce((a,b)=>a+(b.igst+b.cgst+b.sgst),0);
+  const mismatAmt=mismatches.reduce((a,r)=>a+Math.abs(r.taxDiff),0);
+
+  const statusColor={matched:'var(--green)',mismatch:'var(--red)',books_only:'var(--amber)',gstr2b_only:'var(--blue)'};
+  const statusLabel={matched:'✅ Matched',mismatch:'❌ Mismatch',books_only:'⚠️ In Books Only',gstr2b_only:'📥 In GSTR-2B Only'};
+
+  document.getElementById('recon-result').innerHTML=`
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px">
+      <div class="cp-kpi ck-green"><div class="cp-kpi-val">${matched.length}</div><div class="cp-kpi-label">Matched</div></div>
+      <div class="cp-kpi ck-red"><div class="cp-kpi-val">${mismatches.length}</div><div class="cp-kpi-label">Mismatches</div></div>
+      <div class="cp-kpi ck-orange"><div class="cp-kpi-val">${booksOnly.length}</div><div class="cp-kpi-label">Books Only</div></div>
+      <div class="cp-kpi ck-blue"><div class="cp-kpi-val">${gstrOnly.length}</div><div class="cp-kpi-label">GSTR-2B Only</div></div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px">
+      <div class="card" style="text-align:center;padding:14px">
+        <div style="font-size:11px;color:var(--text2);margin-bottom:4px">ITC Available (GSTR-2B)</div>
+        <div style="font-size:20px;font-weight:700;color:var(--green)">₹${totalITC.toLocaleString('en-IN')}</div>
+      </div>
+      <div class="card" style="text-align:center;padding:14px">
+        <div style="font-size:11px;color:var(--text2);margin-bottom:4px">ITC Claimed (Books)</div>
+        <div style="font-size:20px;font-weight:700;color:var(--navy)">₹${totalClaimed.toLocaleString('en-IN')}</div>
+      </div>
+      <div class="card" style="text-align:center;padding:14px;${mismatAmt>0?'border:2px solid var(--red)':''}">
+        <div style="font-size:11px;color:var(--text2);margin-bottom:4px">Mismatch Amount</div>
+        <div style="font-size:20px;font-weight:700;color:${mismatAmt>0?'var(--red)':'var(--green)'}">₹${mismatAmt.toLocaleString('en-IN')}</div>
+      </div>
+    </div>
+
+    ${mismatches.length>0||booksOnly.length>0?`<div style="background:#FEE2E2;border:1px solid var(--red);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--red);margin-bottom:12px;font-weight:600">
+      ⚠️ ${mismatches.length+booksOnly.length} item(s) need attention — share this report with your CA team to correct before filing GSTR-3B.
+      <button class="btn btn-secondary btn-sm" style="margin-left:10px" onclick="printReconReport()">🖨️ Print Report</button>
+    </div>`:'<div style="background:#D1FAE5;border:1px solid var(--green);border-radius:8px;padding:10px 14px;font-size:12px;color:#065F46;margin-bottom:12px;font-weight:600">✅ Perfect match — all invoices reconciled. Share with CA team for GSTR-3B filing.</div>'}
+
+    <div class="card">
+      <div class="card-header"><div class="card-title">📋 Detailed Reconciliation (${results.length} entries)</div></div>
+      <div class="card-body" style="padding:0;overflow-x:auto">
+        <table style="width:100%;border-collapse:collapse;font-size:12px;min-width:800px">
+          <thead><tr style="background:var(--gray-light)">
+            <th style="padding:8px 10px">Status</th><th style="padding:8px 10px">Supplier</th><th style="padding:8px 10px">GSTIN</th>
+            <th style="padding:8px 10px">Invoice No</th><th style="padding:8px 10px">Books Taxable</th><th style="padding:8px 10px">Books Tax</th>
+            <th style="padding:8px 10px">GSTR-2B Taxable</th><th style="padding:8px 10px">GSTR-2B Tax</th><th style="padding:8px 10px">Difference</th>
+          </tr></thead>
+          <tbody>
+            ${results.map(r=>`<tr style="border-top:0.5px solid #F3F4F6;background:${r.status==='mismatch'?'#FEF2F2':r.status==='books_only'?'#FFFBEB':r.status==='gstr2b_only'?'#EFF6FF':''}">
+              <td style="padding:7px 10px"><span style="font-size:10px;font-weight:600;color:${statusColor[r.status]}">${statusLabel[r.status]}</span></td>
+              <td style="padding:7px 10px;font-weight:600">${r.supplier.substring(0,16)}</td>
+              <td style="padding:7px 10px;font-family:monospace;font-size:10px">${r.gstin}</td>
+              <td style="padding:7px 10px">${r.invoiceNo}</td>
+              <td style="padding:7px 10px;text-align:right">₹${r.taxable.toLocaleString('en-IN')}</td>
+              <td style="padding:7px 10px;text-align:right">₹${(r.igst+r.cgst+r.sgst).toLocaleString('en-IN')}</td>
+              <td style="padding:7px 10px;text-align:right">₹${r.g2bTaxable.toLocaleString('en-IN')}</td>
+              <td style="padding:7px 10px;text-align:right">₹${(r.g2bIgst+r.g2bCgst+r.g2bSgst).toLocaleString('en-IN')}</td>
+              <td style="padding:7px 10px;text-align:right;font-weight:700;color:${Math.abs(r.taxDiff)>0?'var(--red)':'var(--green)'}">${r.taxDiff!==0?(r.taxDiff>0?'+':'')+'₹'+r.taxDiff.toLocaleString('en-IN'):'—'}</td>
+            </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `;
+}
+
+function printReconReport(){
+  const win=window.open('','_blank');
+  const div=document.getElementById('recon-result');
+  win.document.write(`<html><head><title>GSTR-2B Reconciliation Report</title><style>body{font-family:sans-serif;padding:24px;font-size:12px}table{width:100%;border-collapse:collapse}th,td{padding:6px 8px;border:1px solid #E5E7EB;text-align:left}th{background:#F9FAFB;font-weight:600}</style></head><body><h2>GSTR-2B Reconciliation Report</h2><p>Generated: ${new Date().toLocaleDateString('en-IN')} · ${clientPortalUser?.name||''}</p>${div?.innerHTML||''}</body></html>`);
+  win.document.close();win.print();
+}
+
+// ─────────────────────────────────────────────────────────────
+//  FEATURE 11 — ENHANCED IN-APP MESSAGING (work order threads)
+// ─────────────────────────────────────────────────────────────
+// NOTE: existing renderCPMessages already shows a basic chat.
+// This enhances it with per-order thread tabs, doc attach in chat,
+// and staff-side unread indicators.
+
+function openCPChat(woId){
+  cpNavigateTo('cp-messages');
+  setTimeout(()=>{
+    const btn=document.querySelector(`[data-wochat="${woId}"]`);
+    if(btn) btn.click();
+  },100);
+}
+
+// Override renderCPMessages with enhanced version
+const _origRenderCPMessages=renderCPMessages;
+window.renderCPMessages=function(){
+  const orders=myOrders();
+  const clientId=myClientId();
+
+  document.getElementById('cp-content').innerHTML=`
+    <div style="font-size:12px;color:var(--text2);margin-bottom:10px">Messages are tied to each work order — full history is saved. No more lost WhatsApp documents.</div>
+
+    <!-- Thread selector tabs -->
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--border)">
+      <button class="btn ${window._cpChatWo==='all'||!window._cpChatWo?'btn-primary':'btn-secondary'} btn-sm" onclick="window._cpChatWo='all';renderCPMessages()">💬 All Messages</button>
+      ${orders.map(w=>{
+        const comments=(CACHE.comments[w.id]||[]).filter(c=>c.author!=='system');
+        return`<button class="btn btn-secondary btn-sm" data-wochat="${w.id}" style="${window._cpChatWo===w.id?'border-color:var(--orange);color:var(--orange)':''}" onclick="window._cpChatWo='${w.id}';renderCPMessages()">${w.service} ${comments.length>0?`<span style="background:var(--orange);color:#fff;border-radius:8px;padding:0 5px;font-size:9px;margin-left:3px">${comments.length}</span>`:''}</button>`;
+      }).join('')}
+    </div>
+
+    <!-- Message thread -->
+    <div class="card" style="margin-bottom:10px">
+      <div class="card-header">
+        <div class="card-title">
+          ${window._cpChatWo&&window._cpChatWo!=='all'
+            ?`Thread: ${orders.find(w=>w.id===window._cpChatWo)?.service||'Work Order'}`
+            :'All Message Threads'}
+        </div>
+      </div>
+      <div id="cp-msg-list" style="max-height:360px;overflow-y:auto;padding:14px;background:#F8F9FB;border-radius:0">
+        ${buildCPMessageHTML(clientId)}
+      </div>
+      <div style="padding:10px 14px;border-top:1px solid var(--border);display:flex;gap:8px;align-items:center">
+        <input id="cp-msg-input" class="form-input" style="flex:1" placeholder="Type a message to your CA team…" onkeydown="if(event.key==='Enter'&&!event.shiftKey){sendCPMessage();event.preventDefault()}"/>
+        <button class="btn btn-primary" onclick="sendCPMessage()">Send</button>
+      </div>
+    </div>
+
+    <!-- Attach document to message -->
+    <div class="card">
+      <div class="card-header"><div class="card-title">📎 Attach Document to Message</div></div>
+      <div class="card-body">
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+          <select id="cp-msg-doc-type" class="form-input form-select" style="width:160px">
+            ${['Select Document Type','Form 130 (Salary TDS)','AIS / TIS','Form 26AS','Bank Statement','Investment Proof','Identity','Other'].map(t=>`<option>${t}</option>`).join('')}
+          </select>
+          <input id="cp-msg-doc-name" class="form-input" style="flex:1;min-width:140px" placeholder="Document name…"/>
+          <button class="btn btn-primary btn-sm" onclick="attachDocViaChat()">📎 Attach & Send</button>
+        </div>
+        <div style="font-size:11px;color:var(--text2);margin-top:6px">Attaching sends a message to your CA team notifying them of the document upload.</div>
+      </div>
+    </div>
+  `;
+};
+
+function buildCPMessageHTML(clientId){
+  const woId=window._cpChatWo;
+  let comments=[];
+  if(!woId||woId==='all'){
+    myOrders().forEach(w=>{
+      (CACHE.comments[w.id]||[]).forEach(c=>comments.push({...c,service:w.service,woId:w.id}));
+    });
+  } else {
+    comments=(CACHE.comments[woId]||[]).map(c=>({...c,service:myOrders().find(w=>w.id===woId)?.service||''}));
+  }
+  comments.sort((a,b)=>new Date(a.ts)-new Date(b.ts));
+  if(!comments.length) return`<div style="text-align:center;color:var(--text2);font-size:13px;padding:24px">No messages yet. Send your CA team a message below.</div>`;
+  return comments.map(c=>{
+    const isClient=c.author==='client_'+clientId||c.uploadedBy==='client';
+    return isClient
+      ?`<div style="display:flex;justify-content:flex-end;margin-bottom:10px"><div style="max-width:75%;background:var(--orange);color:#fff;padding:9px 13px;border-radius:14px 14px 2px 14px;font-size:13px"><div>${c.text}</div><div style="font-size:10px;opacity:.75;margin-top:3px;text-align:right">${fmtDate(c.ts)} · You ${c.service?'('+c.service+')':''}</div></div></div>`
+      :`<div style="display:flex;margin-bottom:10px"><div style="max-width:75%;background:#fff;border:1px solid var(--border);padding:9px 13px;border-radius:14px 14px 14px 2px;font-size:13px"><div style="font-size:10px;font-weight:700;color:var(--orange);margin-bottom:3px">${c.authorName||'CA Team'}</div><div>${c.text}</div><div style="font-size:10px;color:var(--text2);margin-top:3px">${fmtDate(c.ts)} ${c.service?'('+c.service+')':''}</div></div></div>`;
+  }).join('');
+}
+
+function sendCPMessage(){
+  const inp=document.getElementById('cp-msg-input');
+  const text=inp?.value.trim();if(!text)return;
+  const woId=window._cpChatWo&&window._cpChatWo!=='all'?window._cpChatWo:myOrders()[0]?.id;
+  if(!woId){showToast('No work orders to message about');return;}
+  const cId=myClientId();
+  if(!CACHE.comments[woId])CACHE.comments[woId]=[];
+  CACHE.comments[woId].push({id:genId(),author:'client_'+cId,authorName:clientPortalUser?.name||'Client',text,ts:new Date().toISOString()});
+  saveLS();inp.value='';
+  const list=document.getElementById('cp-msg-list');
+  if(list) list.innerHTML=buildCPMessageHTML(cId);
+  list.scrollTop=list.scrollHeight;
+  showToast('Message sent to CA team');
+}
+
+function attachDocViaChat(){
+  const name=document.getElementById('cp-msg-doc-name')?.value.trim();
+  const type=document.getElementById('cp-msg-doc-type')?.value;
+  if(!name||!name||type==='Select Document Type'){showToast('Enter document name and type');return;}
+  const cId=myClientId();
+  const woId=window._cpChatWo&&window._cpChatWo!=='all'?window._cpChatWo:myOrders()[0]?.id;
+  // Add to documents
+  if(!CACHE.documents[cId])CACHE.documents[cId]=[];
+  const doc={id:genId(),name,type,date:new Date().toISOString(),uploadedBy:'client',workOrderId:woId};
+  CACHE.documents[cId].push(doc);
+  // Add as chat message
+  if(woId){
+    if(!CACHE.comments[woId])CACHE.comments[woId]=[];
+    CACHE.comments[woId].push({id:genId(),author:'client_'+cId,authorName:clientPortalUser?.name||'Client',text:`📎 Document attached: ${name} (${type})`,ts:new Date().toISOString()});
+  }
+  saveLS();
+  document.getElementById('cp-msg-doc-name').value='';
+  document.getElementById('cp-msg-doc-type').value='Select Document Type';
+  const list=document.getElementById('cp-msg-list');
+  if(list){list.innerHTML=buildCPMessageHTML(cId);list.scrollTop=list.scrollHeight;}
+  buildAlerts();
+  showToast(`✅ ${name} attached and CA team notified`);
+}
+
+// ─────────────────────────────────────────────────────────────
+//  FEATURE 12 — DIGITAL KYC & ONBOARDING CHECKLIST
+// ─────────────────────────────────────────────────────────────
+const KYC_FIELDS=[
+  {id:'pan',       label:'PAN Card',           required:true, hint:'10-character PAN e.g. ABCDE1234F'},
+  {id:'aadhaar',   label:'Aadhaar Number',      required:true, hint:'12-digit Aadhaar number'},
+  {id:'gstin',     label:'GSTIN',               required:false,hint:'15-character GST number (if registered)'},
+  {id:'mobile',    label:'Mobile Number',        required:true, hint:'10-digit mobile'},
+  {id:'email',     label:'Email Address',        required:true, hint:'Primary email'},
+  {id:'address',   label:'Registered Address',  required:true, hint:'Full address with PIN code'},
+  {id:'bankName',  label:'Bank Name',            required:false,hint:'Primary bank name'},
+  {id:'accountNo', label:'Bank Account Number', required:false,hint:'For refunds / payments'},
+  {id:'ifsc',      label:'IFSC Code',           required:false,hint:'Bank branch IFSC'},
+  {id:'dscHolder', label:'DSC Holder Name',     required:false,hint:'Name on Digital Signature Certificate'},
+];
+const KYC_DOCS=[
+  {id:'doc-pan',     label:'PAN Card Copy',        required:true},
+  {id:'doc-aadhaar', label:'Aadhaar Copy',          required:true},
+  {id:'doc-photo',   label:'Passport-size Photo',   required:false},
+  {id:'doc-address', label:'Address Proof',         required:false},
+  {id:'doc-cancel',  label:'Cancelled Cheque / Bank Passbook', required:false},
+  {id:'doc-gst',     label:'GST Registration Certificate', required:false},
+  {id:'doc-prev',    label:'Previous Year ITR Acknowledgment', required:false},
+  {id:'doc-dsc',     label:'DSC Token (or Class 3 Certificate)', required:false},
+];
+
+function renderCPKYC(){
+  const cId=myClientId();
+  const client=CACHE.clients.find(c=>c.id===cId)||{};
+  const docs=myDocs();
+  const kycData=JSON.parse(localStorage.getItem('ca_kyc_'+cId)||'{}');
+  const filledFields=KYC_FIELDS.filter(f=>kycData[f.id]||client[f.id]).length;
+  const uploadedDocIds=docs.map(d=>d.kycDocId).filter(Boolean);
+  const completedDocs=KYC_DOCS.filter(d=>uploadedDocIds.includes(d.id)).length;
+  const totalRequired=KYC_FIELDS.filter(f=>f.required).length+KYC_DOCS.filter(d=>d.required).length;
+  const completedRequired=KYC_FIELDS.filter(f=>f.required&&(kycData[f.id]||client[f.id])).length
+    +KYC_DOCS.filter(d=>d.required&&uploadedDocIds.includes(d.id)).length;
+  const pct=Math.round((completedRequired/totalRequired)*100);
+
+  document.getElementById('cp-content').innerHTML=`
+    <div style="background:#EDE9FE;border:1px solid #7C3AED;border-radius:10px;padding:11px 15px;font-size:12px;color:#5B21B6;margin-bottom:14px">
+      <b>👤 Digital KYC & Onboarding</b> — Fill your details and upload required documents below. Your CA firm will verify them. This replaces all back-and-forth email and WhatsApp for client onboarding.
+    </div>
+
+    <!-- Progress -->
+    <div class="card" style="margin-bottom:12px">
+      <div class="card-body">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <div style="font-size:13px;font-weight:600">KYC Completion</div>
+          <div style="font-size:14px;font-weight:700;color:${pct===100?'var(--green)':pct>=50?'var(--amber)':'var(--red)'}"> ${pct}%</div>
+        </div>
+        <div class="pw" style="height:10px"><div class="pf ${pct===100?'g':''}" style="width:${pct}%;background:${pct===100?'var(--green)':pct>=50?'var(--amber)':'var(--orange)'}"></div></div>
+        <div style="font-size:11px;color:var(--text2);margin-top:6px">${completedRequired} of ${totalRequired} required items completed</div>
+        ${pct===100?`<div style="margin-top:8px;font-size:12px;font-weight:600;color:var(--green)">✅ KYC Complete — your CA team has been notified for verification.</div>`:''}
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+
+      <!-- Information fields -->
+      <div class="card">
+        <div class="card-header"><div class="card-title">📝 Your Information</div><span class="pill p-blue" style="font-size:11px">${filledFields}/${KYC_FIELDS.length} filled</span></div>
+        <div class="card-body">
+          ${KYC_FIELDS.map(f=>`
+            <div class="form-group">
+              <label class="form-label">${f.label} ${f.required?'<span style="color:var(--red)">*</span>':''}</label>
+              <input id="kyc-${f.id}" class="form-input" placeholder="${f.hint}" value="${kycData[f.id]||client[f.id]||''}" ${kycData[f.id]||client[f.id]?'style="border-color:var(--green)"':''}/>
+            </div>`).join('')}
+          <button class="btn btn-primary" onclick="saveKYCData('${cId}')">💾 Save Information</button>
+        </div>
+      </div>
+
+      <!-- Document upload checklist -->
+      <div class="card">
+        <div class="card-header"><div class="card-title">📎 Required Documents</div><span class="pill p-blue" style="font-size:11px">${completedDocs}/${KYC_DOCS.length} uploaded</span></div>
+        <div class="card-body" style="padding:0">
+          ${KYC_DOCS.map(d=>{
+            const uploaded=uploadedDocIds.includes(d.id);
+            return`<div style="display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;padding:10px 14px;border-bottom:0.5px solid #F3F4F6">
+              <div>
+                <div style="font-size:13px;font-weight:500;color:${uploaded?'var(--green)':'var(--navy)'}">${uploaded?'✅ ':'📋 '}${d.label} ${d.required?'<span style="color:var(--red);font-size:10px">*</span>':''}</div>
+                ${uploaded?`<div style="font-size:10px;color:var(--green)">Uploaded</div>`:`<div style="font-size:10px;color:var(--text2)">Not uploaded yet</div>`}
+              </div>
+              ${uploaded
+                ?`<span class="pill p-green" style="font-size:10px">✓ Done</span>`
+                :`<button class="btn btn-secondary btn-sm" onclick="uploadKYCDoc('${cId}','${d.id}','${d.label}')">Upload</button>`}
+            </div>`;}).join('')}
+          <div style="padding:12px 14px">
+            <div style="font-size:11px;color:var(--text2)">* Required documents must be uploaded before CA can begin work.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:12px">
+      <div class="card-header"><div class="card-title">📋 KYC & Onboarding Checklist (For Your Reference)</div></div>
+      <div class="card-body" style="padding:0">
+        ${[
+          ['Provide PAN & Aadhaar','mandatory for all filings'],
+          ['Share GSTIN if GST registered','for GST compliance'],
+          ['Upload previous year ITR copy','for continuity'],
+          ['Provide bank details','for refunds & advance tax'],
+          ['Share DSC Class 3 token / login','for e-filing'],
+          ['Confirm email address','for notices & portal access'],
+          ['Sign engagement letter','sent by CA firm separately'],
+          ['Confirm billing details','for invoice issuance'],
+        ].map(([step,note],i)=>{
+          const done=kycData['onboard-'+i]==='done';
+          return`<div style="display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;padding:9px 14px;border-bottom:0.5px solid #F3F4F6">
+            <div>
+              <div style="font-size:13px;font-weight:500;color:${done?'var(--text2)':'var(--navy)'};text-decoration:${done?'line-through':''}">${i+1}. ${step}</div>
+              <div style="font-size:11px;color:var(--text2)">${note}</div>
+            </div>
+            <button class="btn ${done?'btn-secondary':'btn-primary'} btn-sm" onclick="toggleOnboardStep('${cId}',${i},'${done?'':'done'}')">${done?'✓ Done':'Mark Done'}</button>
+          </div>`;}).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function saveKYCData(cId){
+  const data={};
+  KYC_FIELDS.forEach(f=>{const el=document.getElementById('kyc-'+f.id);if(el)data[f.id]=el.value.trim();});
+  // Validate required
+  const missing=KYC_FIELDS.filter(f=>f.required&&!data[f.id]);
+  if(missing.length>0){showToast('Please fill: '+missing.map(f=>f.label).join(', '));return;}
+  localStorage.setItem('ca_kyc_'+cId,JSON.stringify(data));
+  // Also update client record with PAN/GSTIN
+  const idx=CACHE.clients.findIndex(c=>c.id===cId);
+  if(idx>=0){
+    if(data.pan)CACHE.clients[idx].pan=data.pan;
+    if(data.gstin)CACHE.clients[idx].gstin=data.gstin;
+    if(data.mobile)CACHE.clients[idx].mobile=data.mobile;
+    if(data.dscHolder)CACHE.clients[idx].dscHolder=data.dscHolder;
+    saveLS();
+  }
+  showToast('✅ KYC information saved — CA team notified');
+  buildAlerts();
+  renderCPKYC();
+}
+
+function uploadKYCDoc(cId,kycDocId,label){
+  if(!CACHE.documents[cId])CACHE.documents[cId]=[];
+  const doc={id:genId(),name:label,type:'KYC Document',date:new Date().toISOString(),uploadedBy:'client',kycDocId};
+  CACHE.documents[cId].push(doc);
+  saveLS();
+  showToast(`✅ ${label} uploaded`);
+  renderCPKYC();
+}
+
+function toggleOnboardStep(cId,idx,val){
+  const stored=JSON.parse(localStorage.getItem('ca_kyc_'+cId)||'{}');
+  stored['onboard-'+idx]=val;
+  localStorage.setItem('ca_kyc_'+cId,JSON.stringify(stored));
+  renderCPKYC();
+}
+
+// Staff-side KYC notification — show in alerts when client completes KYC
+// (called from buildAlerts — checks if any client has kyc data newly saved)
+function getKYCAlerts(){
+  const alerts=[];
+  CACHE.clients.forEach(c=>{
+    const kycData=JSON.parse(localStorage.getItem('ca_kyc_'+c.id)||'{}');
+    const filled=KYC_FIELDS.filter(f=>kycData[f.id]).length;
+    if(filled>0&&!kycData._notified){
+      alerts.push({id:'kyc-'+c.id,type:'kyc',level:'green',
+        title:`👤 KYC Update — ${c.name}`,
+        sub:`Client has filled ${filled}/${KYC_FIELDS.length} KYC fields. Review and verify.`,
+        actionLabel:'Review Client',actionFn:`navigateTo('clients')`,dismissed:false});
+    }
+  });
+  return alerts;
+}
+
+// ══════════════════════════════════════════════════════════════
+//  SPRINT 4 — ADVANCED & AI FEATURES
+//  Feature 13 — Advance Tax Planner (quarterly auto-calculation)
+//  Feature 14 — Annual Compliance Auto-Generator
+//  Feature 15 — Digital Engagement Letter + e-signature
+//  Feature 16 — GSTR-9 Auto-Preparation from monthly returns
+//  Feature 17 — 26AS / AIS Mismatch Detector
+//  Feature 18 — Client Net Worth & Financial Health Tracker
+// ══════════════════════════════════════════════════════════════
+
+// ─────────────────────────────────────────────────────────────
+//  FEATURE 13 — ADVANCE TAX PLANNER
+// ─────────────────────────────────────────────────────────────
+const ADV_TAX_QS=[
+  {q:'Q1',pct:15,month:5,day:15,label:'15 June'},
+  {q:'Q2',pct:45,month:8,day:15,label:'15 September'},
+  {q:'Q3',pct:75,month:11,day:15,label:'15 December'},
+  {q:'Q4',pct:100,month:2,day:15,label:'15 March'},
+];
+
+function renderAdvTax(){
+  const clients=visClients().filter(c=>!['Company','LLP','Firm'].includes(c.type));
+  const saved=JSON.parse(localStorage.getItem('ca_advtax')||'{}');
+
+  document.getElementById('content').innerHTML=`
+    <div style="background:#EDE9FE;border:1px solid #7C3AED;border-radius:10px;padding:11px 15px;font-size:12px;color:#5B21B6;margin-bottom:14px">
+      <b>📅 Advance Tax Planner:</b> Enter estimated annual income per client. App auto-calculates Q1/Q2/Q3/Q4 instalments and alerts 15 days before each due date. Eliminates interest u/s 234B &amp; 234C.
+    </div>
+
+    <div class="card" style="margin-bottom:14px">
+      <div class="card-header"><div class="card-title">⚡ Q1–Q4 Instalment Schedule — FY 2025-26</div></div>
+      <div class="card-body" style="padding:0;overflow-x:auto">
+        <table style="width:100%;border-collapse:collapse;font-size:13px;min-width:700px">
+          <thead><tr style="background:var(--gray-light)">
+            <th style="padding:10px 14px;text-align:left;font-weight:600;min-width:140px">Client</th>
+            <th style="padding:10px 12px;text-align:right;font-weight:600">Est. Annual Income</th>
+            <th style="padding:10px 12px;text-align:right;font-weight:600">Est. Tax (New Regime)</th>
+            ${ADV_TAX_QS.map(q=>`<th style="padding:10px 10px;text-align:center;font-weight:600">${q.q}<br><span style="font-size:10px;font-weight:400">${q.label} (${q.pct}%)</span></th>`).join('')}
+            <th style="padding:10px 12px;text-align:left;font-weight:600">Action</th>
+          </tr></thead>
+          <tbody>
+            ${clients.map(c=>{
+              const d=saved[c.id]||{};
+              const income=+d.income||0;
+              const tax=calcAdvTaxLiability(income);
+              const now=new Date();
+              return`<tr style="border-top:0.5px solid #F3F4F6" id="atr-${c.id}">
+                <td style="padding:9px 14px;font-weight:600">${c.name.substring(0,18)}<div style="font-size:10px;color:var(--text2)">${c.type||''}</div></td>
+                <td style="padding:9px 12px;text-align:right">
+                  <input type="number" class="form-input" style="width:110px;text-align:right;padding:4px 6px;font-size:12px" placeholder="Enter income" value="${income||''}" onchange="saveAdvTax('${c.id}',this.value)" oninput="updateAdvTaxRow('${c.id}',this.value)"/>
+                </td>
+                <td style="padding:9px 12px;text-align:right;font-weight:700;color:${tax>0?'var(--red)':'var(--text2)'}" id="at-tax-${c.id}">${tax>0?fmtMoney(tax):'—'}</td>
+                ${ADV_TAX_QS.map(q=>{
+                  const amt=tax>0?Math.round(tax*q.pct/100):0;
+                  const prevAmt=q.pct>15?Math.round(tax*(ADV_TAX_QS[ADV_TAX_QS.indexOf(q)-1]?.pct||0)/100):0;
+                  const instalment=amt-prevAmt;
+                  const due=new Date(now.getFullYear(),q.month,q.day);
+                  const daysLeft=Math.ceil((due-now)/86400000);
+                  const overdue=daysLeft<0;
+                  const soon=daysLeft>=0&&daysLeft<=15;
+                  return`<td style="padding:9px 10px;text-align:center" id="at-q${q.q}-${c.id}">
+                    <div style="font-size:13px;font-weight:700;color:${overdue?'var(--text2)':soon?'var(--red)':tax>0?'var(--navy)':'var(--text2)'}">${instalment>0?fmtMoney(instalment):'—'}</div>
+                    <div style="font-size:9px;color:${overdue?'var(--text2)':soon?'var(--red)':'var(--text2)'}">${overdue?'Past due':soon?`Due in ${daysLeft}d ⚠️`:tax>0?`${daysLeft}d left`:''}</div>
+                  </td>`;}).join('')}
+                <td style="padding:9px 12px">
+                  <button class="btn btn-secondary btn-sm" onclick="printAdvTaxChallan('${c.id}')">🖨 Challan</button>
+                </td>
+              </tr>`;}).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><div class="card-title">ℹ️ Advance Tax Rules — Quick Reference</div></div>
+      <div class="card-body">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;font-size:13px">
+          <div>
+            <div style="font-weight:600;margin-bottom:8px">Who must pay?</div>
+            <div style="color:var(--text2);line-height:1.8">• Tax liability > ₹10,000 in a year<br>• Salaried (if TDS insufficient)<br>• Business / professionals<br>• Capital gains recipients<br>• Rental income earners</div>
+          </div>
+          <div>
+            <div style="font-weight:600;margin-bottom:8px">Interest if you miss / short pay</div>
+            <div style="color:var(--text2);line-height:1.8">• <b style="color:var(--red)">Sec 234B:</b> 1%/month if < 90% paid by 31 Mar<br>• <b style="color:var(--red)">Sec 234C:</b> 1%/month if Q instalment short<br>• Seniors (no business income) — exempt<br>• Presumptive tax u/s 44AD — pay 100% by Q4</div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+}
+
+function calcAdvTaxLiability(income){
+  if(!income||income<=1200000) return 0;
+  const std=75000;
+  const taxable=Math.max(0,income-std);
+  let t=0;
+  if(taxable>400000)t+=Math.min(taxable-400000,400000)*0.05;
+  if(taxable>800000)t+=Math.min(taxable-800000,400000)*0.10;
+  if(taxable>1200000)t+=Math.min(taxable-1200000,400000)*0.15;
+  if(taxable>1600000)t+=Math.min(taxable-1600000,400000)*0.20;
+  if(taxable>2000000)t+=Math.min(taxable-2000000,400000)*0.25;
+  if(taxable>2400000)t+=(taxable-2400000)*0.30;
+  const surcharge=income>5000000?t*0.10:0;
+  return Math.round((t+surcharge)*1.04);
+}
+
+function saveAdvTax(cId,income){
+  const d=JSON.parse(localStorage.getItem('ca_advtax')||'{}');
+  d[cId]={income:+income,updatedAt:new Date().toISOString()};
+  localStorage.setItem('ca_advtax',JSON.stringify(d));
+}
+
+function updateAdvTaxRow(cId,income){
+  saveAdvTax(cId,income);
+  const tax=calcAdvTaxLiability(+income);
+  const taxEl=document.getElementById('at-tax-'+cId);
+  if(taxEl)taxEl.textContent=tax>0?fmtMoney(tax):'—';
+  const now=new Date();
+  ADV_TAX_QS.forEach((q,i)=>{
+    const el=document.getElementById(`at-q${q.q}-${cId}`);
+    if(!el)return;
+    const amt=tax>0?Math.round(tax*q.pct/100):0;
+    const prevAmt=i>0?Math.round(tax*ADV_TAX_QS[i-1].pct/100):0;
+    const instalment=amt-prevAmt;
+    const due=new Date(now.getFullYear(),q.month,q.day);
+    const daysLeft=Math.ceil((due-now)/86400000);
+    const overdue=daysLeft<0;const soon=daysLeft>=0&&daysLeft<=15;
+    el.innerHTML=`<div style="font-size:13px;font-weight:700;color:${overdue?'var(--text2)':soon?'var(--red)':tax>0?'var(--navy)':'var(--text2)'}">${instalment>0?fmtMoney(instalment):'—'}</div><div style="font-size:9px;color:${overdue?'var(--text2)':soon?'var(--red)':'var(--text2)'}">${overdue?'Past due':soon?`Due in ${daysLeft}d ⚠️`:tax>0?`${daysLeft}d left`:''}</div>`;
+  });
+}
+
+function printAdvTaxChallan(cId){
+  const c=CACHE.clients.find(x=>x.id===cId);if(!c)return;
+  const d=JSON.parse(localStorage.getItem('ca_advtax')||'{}')[cId]||{};
+  const income=+d.income||0;const tax=calcAdvTaxLiability(income);
+  if(!income){showToast('Enter estimated income for this client first');return;}
+  const now=new Date();
+  const win=window.open('','_blank');
+  win.document.write(`<html><head><title>Advance Tax — ${c.name}</title>
+  <style>body{font-family:sans-serif;padding:32px;max-width:600px;margin:0 auto}h2{color:#E8690A}table{width:100%;border-collapse:collapse;margin:12px 0}th,td{padding:8px 10px;border:1px solid #E5E7EB;font-size:13px}th{background:#F9FAFB;font-weight:600}.note{background:#FEF3C7;padding:10px;border-radius:6px;font-size:12px;margin-top:12px}</style>
+  </head><body>
+  <h2>Advance Tax Challan — FY 2025-26</h2>
+  <table><tr><th>Client</th><td>${c.name}</td></tr><tr><th>PAN</th><td>${c.pan||'—'}</td></tr>
+  <tr><th>Estimated Income</th><td>${fmtMoney(income)}</td></tr><tr><th>Total Tax Liability</th><td>${fmtMoney(tax)}</td></tr></table>
+  <h3>Instalment Schedule</h3>
+  <table><thead><tr><th>Quarter</th><th>Due Date</th><th>Cumulative %</th><th>Instalment Amount</th><th>Paid?</th></tr></thead><tbody>
+  ${ADV_TAX_QS.map((q,i)=>{const cum=Math.round(tax*q.pct/100);const prev=i>0?Math.round(tax*ADV_TAX_QS[i-1].pct/100):0;return`<tr><td>${q.q}</td><td>${q.label}</td><td>${q.pct}%</td><td><b>${fmtMoney(cum-prev)}</b></td><td>☐</td></tr>`;}).join('')}
+  </tbody></table>
+  <div class="note"><b>Note:</b> Pay via Challan 280 on www.incometax.gov.in → e-Pay Tax. Select Assessment Year 2026-27. Interest u/s 234B/234C applies if any instalment is short-paid.</div>
+  <p style="margin-top:20px;font-size:11px;color:#999">Generated ${now.toLocaleDateString('en-IN')} · CA Firm OS</p>
+  </body></html>`);win.document.close();win.print();
+}
+
+// ─────────────────────────────────────────────────────────────
+//  FEATURE 14 — ANNUAL COMPLIANCE AUTO-GENERATOR
+// ─────────────────────────────────────────────────────────────
+const SERVICE_PROFILES={
+  'Proprietor / Individual':    {services:[{s:'ITR Filing',q:1},{s:'TDS',q:4},{s:'Advisory',q:1}]},
+  'Company':                    {services:[{s:'Audit',q:1},{s:'ITR Filing',q:1},{s:'GST',q:12},{s:'TDS',q:4},{s:'ROC',q:1}]},
+  'LLP':                        {services:[{s:'Audit',q:1},{s:'ITR Filing',q:1},{s:'GST',q:12},{s:'TDS',q:4},{s:'ROC',q:1}]},
+  'Firm':                       {services:[{s:'ITR Filing',q:1},{s:'GST',q:12},{s:'TDS',q:4}]},
+  'Trust / NGO':                {services:[{s:'Audit',q:1},{s:'ITR Filing',q:1},{s:'ROC',q:1}]},
+  'Proprietor with GST':        {services:[{s:'ITR Filing',q:1},{s:'GST',q:12},{s:'TDS',q:4}]},
+};
+
+function renderAutoGen(){
+  if(!['Admin','Manager'].includes(currentUser.role)){
+    document.getElementById('content').innerHTML=`<div class="empty-state"><div class="empty-state-icon">🔒</div><h3>Admin / Manager Only</h3></div>`;return;
+  }
+  const clients=visClients();
+  const yr=new Date().getFullYear();
+  const genLog=JSON.parse(localStorage.getItem('ca_autogen_log')||'[]');
+
+  document.getElementById('content').innerHTML=`
+    <div style="background:#FEF3C7;border:1px solid #F59E0B;border-radius:10px;padding:11px 15px;font-size:12px;color:#92400E;margin-bottom:14px">
+      <b>⚙ Annual Compliance Auto-Generator:</b> Generates all recurring work orders for each client in one click based on their business type. Normally done on 1 April each year. Saves 4–6 hours of manual work order creation.
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">
+      <div class="card">
+        <div class="card-header"><div class="card-title">🗓 Generate for FY</div></div>
+        <div class="card-body">
+          <div class="form-group">
+            <label class="form-label">Financial Year</label>
+            <select id="ag-fy" class="form-input form-select">
+              <option value="2025-26">FY 2025-26</option>
+              <option value="2026-27">FY 2026-27</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Assign All To</label>
+            <select id="ag-assign" class="form-input form-select">
+              <option value="">Auto-assign (round robin)</option>
+              ${visEmps().map(e=>`<option value="${e.id}">${e.name}</option>`).join('')}
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Filter Clients</label>
+            <select id="ag-filter" class="form-input form-select">
+              <option value="all">All Clients</option>
+              ${Object.keys(SERVICE_PROFILES).map(t=>`<option value="${t}">${t}</option>`).join('')}
+            </select>
+          </div>
+          <button class="btn btn-primary" onclick="previewAutoGen()">👁 Preview Work Orders</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><div class="card-title">📊 Service Profile Reference</div></div>
+        <div class="card-body" style="padding:0">
+          ${Object.entries(SERVICE_PROFILES).map(([type,prof])=>`
+            <div style="padding:8px 14px;border-bottom:0.5px solid #F3F4F6">
+              <div style="font-size:12px;font-weight:600;color:var(--navy)">${type}</div>
+              <div style="font-size:11px;color:var(--text2);margin-top:2px">${prof.services.map(s=>`${s.s} ×${s.q}`).join(' · ')}</div>
+            </div>`).join('')}
+        </div>
+      </div>
+    </div>
+
+    <div id="ag-preview"></div>
+
+    ${genLog.length>0?`
+    <div class="card" style="margin-top:14px">
+      <div class="card-header"><div class="card-title">📋 Generation History</div></div>
+      <div class="card-body" style="padding:0">
+        ${genLog.slice(0,5).map(l=>`<div style="padding:9px 14px;border-bottom:0.5px solid #F3F4F6;font-size:13px">
+          <b>${l.fy}</b> — ${l.count} work orders created on ${fmtDate(l.ts)} by ${l.by}
+        </div>`).join('')}
+      </div>
+    </div>`:''}
+  `;
+}
+
+function previewAutoGen(){
+  const fy=document.getElementById('ag-fy')?.value||'2025-26';
+  const filter=document.getElementById('ag-filter')?.value||'all';
+  const assignTo=document.getElementById('ag-assign')?.value||'';
+  const clients=visClients().filter(c=>filter==='all'||c.type===filter);
+  const preview=[];
+  const startYr=parseInt(fy.split('-')[0]);
+
+  clients.forEach(c=>{
+    const profile=SERVICE_PROFILES[c.type]||SERVICE_PROFILES['Proprietor / Individual'];
+    profile.services.forEach(({s,q})=>{
+      for(let i=0;i<q;i++){
+        // Calculate due date based on service type
+        let dueDate;
+        const mn=new Date().getMonth();
+        if(s==='GST'){const d=new Date(startYr,3+i,20);dueDate=d.toISOString();}
+        else if(s==='TDS'){const d=new Date(startYr,[6,9,12,3][i]||6,31);dueDate=d.toISOString();}
+        else if(s==='ITR Filing'){dueDate=new Date(startYr+1,7,31).toISOString();}
+        else if(s==='Audit'){dueDate=new Date(startYr+1,9,31).toISOString();}
+        else if(s==='ROC'){dueDate=new Date(startYr+1,8,30).toISOString();}
+        else{dueDate=new Date(startYr+1,2,31).toISOString();}
+        preview.push({clientId:c.id,clientName:c.name,service:s,iteration:i+1,total:q,dueDate,description:`${s} ${q>1?`(${i+1}/${q}) `:''} FY ${fy}`,fee:c.defaultFee||0,branch:c.branch||currentUser.branch||'Mumbai HQ',assignedTo:assignTo||''});
+      }
+    });
+  });
+
+  document.getElementById('ag-preview').innerHTML=`
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">👁 Preview — ${preview.length} Work Orders to Create</div>
+        <button class="btn btn-primary" onclick="executeAutoGen(${JSON.stringify(preview).replace(/"/g,'&quot;')})">✅ Generate All</button>
+      </div>
+      <div class="card-body" style="padding:0;overflow-x:auto;max-height:400px;overflow-y:auto">
+        <table style="width:100%;border-collapse:collapse;font-size:12px;min-width:600px">
+          <thead><tr style="background:var(--gray-light)"><th style="padding:8px 12px">Client</th><th style="padding:8px 10px">Service</th><th style="padding:8px 10px">Description</th><th style="padding:8px 10px">Due Date</th></tr></thead>
+          <tbody>
+            ${preview.map(p=>`<tr style="border-top:0.5px solid #F3F4F6"><td style="padding:7px 12px;font-weight:600">${p.clientName.substring(0,16)}</td><td style="padding:7px 10px"><span class="pill p-blue">${p.service}</span></td><td style="padding:7px 10px;font-size:11px;color:var(--text2)">${p.description}</td><td style="padding:7px 10px">${fmtDate(p.dueDate)}</td></tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>`;
+}
+
+async function executeAutoGen(previewData){
+  if(!confirm(`Create ${previewData.length} work orders? Existing orders will not be duplicated.`))return;
+  const emps=visEmps();let empIdx=0;let created=0;
+  for(const p of previewData){
+    // Skip if already exists for this client/service/FY
+    const exists=CACHE.workOrders.some(w=>w.clientId===p.clientId&&w.service===p.service&&w.description===p.description);
+    if(exists)continue;
+    const assigned=p.assignedTo||emps[empIdx%emps.length]?.id||'';
+    empIdx++;
+    const wo={id:genId(),clientId:p.clientId,clientName:p.clientName,service:p.service,status:'Not Started',assignedTo:assigned,branch:p.branch,dueDate:p.dueDate,priority:'Medium',holdReason:'',holdNote:'',fee:p.fee,recurring:'Annual',description:p.description,createdAt:new Date().toISOString(),updatedAt:new Date().toISOString()};
+    await fsSet('workOrders',wo.id,wo);
+    if(SVC_TEMPLATES[p.service]){CACHE.tasks[wo.id]=SVC_TEMPLATES[p.service].map((t,i)=>({id:'t'+i,text:t,done:false}));}
+    created++;
+  }
+  // Log generation
+  const log=JSON.parse(localStorage.getItem('ca_autogen_log')||'[]');
+  log.unshift({fy:document.getElementById('ag-fy')?.value,count:created,ts:new Date().toISOString(),by:currentUser.name||'Admin'});
+  localStorage.setItem('ca_autogen_log',JSON.stringify(log.slice(0,10)));
+  saveLS();buildNav();buildAlerts();
+  showToast(`✅ ${created} work orders created successfully!`);
+  renderAutoGen();
+}
+
+// ─────────────────────────────────────────────────────────────
+//  FEATURE 15 — DIGITAL ENGAGEMENT LETTER + E-SIGNATURE
+// ─────────────────────────────────────────────────────────────
+function renderEngagement(){
+  const clients=visClients();
+  const letters=JSON.parse(localStorage.getItem('ca_eng_letters')||'[]');
+
+  document.getElementById('content').innerHTML=`
+    <div style="background:#D1FAE5;border:1px solid var(--green);border-radius:10px;padding:11px 15px;font-size:12px;color:#065F46;margin-bottom:14px">
+      <b>📝 Digital Engagement Letters:</b> ICAI mandates engagement letters before starting work. Generate, send for client e-signature, and store permanently. Protects the firm legally.
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">
+      <div class="card">
+        <div class="card-header"><div class="card-title">✉ Generate New Engagement Letter</div></div>
+        <div class="card-body">
+          <div class="form-group">
+            <label class="form-label">Client *</label>
+            <select id="el-client" class="form-input form-select" onchange="updateEngLetterPreview()">
+              <option value="">— Select Client —</option>
+              ${clients.map(c=>`<option value="${c.id}">${c.name}</option>`).join('')}
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Services Covered *</label>
+            ${Object.keys(SVC_TEMPLATES).map(s=>`<label style="display:flex;align-items:center;gap:6px;margin-bottom:5px;font-size:13px"><input type="checkbox" class="el-svc" value="${s}"/> ${s}</label>`).join('')}
+          </div>
+          <div class="form-group">
+            <label class="form-label">Professional Fee (₹)</label>
+            <input id="el-fee" class="form-input" type="number" placeholder="e.g. 50000" oninput="updateEngLetterPreview()"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Engagement Period</label>
+            <input id="el-period" class="form-input" value="1 April 2025 to 31 March 2026"/>
+          </div>
+          <button class="btn btn-primary" onclick="generateEngLetter()">📝 Generate Letter</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><div class="card-title">📋 Existing Engagement Letters</div></div>
+        <div class="card-body" style="padding:0;max-height:400px;overflow-y:auto">
+          ${letters.length===0?'<div style="padding:20px;text-align:center;color:var(--text2);font-size:13px">No letters generated yet.</div>':
+          letters.map(l=>`<div style="padding:11px 14px;border-bottom:0.5px solid #F3F4F6">
+            <div style="font-size:13px;font-weight:600">${l.clientName}</div>
+            <div style="font-size:11px;color:var(--text2);margin-top:2px">${l.services} · ${fmtDate(l.ts)}</div>
+            <div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap">
+              <span class="pill ${l.signed?'p-green':'p-amber'}">${l.signed?'✍ Client Signed':'⏳ Awaiting Signature'}</span>
+              <button class="btn btn-secondary btn-sm" onclick="printEngLetter('${l.id}')">🖨 Print / Download</button>
+              ${!l.signed?`<button class="btn btn-success btn-sm" onclick="markEngSigned('${l.id}')">✅ Mark Signed</button>`:''}
+            </div>
+          </div>`).join('')}
+        </div>
+      </div>
+    </div>
+
+    <div id="el-preview"></div>
+  `;
+}
+
+function generateEngLetter(){
+  const cId=document.getElementById('el-client')?.value;if(!cId){showToast('Select a client');return;}
+  const c=CACHE.clients.find(x=>x.id===cId);if(!c)return;
+  const svcs=[...document.querySelectorAll('.el-svc:checked')].map(x=>x.value);
+  if(!svcs.length){showToast('Select at least one service');return;}
+  const fee=document.getElementById('el-fee')?.value;
+  const period=document.getElementById('el-period')?.value;
+  const letter={id:genId(),clientId:cId,clientName:c.name,services:svcs.join(', '),fee,period,ts:new Date().toISOString(),signed:false,signedOn:null};
+  const letters=JSON.parse(localStorage.getItem('ca_eng_letters')||'[]');
+  letters.unshift(letter);
+  localStorage.setItem('ca_eng_letters',JSON.stringify(letters));
+  showToast('✅ Engagement letter generated');
+  renderEngagement();
+  setTimeout(()=>printEngLetter(letter.id),300);
+}
+
+function markEngSigned(lId){
+  const letters=JSON.parse(localStorage.getItem('ca_eng_letters')||'[]');
+  const idx=letters.findIndex(l=>l.id===lId);
+  if(idx>=0){letters[idx].signed=true;letters[idx].signedOn=new Date().toISOString();}
+  localStorage.setItem('ca_eng_letters',JSON.stringify(letters));
+  showToast('✅ Engagement letter marked as signed by client');
+  renderEngagement();
+}
+
+function printEngLetter(lId){
+  const letters=JSON.parse(localStorage.getItem('ca_eng_letters')||'[]');
+  const l=letters.find(x=>x.id===lId);if(!l)return;
+  const c=CACHE.clients.find(x=>x.id===l.clientId)||{};
+  const win=window.open('','_blank');
+  win.document.write(`<html><head><title>Engagement Letter — ${l.clientName}</title>
+  <style>body{font-family:'Times New Roman',serif;padding:48px;max-width:680px;margin:0 auto;color:#111;line-height:1.8}h1{font-size:16px;text-align:center;margin-bottom:4px}h2{font-size:13px;font-align:center;color:#555;text-align:center;margin-bottom:28px}.sig{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:60px}.sig-box{border-top:1px solid #000;padding-top:6px;font-size:12px}p{font-size:13px;margin-bottom:12px}</style>
+  </head><body>
+  <h1>ENGAGEMENT LETTER</h1>
+  <h2>(ICAI Compliant — Confidential)</h2>
+  <p>Date: ${new Date(l.ts).toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'})}</p>
+  <p>To,<br><b>${l.clientName}</b><br>${c.address||'—'}</p>
+  <p>Dear Sir / Madam,</p>
+  <p>We are pleased to confirm our appointment as your professional advisors for the following services during the period <b>${l.period}</b>:</p>
+  <p><b>Scope of Services:</b><br>${l.services.split(', ').map((s,i)=>`${i+1}. ${s}`).join('<br>')}</p>
+  <p><b>Professional Fees:</b> ₹${(+l.fee||0).toLocaleString('en-IN')} plus applicable GST @ 18%.</p>
+  <p><b>Client Responsibilities:</b> You agree to provide all necessary information, documents, and access required for us to perform the above services in a timely manner.</p>
+  <p><b>Confidentiality:</b> All information shared by you shall be treated as strictly confidential and will not be disclosed to any third party without your consent, except as required by law.</p>
+  <p><b>Limitation of Liability:</b> Our liability is limited to the professional fees paid for the specific service in question.</p>
+  <p>Please sign and return a copy of this letter as acceptance of the terms. By signing, you confirm your agreement to the scope and terms outlined above.</p>
+  <div class="sig">
+    <div class="sig-box">For CA Firm<br><br><br>Authorised Signatory<br>Date: _______________</div>
+    <div class="sig-box">Client Acceptance<br><b>${l.clientName}</b><br><br>Signature<br>Date: _______________</div>
+  </div>
+  ${l.signed?`<p style="margin-top:20px;color:green;font-weight:bold">✅ Digitally signed by client on ${new Date(l.signedOn).toLocaleDateString('en-IN')}</p>`:''}
+  </body></html>`);win.document.close();win.print();
+}
+
+// ─────────────────────────────────────────────────────────────
+//  FEATURE 16 — GSTR-9 AUTO-PREPARATION
+// ─────────────────────────────────────────────────────────────
+function renderGSTR9(){
+  const clients=visClients().filter(c=>['Company','LLP','Firm','Proprietor with GST'].includes(c.type));
+  document.getElementById('content').innerHTML=`
+    <div style="background:#FEF3C7;border:1px solid #F59E0B;border-radius:10px;padding:11px 15px;font-size:12px;color:#92400E;margin-bottom:14px">
+      <b>📊 GSTR-9 Auto-Preparation:</b> Reads all 12 months of GST work order data for a client, consolidates into GSTR-9 annual return format, and highlights discrepancies between GSTR-1 and GSTR-3B totals.
+    </div>
+
+    <div class="card" style="margin-bottom:14px">
+      <div class="card-header"><div class="card-title">Select Client for GSTR-9 Preparation</div></div>
+      <div class="card-body">
+        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end">
+          <div class="form-group" style="margin:0;flex:1;min-width:180px">
+            <label class="form-label">Client</label>
+            <select id="g9-client" class="form-input form-select">
+              <option value="">— Select GST-registered client —</option>
+              ${clients.map(c=>`<option value="${c.id}">${c.name} (${c.gstin||'GSTIN pending'})</option>`).join('')}
+            </select>
+          </div>
+          <div class="form-group" style="margin:0">
+            <label class="form-label">FY</label>
+            <select id="g9-fy" class="form-input form-select">
+              <option>2024-25</option><option selected>2025-26</option>
+            </select>
+          </div>
+          <button class="btn btn-primary" onclick="buildGSTR9()">⚡ Build GSTR-9 Draft</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="g9-output"></div>
+  `;
+}
+
+function buildGSTR9(){
+  const cId=document.getElementById('g9-client')?.value;if(!cId){showToast('Select a client');return;}
+  const c=CACHE.clients.find(x=>x.id===cId);const fy=document.getElementById('g9-fy')?.value;
+  const gstOrders=CACHE.workOrders.filter(w=>w.clientId===cId&&w.service==='GST').slice(0,12);
+  const g9data=JSON.parse(localStorage.getItem('ca_g9_'+cId)||'{}');
+
+  const months=['Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan','Feb','Mar'];
+
+  document.getElementById('g9-output').innerHTML=`
+    <div class="card" style="margin-bottom:12px">
+      <div class="card-header">
+        <div class="card-title">📋 GSTR-9 Draft — ${c.name} | FY ${fy} | GSTIN: ${c.gstin||'—'}</div>
+        <button class="btn btn-secondary btn-sm" onclick="printGSTR9('${cId}','${fy}')">🖨 Print Draft</button>
+      </div>
+      <div class="card-body" style="padding:0;overflow-x:auto">
+        <table style="width:100%;border-collapse:collapse;font-size:12px;min-width:700px">
+          <thead><tr style="background:var(--gray-light)">
+            <th style="padding:8px 12px">Month</th><th style="padding:8px 10px">Outward Taxable</th>
+            <th style="padding:8px 10px">IGST Coll.</th><th style="padding:8px 10px">CGST Coll.</th><th style="padding:8px 10px">SGST Coll.</th>
+            <th style="padding:8px 10px">ITC Availed</th><th style="padding:8px 10px">Tax Paid</th><th style="padding:8px 10px">Status</th>
+          </tr></thead>
+          <tbody>
+            ${months.map((mn,i)=>{
+              const key=`${mn}_${fy}`;
+              const d=g9data[key]||{};
+              const hasOrder=gstOrders[i];
+              const isCompleted=hasOrder&&['Completed','Billed'].includes(hasOrder.status);
+              return`<tr style="border-top:0.5px solid #F3F4F6;background:${!hasOrder?'#FAFAFA':''}">
+                <td style="padding:7px 12px;font-weight:600">${mn} ${fy.split('-')[i>=9?1:0]}</td>
+                <td style="padding:7px 10px"><input type="number" class="form-input" style="width:90px;padding:3px 5px;font-size:11px" placeholder="0" value="${d.outward||''}" onchange="saveG9('${cId}','${key}','outward',this.value)"/></td>
+                <td style="padding:7px 10px"><input type="number" class="form-input" style="width:80px;padding:3px 5px;font-size:11px" placeholder="0" value="${d.igst||''}" onchange="saveG9('${cId}','${key}','igst',this.value)"/></td>
+                <td style="padding:7px 10px"><input type="number" class="form-input" style="width:80px;padding:3px 5px;font-size:11px" placeholder="0" value="${d.cgst||''}" onchange="saveG9('${cId}','${key}','cgst',this.value)"/></td>
+                <td style="padding:7px 10px"><input type="number" class="form-input" style="width:80px;padding:3px 5px;font-size:11px" placeholder="0" value="${d.sgst||''}" onchange="saveG9('${cId}','${key}','sgst',this.value)"/></td>
+                <td style="padding:7px 10px"><input type="number" class="form-input" style="width:80px;padding:3px 5px;font-size:11px" placeholder="0" value="${d.itc||''}" onchange="saveG9('${cId}','${key}','itc',this.value)"/></td>
+                <td style="padding:7px 10px"><input type="number" class="form-input" style="width:80px;padding:3px 5px;font-size:11px" placeholder="0" value="${d.taxpaid||''}" onchange="saveG9('${cId}','${key}','taxpaid',this.value)"/></td>
+                <td style="padding:7px 10px">${isCompleted?`<span class="pill p-green" style="font-size:10px">✅ Filed</span>`:hasOrder?`<span class="pill p-amber" style="font-size:10px">${hasOrder.status}</span>`:`<span class="pill p-gray" style="font-size:10px">No order</span>`}</td>
+              </tr>`;}).join('')}
+          </tbody>
+          <tfoot>
+            <tr style="background:var(--gray-light);font-weight:700;border-top:2px solid #E5E7EB">
+              <td style="padding:8px 12px">TOTALS</td>
+              ${['outward','igst','cgst','sgst','itc','taxpaid'].map(f=>`<td style="padding:8px 10px">₹${Object.values(g9data).reduce((a,d)=>a+(+d[f]||0),0).toLocaleString('en-IN')}</td>`).join('')}
+              <td></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><div class="card-title">⚠️ GSTR-9 Discrepancy Check</div></div>
+      <div class="card-body">
+        <div style="font-size:13px;color:var(--text2)">
+          Enter data in the table above and the system will flag discrepancies between monthly GSTR-1 vs GSTR-3B totals automatically.<br><br>
+          <b>Common discrepancies CA firms face:</b>
+          <ul style="margin-top:8px;padding-left:18px;line-height:2">
+            <li>ITC availed in GSTR-3B not matching GSTR-2B — reversal required</li>
+            <li>Outward supply in GSTR-1 not matching GSTR-3B — amendment needed</li>
+            <li>RCM liability not paid in correct month</li>
+            <li>HSN summary mismatch in annual vs monthly</li>
+          </ul>
+        </div>
+      </div>
+    </div>`;
+}
+
+function saveG9(cId,key,field,val){
+  const d=JSON.parse(localStorage.getItem('ca_g9_'+cId)||'{}');
+  if(!d[key])d[key]={};
+  d[key][field]=+val||0;
+  localStorage.setItem('ca_g9_'+cId,JSON.stringify(d));
+}
+
+function printGSTR9(cId,fy){
+  const c=CACHE.clients.find(x=>x.id===cId);if(!c)return;
+  const d=JSON.parse(localStorage.getItem('ca_g9_'+cId)||'{}');
+  const months=['Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan','Feb','Mar'];
+  const totals={outward:0,igst:0,cgst:0,sgst:0,itc:0,taxpaid:0};
+  months.forEach(mn=>{const k=`${mn}_${fy}`;const r=d[k]||{};Object.keys(totals).forEach(f=>totals[f]+=(+r[f]||0));});
+  const win=window.open('','_blank');
+  win.document.write(`<html><head><title>GSTR-9 Draft — ${c.name}</title>
+  <style>body{font-family:sans-serif;padding:28px;font-size:12px}h2{color:#E8690A}table{width:100%;border-collapse:collapse;margin:12px 0}th,td{padding:6px 8px;border:1px solid #E5E7EB;text-align:right}th{background:#F9FAFB;text-align:left;font-weight:600}td:first-child{text-align:left}</style>
+  </head><body>
+  <h2>GSTR-9 Annual Return Draft — FY ${fy}</h2>
+  <p><b>Client:</b> ${c.name} &nbsp;|&nbsp; <b>GSTIN:</b> ${c.gstin||'—'} &nbsp;|&nbsp; <b>Generated:</b> ${new Date().toLocaleDateString('en-IN')}</p>
+  <table><thead><tr><th>Month</th><th>Outward Taxable</th><th>IGST</th><th>CGST</th><th>SGST</th><th>ITC Availed</th><th>Tax Paid</th></tr></thead><tbody>
+  ${months.map(mn=>{const k=`${mn}_${fy}`;const r=d[k]||{};return`<tr><td>${mn}</td><td>₹${(+r.outward||0).toLocaleString('en-IN')}</td><td>₹${(+r.igst||0).toLocaleString('en-IN')}</td><td>₹${(+r.cgst||0).toLocaleString('en-IN')}</td><td>₹${(+r.sgst||0).toLocaleString('en-IN')}</td><td>₹${(+r.itc||0).toLocaleString('en-IN')}</td><td>₹${(+r.taxpaid||0).toLocaleString('en-IN')}</td></tr>`;}).join('')}
+  </tbody><tfoot><tr style="font-weight:700"><td>TOTAL</td>${Object.values(totals).map(v=>`<td>₹${v.toLocaleString('en-IN')}</td>`).join('')}</tr></tfoot></table>
+  <p style="color:#999;font-size:11px;margin-top:16px">Draft only — verify with portal data before filing. CA Firm OS · ${new Date().toLocaleDateString('en-IN')}</p>
+  </body></html>`);win.document.close();win.print();
+}
+
+// ─────────────────────────────────────────────────────────────
+//  FEATURE 17 — 26AS / AIS MISMATCH DETECTOR
+// ─────────────────────────────────────────────────────────────
+let aisData={f26as:[],ais:[],itrDraft:[]};
+
+function renderAISMatch(){
+  document.getElementById('content').innerHTML=`
+    <div style="background:#FEE2E2;border:1px solid var(--red);border-radius:10px;padding:11px 15px;font-size:12px;color:var(--red);margin-bottom:14px">
+      <b>🔍 26AS / AIS Mismatch Detector:</b> IT notices u/s 143(1) increasing because AIS captures every transaction. Upload Form 26AS and AIS data to find unreported income BEFORE filing.
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px">
+      <div class="card">
+        <div class="card-header"><div class="card-title">📥 Form 26AS (CSV)</div></div>
+        <div class="card-body">
+          <div style="font-size:11px;color:var(--text2);margin-bottom:8px">Format: <code>type, party_name, amount, tds_deducted</code></div>
+          <input type="file" id="f26as-file" accept=".csv" style="display:none" onchange="parse26AS(this)"/>
+          <button class="btn btn-primary btn-sm" onclick="document.getElementById('f26as-file').click()">Upload 26AS CSV</button>
+          <div id="f26as-status" style="font-size:11px;margin-top:6px;color:var(--text2)"></div>
+          <button class="btn btn-secondary btn-sm" style="margin-top:6px" onclick="loadSample26AS()">Load Sample</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">📊 AIS Data (CSV)</div></div>
+        <div class="card-body">
+          <div style="font-size:11px;color:var(--text2);margin-bottom:8px">Format: <code>transaction_type, party, amount, reported_value</code></div>
+          <input type="file" id="ais-file" accept=".csv" style="display:none" onchange="parseAIS(this)"/>
+          <button class="btn btn-primary btn-sm" onclick="document.getElementById('ais-file').click()">Upload AIS CSV</button>
+          <div id="ais-status" style="font-size:11px;margin-top:6px;color:var(--text2)"></div>
+          <button class="btn btn-secondary btn-sm" style="margin-top:6px" onclick="loadSampleAIS()">Load Sample</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">📝 Draft ITR Income (CSV)</div></div>
+        <div class="card-body">
+          <div style="font-size:11px;color:var(--text2);margin-bottom:8px">Format: <code>income_head, amount</code></div>
+          <input type="file" id="itr-file" accept=".csv" style="display:none" onchange="parseITRDraft(this)"/>
+          <button class="btn btn-primary btn-sm" onclick="document.getElementById('itr-file').click()">Upload ITR Draft</button>
+          <div id="itr-status" style="font-size:11px;margin-top:6px;color:var(--text2)"></div>
+          <button class="btn btn-secondary btn-sm" style="margin-top:6px" onclick="loadSampleITR()">Load Sample</button>
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align:center;margin-bottom:14px">
+      <button class="btn btn-primary" style="padding:12px 32px;font-size:14px" onclick="runAISMatch()">🔍 Run Mismatch Detection</button>
+    </div>
+    <div id="ais-result"></div>
+
+    <div class="card" style="margin-top:12px">
+      <div class="card-header"><div class="card-title">⚠️ Common AIS Mismatches That Trigger IT Notices</div></div>
+      <div class="card-body" style="padding:0">
+        ${[
+          ['Salary income','TDS deducted by employer shown in 26AS but income not matching ITR salary head'],
+          ['Bank interest','Savings/FD interest shown in AIS but declared lower in ITR or missed'],
+          ['Capital gains','Stocks/MF sold — appearing in AIS statement but not declared in ITR'],
+          ['Dividends','Dividend income shown by CDSL/NSDL in AIS but not reported in ITR'],
+          ['Rental income','Rent payments reported by tenant u/s 194I showing in 26AS'],
+          ['High-value transactions','Cash deposits, property purchase, foreign remittance in AIS'],
+          ['GST turnover','Business turnover in GST return differs from ITR business income'],
+        ].map(([head,desc])=>`<div style="padding:9px 14px;border-bottom:0.5px solid #F3F4F6">
+          <div style="font-size:12px;font-weight:600;color:var(--navy)">${head}</div>
+          <div style="font-size:11px;color:var(--text2);margin-top:1px">${desc}</div>
+        </div>`).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function loadSample26AS(){
+  aisData.f26as=[
+    {type:'Salary',party:'TCS Ltd',amount:1200000,tds:180000},
+    {type:'Bank Interest',party:'HDFC Bank',amount:45000,tds:4500},
+    {type:'FD Interest',party:'SBI',amount:28000,tds:2800},
+    {type:'Dividend',party:'Reliance Industries',amount:12000,tds:1200},
+    {type:'Rental',party:'Ram Kumar',amount:180000,tds:18000},
+  ];
+  document.getElementById('f26as-status').innerHTML=`<span style="color:var(--green);font-weight:600">✅ ${aisData.f26as.length} entries loaded</span>`;
+}
+function loadSampleAIS(){
+  aisData.ais=[
+    {type:'Salary',party:'TCS Ltd',amount:1200000,reportedValue:1200000},
+    {type:'Interest',party:'HDFC Bank',amount:45000,reportedValue:45000},
+    {type:'Interest',party:'SBI Fixed Deposit',amount:32000,reportedValue:32000},
+    {type:'Dividend',party:'Reliance Industries',amount:12000,reportedValue:12000},
+    {type:'MF Redemption',party:'Zerodha',amount:350000,reportedValue:350000},
+    {type:'Rental',party:'Ram Kumar',amount:180000,reportedValue:180000},
+    {type:'Cash Deposit',party:'Axis Bank',amount:500000,reportedValue:500000},
+  ];
+  document.getElementById('ais-status').innerHTML=`<span style="color:var(--green);font-weight:600">✅ ${aisData.ais.length} entries loaded</span>`;
+}
+function loadSampleITR(){
+  aisData.itrDraft=[
+    {head:'Salary',amount:1200000},
+    {head:'Bank Interest',amount:38000},
+    {head:'Dividend',amount:12000},
+    {head:'Rental Income',amount:180000},
+  ];
+  document.getElementById('itr-status').innerHTML=`<span style="color:var(--green);font-weight:600">✅ ${aisData.itrDraft.length} income heads loaded</span>`;
+}
+
+function runAISMatch(){
+  if(!aisData.f26as.length&&!aisData.ais.length){showToast('Load at least 26AS or AIS data first');return;}
+  const issues=[];
+
+  // Compare AIS vs ITR draft
+  aisData.ais.forEach(a=>{
+    const itrMatch=aisData.itrDraft.find(i=>i.head.toLowerCase().includes(a.type.toLowerCase().split(' ')[0])||a.type.toLowerCase().includes(i.head.toLowerCase().split(' ')[0]));
+    const reported=itrMatch?.amount||0;
+    const diff=a.amount-reported;
+    if(diff>1000){
+      issues.push({level:diff>50000?'red':'amber',type:a.type,party:a.party,aisAmt:a.amount,itrAmt:reported,diff,msg:`₹${diff.toLocaleString('en-IN')} shown in AIS but ${reported?'understated':'not declared'} in ITR draft`});
+    }
+  });
+
+  // FD interest — AIS often shows more than 26AS
+  const fdAIS=aisData.ais.filter(a=>a.type.toLowerCase().includes('interest')).reduce((s,a)=>s+a.amount,0);
+  const fd26AS=aisData.f26as.filter(a=>a.type.toLowerCase().includes('interest')).reduce((s,a)=>s+a.amount,0);
+  if(Math.abs(fdAIS-fd26AS)>500){
+    issues.push({level:'amber',type:'Interest Income Discrepancy',party:'Bank / NBFC',aisAmt:fdAIS,itrAmt:fd26AS,diff:fdAIS-fd26AS,msg:'AIS and 26AS interest totals differ — verify with bank statements'});
+  }
+
+  const totalAISIncome=aisData.ais.reduce((s,a)=>s+a.amount,0);
+  const totalITRIncome=aisData.itrDraft.reduce((s,a)=>s+a.amount,0);
+  const totalDiff=totalAISIncome-totalITRIncome;
+
+  document.getElementById('ais-result').innerHTML=`
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px">
+      <div class="kpi-card kc-blue"><div class="kpi-val">${aisData.ais.length}</div><div class="kpi-label">AIS Entries</div></div>
+      <div class="kpi-card kc-green"><div class="kpi-val">${aisData.itrDraft.length}</div><div class="kpi-label">ITR Heads</div></div>
+      <div class="kpi-card ${issues.filter(i=>i.level==='red').length?'kc-red':'kc-green'}"><div class="kpi-val">${issues.length}</div><div class="kpi-label">Mismatches Found</div></div>
+      <div class="kpi-card ${totalDiff>0?'kc-red':'kc-green'}"><div class="kpi-val">${totalDiff>0?fmtMoney(totalDiff):'✅ Clear'}</div><div class="kpi-label">Unreported Amount</div></div>
+    </div>
+
+    ${issues.length>0?`
+    <div class="card" style="margin-bottom:12px">
+      <div class="card-header"><div class="card-title">❌ Mismatches — Must Resolve Before Filing</div></div>
+      <div class="card-body" style="padding:0">
+        ${issues.map(iss=>`<div style="display:grid;grid-template-columns:4px 1fr;gap:12px;padding:12px 14px;border-bottom:0.5px solid #F3F4F6">
+          <div style="background:${iss.level==='red'?'var(--red)':'var(--amber)'};border-radius:2px;align-self:stretch"></div>
+          <div>
+            <div style="font-size:13px;font-weight:600;color:var(--navy)">${iss.type} — ${iss.party}</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:6px">
+              <div><div style="font-size:10px;color:var(--text2)">AIS / 26AS Amount</div><div style="font-size:13px;font-weight:700">₹${iss.aisAmt.toLocaleString('en-IN')}</div></div>
+              <div><div style="font-size:10px;color:var(--text2)">ITR Draft</div><div style="font-size:13px;font-weight:700;color:${iss.itrAmt<iss.aisAmt?'var(--red)':'var(--green)'}">₹${iss.itrAmt.toLocaleString('en-IN')}</div></div>
+              <div><div style="font-size:10px;color:var(--text2)">Difference</div><div style="font-size:13px;font-weight:700;color:${iss.level==='red'?'var(--red)':'var(--amber)'}">+₹${iss.diff.toLocaleString('en-IN')}</div></div>
+            </div>
+            <div style="font-size:11px;color:${iss.level==='red'?'var(--red)':'#92400E'};margin-top:5px">⚠️ ${iss.msg}</div>
+          </div>
+        </div>`).join('')}
+      </div>
+    </div>`:'<div style="background:#D1FAE5;border:1px solid var(--green);border-radius:8px;padding:12px 16px;font-size:13px;color:#065F46;font-weight:600;margin-bottom:12px">✅ No mismatches found — all AIS income appears to be declared in ITR draft. Safe to file.</div>'}
+  `;
+}
+
+function parse26AS(input){const f=input.files[0];if(!f)return;const r=new FileReader();r.onload=e=>{const rows=e.target.result.trim().split('\n').slice(1);aisData.f26as=rows.map(r=>{const c=r.split(',').map(x=>x.trim());return{type:c[0],party:c[1],amount:+c[2]||0,tds:+c[3]||0};}).filter(r=>r.type);document.getElementById('f26as-status').innerHTML=`<span style="color:var(--green);font-weight:600">✅ ${aisData.f26as.length} entries</span>`;};r.readAsText(f);}
+function parseAIS(input){const f=input.files[0];if(!f)return;const r=new FileReader();r.onload=e=>{const rows=e.target.result.trim().split('\n').slice(1);aisData.ais=rows.map(r=>{const c=r.split(',').map(x=>x.trim());return{type:c[0],party:c[1],amount:+c[2]||0,reportedValue:+c[3]||0};}).filter(r=>r.type);document.getElementById('ais-status').innerHTML=`<span style="color:var(--green);font-weight:600">✅ ${aisData.ais.length} entries</span>`;};r.readAsText(f);}
+function parseITRDraft(input){const f=input.files[0];if(!f)return;const r=new FileReader();r.onload=e=>{const rows=e.target.result.trim().split('\n').slice(1);aisData.itrDraft=rows.map(r=>{const c=r.split(',').map(x=>x.trim());return{head:c[0],amount:+c[1]||0};}).filter(r=>r.head);document.getElementById('itr-status').innerHTML=`<span style="color:var(--green);font-weight:600">✅ ${aisData.itrDraft.length} heads</span>`;};r.readAsText(f);}
+
+// ─────────────────────────────────────────────────────────────
+//  FEATURE 18 — CLIENT NET WORTH & FINANCIAL HEALTH TRACKER
+// ─────────────────────────────────────────────────────────────
+function renderNetWorth(){
+  const clients=visClients();
+  document.getElementById('content').innerHTML=`
+    <div style="background:#EDE9FE;border:1px solid #7C3AED;border-radius:10px;padding:11px 15px;font-size:12px;color:#5B21B6;margin-bottom:14px">
+      <b>📈 Client Net Worth Tracker:</b> Year-on-year financial health snapshot per client. Converts your CA firm from a "tax filer" to a "trusted advisor". Clients who see their financial progress are 3× less likely to switch CA firms.
+    </div>
+
+    <div style="display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;align-items:flex-end">
+      <div class="form-group" style="margin:0;flex:1;min-width:180px">
+        <label class="form-label">Select Client</label>
+        <select id="nw-client" class="form-input form-select" onchange="loadNetWorth()">
+          <option value="">— Select Client —</option>
+          ${clients.map(c=>`<option value="${c.id}">${c.name}</option>`).join('')}
+        </select>
+      </div>
+    </div>
+    <div id="nw-content"></div>
+  `;
+}
+
+function loadNetWorth(){
+  const cId=document.getElementById('nw-client')?.value;if(!cId)return;
+  const c=CACHE.clients.find(x=>x.id===cId);
+  const nw=JSON.parse(localStorage.getItem('ca_nw_'+cId)||'{}');
+  const yrs=['FY 2022-23','FY 2023-24','FY 2024-25','FY 2025-26'];
+  const NW_FIELDS=[
+    {id:'income',     label:'Annual Income (₹)',    color:'#3B82F6'},
+    {id:'taxpaid',    label:'Total Tax Paid (₹)',    color:'#EF4444'},
+    {id:'savings',    label:'Savings / Investments (₹)',color:'#10B981'},
+    {id:'property',   label:'Property Value (₹)',    color:'#F59E0B'},
+    {id:'loans',      label:'Outstanding Loans (₹)', color:'#EF4444'},
+    {id:'networth',   label:'Net Worth (₹)',          color:'#7C3AED'},
+  ];
+
+  // Calculate net worth for each year
+  const nwByYr=yrs.map(yr=>{
+    const d=nw[yr]||{};
+    const assets=(+d.savings||0)+(+d.property||0);
+    const liabilities=+d.loans||0;
+    const computed=assets-liabilities;
+    return{yr,data:d,computed};
+  });
+  const maxNW=Math.max(...nwByYr.map(y=>y.computed),1);
+  const maxInc=Math.max(...nwByYr.map(y=>+y.data.income||0),1);
+
+  document.getElementById('nw-content').innerHTML=`
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">
+
+      <!-- Data entry -->
+      <div class="card">
+        <div class="card-header"><div class="card-title">📝 Enter / Update Financial Data — ${c.name}</div></div>
+        <div class="card-body" style="padding:0;overflow-x:auto">
+          <table style="width:100%;border-collapse:collapse;font-size:12px;min-width:500px">
+            <thead><tr style="background:var(--gray-light)">
+              <th style="padding:8px 12px;text-align:left">Field</th>
+              ${yrs.map(yr=>`<th style="padding:8px 10px;text-align:center;font-size:11px">${yr.replace('FY ','')}</th>`).join('')}
+            </tr></thead>
+            <tbody>
+              ${NW_FIELDS.map(f=>`<tr style="border-top:0.5px solid #F3F4F6">
+                <td style="padding:7px 12px;font-weight:500;color:var(--navy)">${f.label}</td>
+                ${yrs.map(yr=>{const d=nw[yr]||{};return`<td style="padding:5px 8px;text-align:center"><input type="number" class="form-input" style="width:90px;padding:3px 5px;font-size:11px;text-align:right" value="${d[f.id]||''}" onchange="saveNW('${cId}','${yr}','${f.id}',this.value)"/></td>`;}).join('')}
+              </tr>`).join('')}
+              <tr style="background:var(--gray-light);font-weight:700;border-top:2px solid #E5E7EB">
+                <td style="padding:7px 12px;color:#7C3AED">Computed Net Worth</td>
+                ${nwByYr.map(y=>`<td style="padding:7px 10px;text-align:center;font-size:13px;font-weight:700;color:${y.computed>0?'var(--green)':'var(--red)'}">${y.computed!==0?fmtMoney(y.computed):'—'}</td>`).join('')}
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Visual chart -->
+      <div class="card">
+        <div class="card-header"><div class="card-title">📈 Net Worth Trend</div></div>
+        <div class="card-body">
+          <div style="font-size:11px;font-weight:600;color:var(--text2);margin-bottom:12px;text-transform:uppercase;letter-spacing:.5px">Net Worth Growth Year on Year</div>
+          <div style="display:flex;align-items:flex-end;gap:12px;height:120px;margin-bottom:8px">
+            ${nwByYr.map(y=>`<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px">
+              <div style="font-size:9px;color:var(--text2);font-weight:600;text-align:center">${y.computed>0?fmtMoney(y.computed).replace('₹','₹'):''}</div>
+              <div style="width:100%;background:${y.computed>0?'#7C3AED':'var(--red)'};border-radius:5px 5px 0 0;height:${y.computed>0?Math.max(8,Math.round((y.computed/maxNW)*100)):4}px;transition:height .4s"></div>
+              <div style="font-size:9px;color:var(--text2);text-align:center">${y.yr.replace('FY ','')}</div>
+            </div>`).join('')}
+          </div>
+
+          <div style="margin-top:14px">
+            <div style="font-size:11px;font-weight:600;color:var(--text2);margin-bottom:8px;text-transform:uppercase">Income Trend</div>
+            ${nwByYr.map(y=>`<div style="display:flex;align-items:center;gap:8px;margin-bottom:7px">
+              <div style="font-size:11px;color:var(--text2);width:60px">${y.yr.replace('FY ','')}</div>
+              <div style="flex:1"><div class="pw"><div class="pf" style="width:${maxInc>0?Math.round(((+y.data.income||0)/maxInc)*100):0}%;background:#3B82F6"></div></div></div>
+              <div style="font-size:11px;font-weight:700;width:80px;text-align:right">${y.data.income?fmtMoney(+y.data.income):'—'}</div>
+            </div>`).join('')}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CA Advisory Notes -->
+    <div class="card">
+      <div class="card-header"><div class="card-title">📋 CA Advisory Notes — ${c.name}</div></div>
+      <div class="card-body">
+        <textarea id="nw-notes" class="form-input" rows="4" style="margin-bottom:10px" placeholder="Add financial advisory notes for this client — e.g. 'Recommend increasing ELSS investment for FY 2025-26. Consider prepaying home loan tranche given current interest rate. Net worth grew 18% YoY — above market average.'">${nw._notes||''}</textarea>
+        <button class="btn btn-primary btn-sm" onclick="saveNWNotes('${cId}')">💾 Save Notes</button>
+        <button class="btn btn-secondary btn-sm" onclick="printNetWorthReport('${cId}')">🖨 Print Annual Report</button>
+      </div>
+    </div>
+  `;
+}
+
+function saveNW(cId,yr,field,val){
+  const nw=JSON.parse(localStorage.getItem('ca_nw_'+cId)||'{}');
+  if(!nw[yr])nw[yr]={};
+  nw[yr][field]=+val||0;
+  localStorage.setItem('ca_nw_'+cId,JSON.stringify(nw));
+}
+function saveNWNotes(cId){
+  const nw=JSON.parse(localStorage.getItem('ca_nw_'+cId)||'{}');
+  nw._notes=document.getElementById('nw-notes')?.value||'';
+  localStorage.setItem('ca_nw_'+cId,JSON.stringify(nw));
+  showToast('✅ Advisory notes saved');
+}
+
+function printNetWorthReport(cId){
+  const c=CACHE.clients.find(x=>x.id===cId);if(!c)return;
+  const nw=JSON.parse(localStorage.getItem('ca_nw_'+cId)||'{}');
+  const yrs=['FY 2022-23','FY 2023-24','FY 2024-25','FY 2025-26'];
+  const win=window.open('','_blank');
+  win.document.write(`<html><head><title>Financial Health Report — ${c.name}</title>
+  <style>body{font-family:sans-serif;padding:32px;max-width:700px;margin:0 auto;font-size:13px}h2{color:#7C3AED}table{width:100%;border-collapse:collapse;margin:12px 0}th,td{padding:8px 10px;border:1px solid #E5E7EB;text-align:right}th{background:#F9FAFB;text-align:left;font-weight:600}td:first-child{text-align:left}.note{background:#EDE9FE;padding:14px;border-radius:8px;margin-top:20px;line-height:1.8}</style>
+  </head><body>
+  <h2>Annual Financial Health Report</h2>
+  <p><b>Client:</b> ${c.name} &nbsp;|&nbsp; <b>PAN:</b> ${c.pan||'—'} &nbsp;|&nbsp; <b>Prepared by:</b> ${currentUser.name||'CA Firm'} &nbsp;|&nbsp; <b>Date:</b> ${new Date().toLocaleDateString('en-IN')}</p>
+  <table><thead><tr><th>Financial Metric</th>${yrs.map(yr=>`<th>${yr}</th>`).join('')}</tr></thead><tbody>
+  ${['income','taxpaid','savings','property','loans'].map(f=>{const labels={income:'Annual Income',taxpaid:'Tax Paid',savings:'Savings / Investments',property:'Property Value',loans:'Outstanding Loans'};return`<tr><td>${labels[f]}</td>${yrs.map(yr=>`<td>₹${(+(nw[yr]||{})[f]||0).toLocaleString('en-IN')}</td>`).join('')}</tr>`;}).join('')}
+  <tr style="font-weight:700;background:#F3F0FF"><td>Computed Net Worth</td>${yrs.map(yr=>{const d=nw[yr]||{};const nwv=(+d.savings||0)+(+d.property||0)-(+d.loans||0);return`<td style="color:${nwv>0?'#065F46':'#DC2626'}">₹${nwv.toLocaleString('en-IN')}</td>`;}).join('')}</tr>
+  </tbody></table>
+  ${nw._notes?`<div class="note"><b>CA Advisory Notes:</b><br><br>${nw._notes.replace(/\n/g,'<br>')}</div>`:''}
+  <p style="margin-top:24px;font-size:11px;color:#999">This report is prepared for advisory purposes only and is confidential. CA Firm OS · ${new Date().toLocaleDateString('en-IN')}</p>
+  </body></html>`);win.document.close();win.print();
+}
+
+// ── Client portal advance tax view ───────────────────────────
+function renderCPAdvTax(){
+  const cId=myClientId();
+  const saved=JSON.parse(localStorage.getItem('ca_advtax')||'{}');
+  const d=saved[cId]||{};
+  const income=+d.income||0;
+  const tax=calcAdvTaxLiability(income);
+  const now=new Date();
+
+  document.getElementById('cp-content').innerHTML=!income?`
+    <div class="empty-state">
+      <div class="empty-state-icon">📅</div>
+      <h3>Advance Tax Schedule</h3>
+      <p>Your CA team will set up your advance tax schedule here once your estimated income for FY 2025-26 is confirmed. This helps you avoid interest under Section 234B &amp; 234C.</p>
+    </div>`:`
+    <div style="background:#EDE9FE;border:1px solid #7C3AED;border-radius:10px;padding:11px 15px;font-size:12px;color:#5B21B6;margin-bottom:14px">
+      <b>📅 Advance Tax Schedule — FY 2025-26</b><br>Pay each instalment on or before the due date to avoid 1% interest per month u/s 234B &amp; 234C.
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
+      <div class="cp-kpi ck-blue"><div class="cp-kpi-val">${fmtMoney(income)}</div><div class="cp-kpi-label">Estimated Income</div></div>
+      <div class="cp-kpi ck-red"><div class="cp-kpi-val">${fmtMoney(tax)}</div><div class="cp-kpi-label">Estimated Tax Liability</div></div>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-title">💳 Your Instalment Schedule</div></div>
+      <div class="card-body" style="padding:0">
+        ${ADV_TAX_QS.map((q,i)=>{
+          const cum=Math.round(tax*q.pct/100);
+          const prev=i>0?Math.round(tax*ADV_TAX_QS[i-1].pct/100):0;
+          const amt=cum-prev;
+          const due=new Date(now.getFullYear(),q.month,q.day);
+          const daysLeft=Math.ceil((due-now)/86400000);
+          const overdue=daysLeft<0;
+          const soon=daysLeft>=0&&daysLeft<=15;
+          return`<div style="display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;padding:14px 16px;border-bottom:0.5px solid #F3F4F6">
+            <div>
+              <div style="font-size:14px;font-weight:700;color:var(--navy)">${q.q} Instalment — Due ${q.label}</div>
+              <div style="font-size:12px;color:${overdue?'var(--text2)':soon?'var(--red)':'var(--text2)'};margin-top:3px">
+                ${overdue?'Past due date':soon?`⚠️ Due in ${daysLeft} day${daysLeft!==1?'s':''}`:`${daysLeft} days remaining`}
+                &nbsp;·&nbsp; Cumulative: ${q.pct}% of total tax
+              </div>
+            </div>
+            <div style="text-align:right">
+              <div style="font-size:22px;font-weight:700;color:${overdue?'var(--text2)':soon?'var(--red)':'#7C3AED'}">${fmtMoney(amt)}</div>
+              <div style="font-size:10px;color:var(--text2)">Pay via Challan 280</div>
+            </div>
+          </div>`;}).join('')}
+      </div>
+    </div>
+    <div class="card" style="margin-top:12px">
+      <div class="card-header"><div class="card-title">ℹ️ How to Pay Advance Tax</div></div>
+      <div class="card-body">
+        <ol style="font-size:13px;color:var(--text2);line-height:2;padding-left:18px">
+          <li>Go to <b>www.incometax.gov.in</b> → e-Pay Tax</li>
+          <li>Select <b>Challan 280</b> → Income Tax (Other than Companies)</li>
+          <li>Select <b>Assessment Year 2026-27</b> and Type of Payment: <b>Advance Tax (100)</b></li>
+          <li>Enter the instalment amount and pay via net banking / UPI / debit card</li>
+          <li>Download and save the challan receipt — share with your CA</li>
+        </ol>
+      </div>
+    </div>`;
+}
+
+// ── Client portal net worth view ──────────────────────────────
+function renderCPNetWorth(){
+  const cId=myClientId();
+  const nw=JSON.parse(localStorage.getItem('ca_nw_'+cId)||'{}');
+  const yrs=['FY 2022-23','FY 2023-24','FY 2024-25','FY 2025-26'];
+  const nwByYr=yrs.map(yr=>{const d=nw[yr]||{};const v=(+d.savings||0)+(+d.property||0)-(+d.loans||0);return{yr,income:+d.income||0,nw:v,notes:d};});
+  const hasData=nwByYr.some(y=>y.income>0||y.nw!==0);
+  document.getElementById('cp-content').innerHTML=hasData?`
+    <div style="font-size:13px;color:var(--text2);margin-bottom:14px">Your year-on-year financial health — prepared and updated by your CA team.</div>
+    <div style="display:grid;grid-template-columns:repeat(${yrs.length},1fr);gap:10px;margin-bottom:14px">
+      ${nwByYr.map(y=>`<div class="cp-kpi ${y.nw>0?'ck-green':'ck-blue'}">
+        <div class="cp-kpi-val" style="font-size:15px">${y.nw!==0?fmtMoney(y.nw):'—'}</div>
+        <div class="cp-kpi-label">Net Worth ${y.yr.replace('FY ','')}</div>
+      </div>`).join('')}
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div class="card">
+        <div class="card-header"><div class="card-title">📈 Income Trend</div></div>
+        <div class="card-body">
+          ${nwByYr.map(y=>`<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+            <div style="font-size:11px;width:56px;color:var(--text2)">${y.yr.replace('FY ','')}</div>
+            <div style="flex:1"><div style="height:8px;background:#EDE9FE;border-radius:4px"><div style="height:100%;background:#7C3AED;border-radius:4px;width:${Math.round((y.income/Math.max(...nwByYr.map(z=>z.income),1))*100)||0}%"></div></div></div>
+            <div style="font-size:12px;font-weight:700;width:80px;text-align:right">${y.income?fmtMoney(y.income):'—'}</div>
+          </div>`).join('')}
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">📋 CA Advisory Notes</div></div>
+        <div class="card-body">
+          <div style="font-size:13px;color:var(--navy);line-height:1.8">${nw._notes?nw._notes.replace(/\n/g,'<br>'):'<span style="color:var(--text2)">Your CA will add advisory notes here.</span>'}</div>
+        </div>
+      </div>
+    </div>`:`<div class="empty-state"><div class="empty-state-icon">📈</div><h3>Financial Snapshot Coming Soon</h3><p>Your CA team will update your financial health report here. This helps you track income, tax paid, investments, and net worth year on year.</p></div>`;
 }
 
 </script>
