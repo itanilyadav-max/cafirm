@@ -103,6 +103,22 @@ textarea.form-input{resize:vertical;min-height:80px}
 .bnav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;color:var(--text2);font-size:10px;font-weight:500;position:relative}
 .bnav-item.active{color:var(--orange)}
 .bnav-badge{position:absolute;top:6px;right:calc(50% - 16px);background:var(--red);color:#fff;font-size:8px;font-weight:700;padding:1px 4px;border-radius:7px}
+/* ── MOBILE ALL-MENUS DRAWER ── */
+#nav-drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:800;opacity:0;pointer-events:none;transition:opacity .22s}
+#nav-drawer-overlay.open{opacity:1;pointer-events:all}
+#nav-drawer{position:fixed;bottom:0;left:0;right:0;background:#fff;z-index:801;border-radius:20px 20px 0 0;max-height:82vh;display:flex;flex-direction:column;transform:translateY(100%);transition:transform .3s cubic-bezier(.34,1.2,.64,1)}
+#nav-drawer.open{transform:translateY(0)}
+#nav-drawer-handle{width:36px;height:4px;background:#E5E7EB;border-radius:2px;margin:10px auto 4px;flex-shrink:0}
+#nav-drawer-head{padding:0 16px 10px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;border-bottom:1px solid #F3F4F6}
+#nav-drawer-body{overflow-y:auto;padding:8px 10px 24px;-webkit-overflow-scrolling:touch}
+.drw-section{font-size:10px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.7px;padding:10px 10px 4px}
+.drw-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:0 2px 4px}
+.drw-item{display:flex;align-items:center;gap:9px;padding:10px 12px;border-radius:10px;cursor:pointer;background:#F8F9FB;border:1px solid #F3F4F6;position:relative;transition:all .15s;min-height:44px}
+.drw-item:active{background:#FFF0E6;border-color:var(--orange)}
+.drw-item-icon{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.drw-item-label{font-size:12px;font-weight:600;color:var(--text);line-height:1.3}
+.drw-badge{position:absolute;top:6px;right:6px;background:var(--red);color:#fff;font-size:8px;font-weight:700;padding:1px 5px;border-radius:8px}
+@media(min-width:768px){#nav-drawer,#nav-drawer-overlay{display:none!important}}
 .card{background:#fff;border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow);margin-bottom:12px}
 .card-header{padding:12px 15px 10px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
 .card-title{font-size:13px;font-weight:700;color:var(--navy)}
@@ -365,6 +381,18 @@ tr:hover td{background:#FAFAFA;cursor:pointer}
     <div id="content"></div>
   </div>
   <nav id="bottom-nav"></nav>
+</div>
+<!-- MOBILE ALL-MENU DRAWER — at body level, outside all fixed containers -->
+<div id="nav-drawer-overlay" onclick="closeNavDrawer()"></div>
+<div id="nav-drawer">
+  <div id="nav-drawer-handle"></div>
+  <div id="nav-drawer-head">
+    <div style="font-size:14px;font-weight:700;color:var(--navy)">All Sections</div>
+    <button onclick="closeNavDrawer()" style="width:26px;height:26px;border:none;background:var(--gray-light);border-radius:7px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text2)">
+      <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div id="nav-drawer-body"></div>
 </div>
 <div id="toast"></div>
 <div id="modal-overlay" class="modal-overlay">
@@ -643,9 +671,66 @@ const BNAV=[
   {id:'clients', label:'Clients', icon:'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z'},
   {id:'work',    label:'Work',    icon:'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01'},
   {id:'billing', label:'Bills',   icon:'M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2z'},
-  {id:'more',    label:'More',    icon:'M4 6h16M4 12h16M4 18h16'},
+  {id:'__more__',label:'Menu',   icon:'M4 6h16M4 12h16M4 18h16'},
 ];
 
+function openNavDrawer(){
+  document.getElementById('nav-drawer-overlay').classList.add('open');
+  document.getElementById('nav-drawer').classList.add('open');
+  // mark more button active
+  document.querySelectorAll('.bnav-item').forEach(el=>{
+    el.classList.toggle('active',el.dataset.tab==='__more__');
+  });
+}
+function closeNavDrawer(){
+  document.getElementById('nav-drawer-overlay').classList.remove('open');
+  document.getElementById('nav-drawer').classList.remove('open');
+  // restore active state to current tab
+  document.querySelectorAll('.bnav-item').forEach(el=>{
+    el.classList.toggle('active',el.dataset.tab===currentTab);
+  });
+}
+function buildNavDrawer(){
+  const body=document.getElementById('nav-drawer-body');
+  if(!body)return;
+  const badges=getBadges();
+  // section color map
+  const colors={
+    'Core':'#E8690A','Finance':'#3B82F6','People & Growth':'#8B5CF6',
+    'Transparency':'#10B981','Advanced & AI':'#EC4899','Tools':'#F59E0B'
+  };
+  const bgMap={
+    'Core':'#FFF0E6','Finance':'#DBEAFE','People & Growth':'#EDE9FE',
+    'Transparency':'#D1FAE5','Advanced & AI':'#FCE7F3','Tools':'#FEF3C7'
+  };
+  let html='';
+  NAV_GROUPS.forEach(g=>{
+    const col=colors[g.section]||'#6B7280';
+    const bg=bgMap[g.section]||'#F3F4F6';
+    html+=`<div class="drw-section">${g.section}</div><div class="drw-grid">`;
+    g.items.forEach(item=>{
+      const cnt=item.badge?badges[item.badge]:0;
+      html+=`<div class="drw-item" onclick="navigateTo('${item.id}')">
+        <div class="drw-item-icon" style="background:${bg}">
+          <svg width="14" height="14" fill="none" stroke="${col}" stroke-width="1.8" viewBox="0 0 24 24"><path d="${item.icon}"/></svg>
+        </div>
+        <div class="drw-item-label">${item.label.replace(' ★2025',' ★').replace('🔔 ','').replace('Compliance Auto-Generator','Auto-Generator').replace('Client Net Worth','Net Worth')}</div>
+        ${cnt>0?`<span class="drw-badge">${cnt}</span>`:''}
+      </div>`;
+    });
+    html+='</div>';
+  });
+  // Settings shortcut at bottom
+  html+=`<div class="drw-section">Account</div><div class="drw-grid">
+    <div class="drw-item" onclick="navigateTo('more')" style="grid-column:1/-1">
+      <div class="drw-item-icon" style="background:#F3F4F6">
+        <svg width="14" height="14" fill="none" stroke="#6B7280" stroke-width="1.8" viewBox="0 0 24 24"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+      </div>
+      <div class="drw-item-label">Settings & Firebase</div>
+    </div>
+  </div>`;
+  body.innerHTML=html;
+}
 function getBadges(){
   const now=new Date();
   return{
@@ -689,9 +774,13 @@ function buildNav(){
   });
   BNAV.forEach(item=>{
     const bi=document.createElement('div');bi.className='bnav-item';bi.dataset.tab=item.id;
-    bi.innerHTML=`<svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="${item.icon}"/></svg><span>${item.label}</span>`;
-    bi.onclick=()=>navigateTo(item.id);bn.appendChild(bi);
+    const cnt=item.badge?badges[item.badge]:0;
+    bi.innerHTML=`<svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="${item.icon}"/></svg><span>${item.label}</span>${cnt>0?`<span class="bnav-badge">${cnt}</span>`:''}`;
+    if(item.id==='__more__') bi.onclick=()=>openNavDrawer();
+    else bi.onclick=()=>navigateTo(item.id);
+    bn.appendChild(bi);
   });
+  buildNavDrawer();
 }
 
 const TAB_TITLES={dashboard:'Dashboard',clients:'Clients',work:'Work Orders',billing:'Billing & Invoices',timesheet:'Timesheets',profitability:'Profitability',team:'Team & Workload',leaves:'Leave & Attendance',prospects:'CRM / Leads',performance:'Performance Scorecard',calendar:'Compliance Calendar',dsc:'DSC Tracker',knowledge:'SOP Library',taxcalc:'Tax Calculator — IT Act 2025',alerts:'Alerts & Automation',filingstatus:'Filing Status Tracker',handover:'Staff Handover',analytics:'Firm Analytics',approvals:'Approval Workflow',advtax:'Advance Tax Planner',autogen:'Compliance Auto-Generator',engagement:'Engagement Letters',gstr9:'GSTR-9 Auto-Preparation',aismatch:'26AS / AIS Mismatch Detector',networth:'Client Net Worth Tracker',more:'Settings'};
@@ -699,6 +788,10 @@ const TAB_TITLES={dashboard:'Dashboard',clients:'Clients',work:'Work Orders',bil
 function navigateTo(tab){
   currentTab=tab;
   document.querySelectorAll('[data-tab]').forEach(el=>el.classList.toggle('active',el.dataset.tab===tab));
+  // Close mobile drawer when navigating to any section
+  const drw=document.getElementById('nav-drawer');
+  const drwOv=document.getElementById('nav-drawer-overlay');
+  if(drw&&drw.classList.contains('open')){drw.classList.remove('open');drwOv.classList.remove('open');}
   document.getElementById('topbar-title').textContent=TAB_TITLES[tab]||tab;
   const addBtn=document.getElementById('add-btn');
   const addTabs=['clients','work','billing','prospects','knowledge'];
