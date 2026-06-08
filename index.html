@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover"/>
 <meta name="theme-color" content="#0D1B2A"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <title>CA Firm OS</title>
@@ -67,7 +67,7 @@ textarea.form-input{resize:vertical;min-height:80px}
 .demo-role{font-size:12px;font-weight:600}
 .demo-email{font-size:11px;color:var(--text2)}
 .demo-btn{font-size:11px;padding:4px 10px;background:var(--navy);color:#fff;border:none;border-radius:6px;cursor:pointer;font-family:inherit;font-weight:600}
-#app{display:none;position:fixed;inset:0;height:100vh;overflow:hidden;z-index:100}
+#app{display:none;position:fixed;inset:0;height:100vh;height:100dvh;overflow:hidden;z-index:100}
 #app.visible{display:flex;flex-direction:column}
 @media(min-width:768px){#app.visible{flex-direction:row}}
 #sidebar{display:none;width:var(--sidebar-w);background:var(--navy);flex-shrink:0;flex-direction:column;height:100vh;overflow:hidden}
@@ -92,13 +92,13 @@ textarea.form-input{resize:vertical;min-height:80px}
 .sidebar-footer{padding:10px 14px;border-top:1px solid rgba(255,255,255,.08)}
 .sidebar-logout{display:flex;align-items:center;gap:9px;color:rgba(255,255,255,.38);font-size:13px;cursor:pointer;padding:7px 11px;border-radius:8px;transition:all .2s}
 .sidebar-logout:hover{background:rgba(239,68,68,.12);color:var(--red)}
-#main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+#main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-height:0}
 .topbar{background:#fff;border-bottom:1px solid var(--border);padding:0 16px;height:50px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
 .topbar-title{font-size:15px;font-weight:700;color:var(--navy)}
-#content{flex:1;overflow-y:auto;padding:14px;padding-bottom:calc(var(--nav-h) + 14px)}
+#content{flex:1;overflow-y:auto;padding:14px;padding-bottom:calc(var(--nav-h) + env(safe-area-inset-bottom,0px) + 14px);min-height:0;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
 #content::-webkit-scrollbar{width:5px}
 #content::-webkit-scrollbar-thumb{background:#D1D5DB;border-radius:3px}
-#bottom-nav{background:#fff;border-top:1px solid var(--border);display:flex;height:var(--nav-h);flex-shrink:0}
+#bottom-nav{background:#fff;border-top:1px solid var(--border);display:flex;height:calc(var(--nav-h) + env(safe-area-inset-bottom,0px));min-height:var(--nav-h);padding-bottom:env(safe-area-inset-bottom,0px);flex-shrink:0;z-index:10}
 @media(min-width:768px){#bottom-nav{display:none}#content{padding-bottom:14px}}
 .bnav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;color:var(--text2);font-size:10px;font-weight:500;position:relative}
 .bnav-item.active{color:var(--orange)}
@@ -256,7 +256,7 @@ tr:hover td{background:#FAFAFA;cursor:pointer}
 .cp-tagline{color:var(--text2);font-size:13px;margin-bottom:26px;padding-bottom:18px;border-bottom:1px solid var(--border)}
 .cp-welcome{font-size:12px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
 .cp-firm{font-size:22px;font-weight:700;color:var(--navy);margin-bottom:20px}
-#cp-app{display:none;position:fixed;inset:0;height:100vh;flex-direction:column;overflow:hidden;z-index:100}
+#cp-app{display:none;position:fixed;inset:0;height:100vh;height:100dvh;flex-direction:column;overflow:hidden;z-index:100}
 #cp-app.visible{display:flex}
 @media(min-width:768px){#cp-app.visible{flex-direction:row}}
 #cp-sidebar{display:none;width:220px;background:linear-gradient(180deg,#0D1B2A 0%,#162438 100%);flex-shrink:0;flex-direction:column;height:100vh}
@@ -379,7 +379,28 @@ tr:hover td{background:#FAFAFA;cursor:pointer}
       </div>
     </div>
     <div id="content"></div>
-    <nav id="bottom-nav"></nav>
+    <nav id="bottom-nav">
+      <div class="bnav-item active" data-tab="dashboard" onclick="navigateTo('dashboard')">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 12L12 3l9 9M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg>
+        <span>Home</span>
+      </div>
+      <div class="bnav-item" data-tab="clients" onclick="navigateTo('clients')">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8zM23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+        <span>Clients</span>
+      </div>
+      <div class="bnav-item" data-tab="work" onclick="navigateTo('work')">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+        <span>Work</span>
+      </div>
+      <div class="bnav-item" data-tab="billing" onclick="navigateTo('billing')">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M9 14l2 2 4-4M7 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V5a2 2 0 00-2-2h-2M9 3h6a1 1 0 011 1v0a1 1 0 01-1 1H9a1 1 0 01-1-1v0a1 1 0 011-1z"/></svg>
+        <span>Bills</span>
+      </div>
+      <div class="bnav-item" data-tab="__more__" onclick="openNavDrawer()">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+        <span>Menu</span>
+      </div>
+    </nav>
   </div>
 </div>
 <!-- MOBILE ALL-MENU DRAWER — at body level, outside all fixed containers -->
@@ -464,6 +485,18 @@ tr:hover td{background:#FAFAFA;cursor:pointer}
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 <script>
+// ── MOBILE VIEWPORT HEIGHT FIX ───────────────────────────────
+// Android Chrome counts address bar in 100vh — this fixes it
+function fixVH(){
+  const h = window.innerHeight;
+  const els = ['app','cp-app','auth-screen','cp-screen'];
+  els.forEach(id=>{const el=document.getElementById(id);if(el)el.style.height=h+'px';});
+}
+fixVH();
+window.addEventListener('resize', fixVH);
+window.addEventListener('orientationchange', ()=>setTimeout(fixVH,200));
+// ─────────────────────────────────────────────────────────────
+
 // ══════════════════════════════════════════
 //  FIREBASE CONFIG — ca-firm-os project
 //  Region: asia-south1 (Mumbai) for India data residency
@@ -754,7 +787,9 @@ function showApp(){
   document.getElementById('sb-role').textContent=currentUser.role||'Staff';
   document.getElementById('sb-branch').textContent=currentUser.branch||'';
   buildNav();
-  setTimeout(()=>{buildAlerts();buildNav();},300); // build alerts after data loads
+  setTimeout(()=>{buildAlerts();buildNav();fixVH();},300);
+  setTimeout(()=>fixVH(),100);   // retry after layout settles
+  setTimeout(()=>fixVH(),600);   // retry after fonts/images load
   navigateTo('dashboard');
 }
 
