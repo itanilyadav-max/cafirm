@@ -325,8 +325,8 @@ tr:hover td{background:#FAFAFA;cursor:pointer}
     <div class="form-group"><label class="form-label">Password</label><input type="password" id="auth-pass" class="form-input" placeholder="••••••••"/></div>
     <button class="btn btn-primary btn-full" onclick="doLogin()" id="login-btn">Sign In</button>
     <div id="auth-error" style="margin-top:8px;font-size:12px;color:var(--red);display:none"></div>
-    <div class="demo-accounts" style="display:none">
-      <div class="demo-title">Demo Accounts</div>
+    <div class="demo-accounts">
+      <div class="demo-title">Demo Accounts — for client demo only</div>
       <div class="demo-row"><div><div class="demo-role">Admin</div><div class="demo-email">admin@cafirm.com</div></div><button class="demo-btn" onclick="fillDemo('admin@cafirm.com','admin123')">Use</button></div>
       <div class="demo-row"><div><div class="demo-role">Manager</div><div class="demo-email">manager@cafirm.com</div></div><button class="demo-btn" onclick="fillDemo('manager@cafirm.com','manager123')">Use</button></div>
       <div class="demo-row"><div><div class="demo-role">Staff</div><div class="demo-email">staff@cafirm.com</div></div><button class="demo-btn" onclick="fillDemo('staff@cafirm.com','staff123')">Use</button></div>
@@ -339,7 +339,7 @@ tr:hover td{background:#FAFAFA;cursor:pointer}
     <div class="sidebar-header">
       <div class="sidebar-logo">
         <div class="sidebar-logo-icon">CA</div>
-        <div><div class="sidebar-logo-text">CA Firm OS</div><div class="sidebar-logo-sub">Practice Management</div></div>
+        <div><div class="sidebar-logo-text">CA Firm OS</div><div class="sidebar-logo-sub">Practice Management &nbsp;<span style="background:rgba(232,105,10,0.3);color:#E8690A;padding:1px 6px;border-radius:6px;font-size:9px;font-weight:800">v11</span> <span id="fb-status-dot" style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#9CA3AF;margin-left:4px;vertical-align:middle" title="Firebase status"></span></div></div>
       </div>
     </div>
     <div class="sidebar-user">
@@ -392,8 +392,8 @@ tr:hover td{background:#FAFAFA;cursor:pointer}
     <div class="form-group"><label class="form-label">Password</label><input type="password" id="cp-pass" class="form-input" placeholder="••••••••"/></div>
     <button class="btn btn-primary btn-full" onclick="doClientLogin()" id="cp-login-btn">Sign In to Portal</button>
     <div id="cp-error" style="margin-top:8px;font-size:12px;color:var(--red);display:none"></div>
-    <div class="demo-accounts" style="display:none;margin-top:16px">
-      <div class="demo-title">Demo Client Accounts</div>
+    <div class="demo-accounts" style="margin-top:16px">
+      <div class="demo-title">Demo Client Accounts — for client demo only</div>
       <div class="demo-row"><div><div class="demo-role">TCS Finance</div><div class="demo-email">portal@tcs.com</div></div><button class="demo-btn" onclick="fillCPDemo('portal@tcs.com','client123')">Use</button></div>
       <div class="demo-row"><div><div class="demo-role">Infosys Finance</div><div class="demo-email">portal@infosys.com</div></div><button class="demo-btn" onclick="fillCPDemo('portal@infosys.com','client123')">Use</button></div>
       <div class="demo-row"><div><div class="demo-role">Sunita Rao</div><div class="demo-email">sunita@gmail.com</div></div><button class="demo-btn" onclick="fillCPDemo('sunita@gmail.com','client123')">Use</button></div>
@@ -437,11 +437,17 @@ tr:hover td{background:#FAFAFA;cursor:pointer}
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 <script>
 // ══════════════════════════════════════════
-//  FIREBASE CONFIG — replace with your own
+//  FIREBASE CONFIG — ca-firm-os project
+//  Region: asia-south1 (Mumbai) for India data residency
 // ══════════════════════════════════════════
-const FB={apiKey:"AIzaSyDEMO-replace",authDomain:"ca-firm-os.firebaseapp.com",
-  projectId:"ca-firm-os",storageBucket:"ca-firm-os.appspot.com",
-  messagingSenderId:"000000",appId:"1:000:web:demo"};
+const FB={
+  apiKey:            "AIzaSyBJWbzf3tOaVmZS7reuNP3Ksd4kkM4CjH4",
+  authDomain:        "ca-firm-os.firebaseapp.com",
+  projectId:         "ca-firm-os",
+  storageBucket:     "ca-firm-os.firebasestorage.app",
+  messagingSenderId: "482327859386",
+  appId:             "1:482327859386:web:45c674fd4593e9c65f7283"
+};
 
 // ══════════════════════════════════════════
 //  CONSTANTS
@@ -524,9 +530,41 @@ let CACHE={clients:[],workOrders:[],employees:[],invoices:[],timesheets:[],leave
 function init(){
   window.addEventListener('online',()=>{isOnline=true;updateOffline();});
   window.addEventListener('offline',()=>{isOnline=false;updateOffline();});
-  try{firebase.initializeApp(FB);AUTH=firebase.auth();DB=firebase.firestore();DB.enablePersistence({synchronizeTabs:true}).catch(()=>{});fbReady=true;}catch(e){fbReady=false;}
-  loadLS();seedDemo();
-  setTimeout(()=>{document.getElementById('loader').classList.add('hide');checkAuth();},2500);
+  try{
+    firebase.initializeApp(FB);
+    AUTH=firebase.auth();
+    // ── Firestore with India data residency settings ──────────
+    DB=firebase.firestore();
+    DB.settings({
+      cacheSizeBytes: firebase.firestore.CACHE_SIZE_UNLIMITED,
+      experimentalForceLongPolling: false,  // use WebChannel (faster)
+    });
+    DB.enablePersistence({synchronizeTabs:true})
+      .catch(e=>{
+        if(e.code==='failed-precondition')console.warn('Multiple tabs open — offline persistence disabled');
+        else if(e.code==='unimplemented')console.warn('Browser does not support offline persistence');
+      });
+    fbReady=true;
+    console.log('✅ Firebase connected — project: ca-firm-os (India region)');
+  }catch(e){
+    fbReady=false;
+    console.warn('⚠️ Firebase offline — using localStorage fallback');
+  }
+  loadLS();
+  seedDemo().then(()=>{
+    setTimeout(()=>{
+      document.getElementById('loader').classList.add('hide');
+      checkAuth();
+      // Update Firebase status dot in sidebar
+      const dot=document.getElementById('fb-status-dot');
+      if(dot){
+        dot.style.background=fbReady?'#10B981':'#9CA3AF';
+        dot.title=fbReady?'Firebase: Connected (India region)':'Firebase: Offline (localStorage)';
+      }
+      if(fbReady) console.log('🔥 Firebase: CONNECTED | Project: ca-firm-os | Region: india');
+      else        console.log('💾 Firebase: OFFLINE | Using localStorage fallback');
+    },2500);
+  });
   setupPWA();
 }
 function updateOffline(){const s=document.getElementById('offline-strip');if(s)s.classList.toggle('on',!isOnline);}
@@ -707,10 +745,12 @@ function invBadge(s){const m={Paid:'p-green',Unpaid:'p-blue',Overdue:'p-red',Dra
 function pBadge(s){const m={'New Lead':'ps-new','Initial Contact':'ps-contact','Proposal Sent':'ps-proposal',Negotiation:'ps-negotiation',Won:'ps-won',Lost:'ps-lost'};return`<span class="prospect-stage ${m[s]||''}">${s}</span>`;}
 
 // ══════════════════════════════════════════
-//  SEED DEMO
+//  SEED DEMO — seeds localStorage first,
+//  then auto-pushes to Firestore if connected
+//  (runs only once — skips if data exists)
 // ══════════════════════════════════════════
-function seedDemo(){
-  if(CACHE.clients.length>0)return;
+async function seedDemo(){
+  if(CACHE.clients.length>0) return; // already seeded
   const now=new Date();
   function ad(n){const d=new Date(now);d.setDate(d.getDate()+n);return d.toISOString();}
 
@@ -718,80 +758,132 @@ function seedDemo(){
     {id:'emp001',name:'Rajan Mehta',  email:'admin@cafirm.com',   role:'Admin',   branch:'Mumbai HQ',        designation:'Senior Partner',  billRate:5000},
     {id:'emp002',name:'Priya Sharma', email:'manager@cafirm.com', role:'Manager', branch:'Mumbai HQ',        designation:'Manager',         billRate:2500},
     {id:'emp003',name:'Arjun Patel',  email:'staff@cafirm.com',   role:'Staff',   branch:'Mumbai HQ',        designation:'Article Assistant',billRate:800},
-    {id:'emp004',name:'Kavita Desai', email:'kavita@cafirm.com',  role:'Staff',   branch:'Delhi Branch',     designation:'Senior Associate',billRate:1500},
-    {id:'emp005',name:'Rohit Jain',   email:'rohit@cafirm.com',   role:'Staff',   branch:'Mumbai HQ',        designation:'Associate',       billRate:1000},
-    {id:'emp006',name:'Sneha Nair',   email:'sneha@cafirm.com',   role:'Manager', branch:'Bangalore Branch', designation:'Manager',         billRate:2200},
+    {id:'emp004',name:'Kavita Desai', email:'kavita@cafirm.com',  role:'Staff',   branch:'Delhi Branch',     designation:'Senior Associate', billRate:1500},
+    {id:'emp005',name:'Rohit Jain',   email:'rohit@cafirm.com',   role:'Staff',   branch:'Mumbai HQ',        designation:'Associate',        billRate:1000},
+    {id:'emp006',name:'Sneha Nair',   email:'sneha@cafirm.com',   role:'Manager', branch:'Bangalore Branch', designation:'Manager',          billRate:2200},
   ];
-
   CACHE.clients=[
-    {id:'c001',name:'Tata Consultancy Services',pan:'AABCT1234C',gstin:'27AABCT1234C1Z5',type:'Public Ltd',  assignedManager:'emp002',branch:'Mumbai HQ',       email:'finance@tcs.com',      phone:'022-67789900',dscExpiry:ad(25),dscHolder:'Rajan Kumar',  notes:'Listed company — strict deadlines',creditLimit:500000},
-    {id:'c002',name:'Infosys Technologies Ltd',  pan:'AAACI3029L',gstin:'29AAACI3029L1ZA',type:'Public Ltd',  assignedManager:'emp002',branch:'Mumbai HQ',       email:'finance@infosys.com',  phone:'080-28520261',dscExpiry:ad(8), dscHolder:'Nandan M',       notes:'Transfer pricing ongoing',         creditLimit:300000},
-    {id:'c003',name:'Sunita Rao',                pan:'ABCPR5432K',gstin:'',               type:'Individual',  assignedManager:'emp002',branch:'Mumbai HQ',       email:'sunita@gmail.com',     phone:'9876543210', dscExpiry:ad(-5),dscHolder:'Sunita Rao',    notes:'Salaried — ITR only',              creditLimit:20000},
-    {id:'c004',name:'Delhi Textiles LLP',        pan:'AADFD2222B',gstin:'07AADFD2222B1ZK',type:'LLP',         assignedManager:'emp004',branch:'Delhi Branch',    email:'dt@delhitex.in',       phone:'011-45634565',dscExpiry:ad(45),dscHolder:'Mahesh Gupta',   notes:'',                                 creditLimit:100000},
-    {id:'c005',name:'Mahesh & Brothers',         pan:'AABFM9876P',gstin:'27AABFM9876P1ZQ',type:'Partnership', assignedManager:'emp002',branch:'Mumbai HQ',       email:'mahesh@mbrothers.in',  phone:'9898001122', dscExpiry:ad(60),dscHolder:'Mahesh Shah',   notes:'Good payer',                       creditLimit:80000},
-    {id:'c006',name:'Reliance Digital Pvt Ltd',  pan:'AAECR1234F',gstin:'27AAECR1234F1Z1',type:'Private Ltd', assignedManager:'emp006',branch:'Bangalore Branch',email:'fin@reliancedigi.in',  phone:'080-47356789',dscExpiry:ad(12),dscHolder:'Rajesh A',       notes:'Large client — high priority',     creditLimit:200000},
+    {id:'c001',name:'Tata Consultancy Services',pan:'AABCT1234C',gstin:'27AABCT1234C1Z5',type:'Public Ltd',  assignedManager:'emp002',branch:'Mumbai HQ',       email:'finance@tcs.com',      phone:'022-67789900',dscExpiry:ad(25),dscHolder:'Rajan Kumar',notes:'Listed company — strict deadlines',creditLimit:500000},
+    {id:'c002',name:'Infosys Technologies Ltd',  pan:'AAACI3029L',gstin:'29AAACI3029L1ZA',type:'Public Ltd',  assignedManager:'emp002',branch:'Mumbai HQ',       email:'finance@infosys.com',  phone:'080-28520261',dscExpiry:ad(8), dscHolder:'Nandan M',    notes:'Transfer pricing ongoing',        creditLimit:300000},
+    {id:'c003',name:'Sunita Rao',                pan:'ABCPR5432K',gstin:'',               type:'Individual',  assignedManager:'emp002',branch:'Mumbai HQ',       email:'sunita@gmail.com',     phone:'9876543210', dscExpiry:ad(-5),dscHolder:'Sunita Rao', notes:'Salaried — ITR only',             creditLimit:20000},
+    {id:'c004',name:'Delhi Textiles LLP',        pan:'AADFD2222B',gstin:'07AADFD2222B1ZK',type:'LLP',         assignedManager:'emp004',branch:'Delhi Branch',    email:'dt@delhitex.in',       phone:'011-45634565',dscExpiry:ad(45),dscHolder:'Mahesh Gupta',notes:'',                                creditLimit:100000},
+    {id:'c005',name:'Mahesh & Brothers',         pan:'AABFM9876P',gstin:'27AABFM9876P1ZQ',type:'Partnership', assignedManager:'emp002',branch:'Mumbai HQ',       email:'mahesh@mbrothers.in',  phone:'9898001122', dscExpiry:ad(60),dscHolder:'Mahesh Shah', notes:'Good payer',                      creditLimit:80000},
+    {id:'c006',name:'Reliance Digital Pvt Ltd',  pan:'AAECR1234F',gstin:'27AAECR1234F1Z1',type:'Private Ltd', assignedManager:'emp006',branch:'Bangalore Branch',email:'fin@reliancedigi.in',  phone:'080-47356789',dscExpiry:ad(12),dscHolder:'Rajesh A',    notes:'Large client — high priority',    creditLimit:200000},
   ];
-
   CACHE.workOrders=[
-    {id:'w001',clientId:'c001',clientName:'Tata Consultancy Services',service:'Audit',      status:'In Progress',  assignedTo:'emp003',branch:'Mumbai HQ',       dueDate:ad(15), priority:'High',  holdReason:'',holdNote:'',fee:85000, recurring:'Annual',  description:'Annual statutory audit FY 2025-26',createdAt:now.toISOString()},
-    {id:'w002',clientId:'c002',clientName:'Infosys Technologies Ltd',  service:'ITR Filing', status:'Under Review', assignedTo:'emp003',branch:'Mumbai HQ',       dueDate:ad(7),  priority:'High',  holdReason:'',holdNote:'',fee:45000, recurring:'Annual',  description:'ITR-6 for FY 2025-26',createdAt:now.toISOString()},
-    {id:'w003',clientId:'c003',clientName:'Sunita Rao',                service:'ITR Filing', status:'On Hold',      assignedTo:'emp005',branch:'Mumbai HQ',       dueDate:ad(-3), priority:'Medium',holdReason:'Awaiting Documents',holdNote:'Form 130 (salary TDS cert) pending from employer',fee:5000,recurring:'Annual',description:'ITR-2 FY 2025-26',createdAt:now.toISOString()},
-    {id:'w004',clientId:'c004',clientName:'Delhi Textiles LLP',        service:'GST',        status:'Not Started',  assignedTo:'emp004',branch:'Delhi Branch',    dueDate:ad(5),  priority:'High',  holdReason:'',holdNote:'',fee:18000, recurring:'Monthly', description:'GSTR-9 Annual return',createdAt:now.toISOString()},
-    {id:'w005',clientId:'c005',clientName:'Mahesh & Brothers',         service:'Bookkeeping',status:'In Progress',  assignedTo:'emp005',branch:'Mumbai HQ',       dueDate:ad(20), priority:'Low',   holdReason:'',holdNote:'',fee:12000, recurring:'Monthly', description:'Monthly bookkeeping',createdAt:now.toISOString()},
-    {id:'w006',clientId:'c001',clientName:'Tata Consultancy Services', service:'TDS',        status:'Completed',    assignedTo:'emp003',branch:'Mumbai HQ',       dueDate:ad(-8), priority:'Medium',holdReason:'',holdNote:'',fee:22000, recurring:'Quarterly',description:'TDS Q4 returns',createdAt:now.toISOString()},
-    {id:'w007',clientId:'c006',clientName:'Reliance Digital Pvt Ltd',  service:'ROC',        status:'In Progress',  assignedTo:'emp004',branch:'Bangalore Branch',dueDate:ad(10), priority:'High',  holdReason:'',holdNote:'',fee:35000, recurring:'Annual',  description:'Annual ROC compliance',createdAt:now.toISOString()},
-    {id:'w008',clientId:'c002',clientName:'Infosys Technologies Ltd',  service:'Advisory',   status:'Billed',       assignedTo:'emp002',branch:'Mumbai HQ',       dueDate:ad(-12),priority:'Low',   holdReason:'',holdNote:'',fee:75000, recurring:'',        description:'Transfer pricing advisory',createdAt:now.toISOString()},
-    {id:'w009',clientId:'c005',clientName:'Mahesh & Brothers',         service:'GST',        status:'On Hold',      assignedTo:'emp003',branch:'Mumbai HQ',       dueDate:ad(-1), priority:'High',  holdReason:'Portal Down',holdNote:'GST portal 502 error',fee:8000,recurring:'Monthly',description:'GSTR-3B May 2025',createdAt:now.toISOString()},
+    {id:'w001',clientId:'c001',clientName:'Tata Consultancy Services',service:'Audit',      status:'In Progress',  assignedTo:'emp003',branch:'Mumbai HQ',       dueDate:ad(15), priority:'High',  holdReason:'',holdNote:'',fee:85000, recurring:'Annual',   description:'Annual statutory audit FY 2025-26',createdAt:now.toISOString(),updatedAt:now.toISOString()},
+    {id:'w002',clientId:'c002',clientName:'Infosys Technologies Ltd',  service:'ITR Filing', status:'Under Review', assignedTo:'emp003',branch:'Mumbai HQ',       dueDate:ad(7),  priority:'High',  holdReason:'',holdNote:'',fee:45000, recurring:'Annual',   description:'ITR-6 for FY 2025-26',createdAt:now.toISOString(),updatedAt:now.toISOString()},
+    {id:'w003',clientId:'c003',clientName:'Sunita Rao',                service:'ITR Filing', status:'On Hold',      assignedTo:'emp005',branch:'Mumbai HQ',       dueDate:ad(-3), priority:'Medium',holdReason:'Awaiting Documents',holdNote:'Form 130 (salary TDS cert) pending from employer',fee:5000,recurring:'Annual',description:'ITR-2 FY 2025-26',createdAt:now.toISOString(),updatedAt:now.toISOString()},
+    {id:'w004',clientId:'c004',clientName:'Delhi Textiles LLP',        service:'GST',        status:'Not Started',  assignedTo:'emp004',branch:'Delhi Branch',    dueDate:ad(5),  priority:'High',  holdReason:'',holdNote:'',fee:18000, recurring:'Monthly',  description:'GSTR-9 Annual return',createdAt:now.toISOString(),updatedAt:now.toISOString()},
+    {id:'w005',clientId:'c005',clientName:'Mahesh & Brothers',         service:'Bookkeeping',status:'In Progress',  assignedTo:'emp005',branch:'Mumbai HQ',       dueDate:ad(20), priority:'Low',   holdReason:'',holdNote:'',fee:12000, recurring:'Monthly',  description:'Monthly bookkeeping',createdAt:now.toISOString(),updatedAt:now.toISOString()},
+    {id:'w006',clientId:'c001',clientName:'Tata Consultancy Services', service:'TDS',        status:'Completed',    assignedTo:'emp003',branch:'Mumbai HQ',       dueDate:ad(-8), priority:'Medium',holdReason:'',holdNote:'',fee:22000, recurring:'Quarterly',description:'TDS Q4 returns',createdAt:now.toISOString(),updatedAt:now.toISOString()},
+    {id:'w007',clientId:'c006',clientName:'Reliance Digital Pvt Ltd',  service:'ROC',        status:'In Progress',  assignedTo:'emp004',branch:'Bangalore Branch',dueDate:ad(10), priority:'High',  holdReason:'',holdNote:'',fee:35000, recurring:'Annual',   description:'Annual ROC compliance',createdAt:now.toISOString(),updatedAt:now.toISOString()},
+    {id:'w008',clientId:'c002',clientName:'Infosys Technologies Ltd',  service:'Advisory',   status:'Billed',       assignedTo:'emp002',branch:'Mumbai HQ',       dueDate:ad(-12),priority:'Low',   holdReason:'',holdNote:'',fee:75000, recurring:'',         description:'Transfer pricing advisory',createdAt:now.toISOString(),updatedAt:now.toISOString()},
+    {id:'w009',clientId:'c005',clientName:'Mahesh & Brothers',         service:'GST',        status:'On Hold',      assignedTo:'emp003',branch:'Mumbai HQ',       dueDate:ad(-1), priority:'High',  holdReason:'Portal Down',holdNote:'GST portal 502 error',fee:8000,recurring:'Monthly',description:'GSTR-3B May 2025',createdAt:now.toISOString(),updatedAt:now.toISOString()},
   ];
-
-  CACHE.tasks={
-    'w001':[{id:'t1',text:'Gather trial balance',done:true},{id:'t2',text:'Bank reconciliation',done:true},{id:'t3',text:'Fixed assets review',done:false},{id:'t4',text:'Draft audit report',done:false}],
-    'w002':[{id:'t1',text:'Collect Form 26AS & AIS (Annual Information Statement)',done:true},{id:'t2',text:'Compute taxable income — check old vs new regime',done:true},{id:'t3',text:'Prepare ITR-6 for FY 2025-26',done:false}],
-    'w004':[{id:'t1',text:'Reconcile GSTR-1 vs 3B',done:false},{id:'t2',text:'Prepare GSTR-9 draft',done:false}],
-  };
-
   CACHE.invoices=[
-    {id:'inv001',clientId:'c001',clientName:'Tata Consultancy Services',workOrderId:'w006',amount:22000,gst:3960,total:25960,status:'Paid',   issueDate:ad(-8), dueDate:ad(7),  paidDate:ad(-2),invoiceNo:'INV-2025-001',description:'TDS Q4 Filing Charges',branch:'Mumbai HQ'},
-    {id:'inv002',clientId:'c002',clientName:'Infosys Technologies Ltd',  workOrderId:'w008',amount:75000,gst:13500,total:88500,status:'Paid',  issueDate:ad(-12),dueDate:ad(3),  paidDate:ad(-5),invoiceNo:'INV-2025-002',description:'Transfer Pricing Advisory',branch:'Mumbai HQ'},
-    {id:'inv003',clientId:'c001',clientName:'Tata Consultancy Services', workOrderId:'w001',amount:85000,gst:15300,total:100300,status:'Unpaid',issueDate:ad(-2), dueDate:ad(13), paidDate:'',    invoiceNo:'INV-2025-003',description:'Statutory Audit FY 2025-26',branch:'Mumbai HQ'},
-    {id:'inv004',clientId:'c005',clientName:'Mahesh & Brothers',         workOrderId:'w005',amount:12000,gst:2160,total:14160,status:'Overdue', issueDate:ad(-20),dueDate:ad(-5), paidDate:'',    invoiceNo:'INV-2025-004',description:'Bookkeeping Apr-Jun 2025',branch:'Mumbai HQ'},
+    {id:'inv001',clientId:'c001',clientName:'Tata Consultancy Services',workOrderId:'w006',amount:22000,gst:3960, total:25960, status:'Paid',   issueDate:ad(-8), dueDate:ad(7),  paidDate:ad(-2), invoiceNo:'INV-2025-001',description:'TDS Q4 Filing Charges',        branch:'Mumbai HQ'},
+    {id:'inv002',clientId:'c002',clientName:'Infosys Technologies Ltd',  workOrderId:'w008',amount:75000,gst:13500,total:88500, status:'Paid',   issueDate:ad(-12),dueDate:ad(3),  paidDate:ad(-5), invoiceNo:'INV-2025-002',description:'Transfer Pricing Advisory',     branch:'Mumbai HQ'},
+    {id:'inv003',clientId:'c001',clientName:'Tata Consultancy Services', workOrderId:'w001',amount:85000,gst:15300,total:100300,status:'Unpaid', issueDate:ad(-2), dueDate:ad(13), paidDate:'',     invoiceNo:'INV-2025-003',description:'Statutory Audit FY 2025-26',     branch:'Mumbai HQ'},
+    {id:'inv004',clientId:'c005',clientName:'Mahesh & Brothers',         workOrderId:'w005',amount:12000,gst:2160, total:14160, status:'Overdue',issueDate:ad(-20),dueDate:ad(-5), paidDate:'',     invoiceNo:'INV-2025-004',description:'Bookkeeping Apr-Jun 2025',       branch:'Mumbai HQ'},
   ];
-
   CACHE.timesheets=[
-    {id:'ts001',empId:'emp003',workOrderId:'w001',clientName:'TCS',    service:'Audit',    date:ad(-3),hours:4,billable:true, note:'Trial balance review',     branch:'Mumbai HQ'},
-    {id:'ts002',empId:'emp003',workOrderId:'w002',clientName:'Infosys',service:'ITR',      date:ad(-2),hours:3,billable:true, note:'Income computation',       branch:'Mumbai HQ'},
-    {id:'ts003',empId:'emp005',workOrderId:'w005',clientName:'Mahesh', service:'Bookkeeping',date:ad(-1),hours:6,billable:true,note:'April entries',           branch:'Mumbai HQ'},
-    {id:'ts004',empId:'emp002',workOrderId:'w008',clientName:'Infosys',service:'Advisory', date:ad(-5),hours:8,billable:true, note:'Transfer pricing report',  branch:'Mumbai HQ'},
-    {id:'ts005',empId:'emp003',workOrderId:'w001',clientName:'TCS',    service:'Audit',    date:ad(-1),hours:5,billable:true, note:'Bank rec & debtors',       branch:'Mumbai HQ'},
-    {id:'ts006',empId:'emp004',workOrderId:'w004',clientName:'Delhi Textiles',service:'GST',date:ad(-1),hours:2,billable:true,note:'GSTR-1 reconciliation',   branch:'Delhi Branch'},
+    {id:'ts001',empId:'emp003',workOrderId:'w001',clientName:'TCS',    service:'Audit',      date:ad(-3),hours:4,billable:true,note:'Trial balance review',    branch:'Mumbai HQ'},
+    {id:'ts002',empId:'emp003',workOrderId:'w002',clientName:'Infosys',service:'ITR Filing', date:ad(-2),hours:3,billable:true,note:'Income computation',       branch:'Mumbai HQ'},
+    {id:'ts003',empId:'emp005',workOrderId:'w005',clientName:'Mahesh', service:'Bookkeeping',date:ad(-1),hours:6,billable:true,note:'April entries',            branch:'Mumbai HQ'},
+    {id:'ts004',empId:'emp002',workOrderId:'w008',clientName:'Infosys',service:'Advisory',   date:ad(-5),hours:8,billable:true,note:'Transfer pricing report',  branch:'Mumbai HQ'},
+    {id:'ts005',empId:'emp003',workOrderId:'w001',clientName:'TCS',    service:'Audit',      date:ad(-1),hours:5,billable:true,note:'Bank rec & debtors',       branch:'Mumbai HQ'},
+    {id:'ts006',empId:'emp004',workOrderId:'w004',clientName:'Delhi Textiles',service:'GST', date:ad(-1),hours:2,billable:true,note:'GSTR-1 reconciliation',    branch:'Delhi Branch'},
   ];
-
   CACHE.leaves=[
     {id:'l001',empId:'emp003',empName:'Arjun Patel', type:'Casual Leave',   from:ad(3), to:ad(4), reason:'Personal work',status:'Pending', appliedOn:now.toISOString(),branch:'Mumbai HQ'},
     {id:'l002',empId:'emp005',empName:'Rohit Jain',  type:'Sick Leave',     from:ad(-1),to:ad(-1),reason:'Fever',        status:'Approved',appliedOn:ad(-2),approvedBy:'emp002',branch:'Mumbai HQ'},
     {id:'l003',empId:'emp004',empName:'Kavita Desai',type:'Privilege Leave',from:ad(10),to:ad(12),reason:'Vacation',     status:'Pending', appliedOn:now.toISOString(),branch:'Delhi Branch'},
   ];
-
   CACHE.prospects=[
-    {id:'p001',name:'Wipro Limited',         contact:'Azim P',     phone:'9900112233',email:'azim@wipro.com',    service:'Audit,Advisory',source:'Referral',stage:'Proposal Sent',  value:200000,followUpDate:ad(2), notes:'Large audit. Met at CII event.',      createdAt:now.toISOString()},
-    {id:'p002',name:'Sharma Textiles Pvt',   contact:'Vikas S',    phone:'9123456789',email:'vikas@sharmatex.in',service:'GST,Bookkeeping',source:'Website',  stage:'Initial Contact',value:60000, followUpDate:ad(-1),notes:'Startup, needs full accounting setup.',createdAt:now.toISOString()},
-    {id:'p003',name:'Preeti Aggarwal',        contact:'Preeti A',   phone:'9876001122',email:'preeti@gmail.com',  service:'ITR Filing',   source:'WhatsApp', stage:'New Lead',        value:8000,  followUpDate:ad(1), notes:'Individual ITR.',                     createdAt:now.toISOString()},
-    {id:'p004',name:'BuildFast Infra LLP',   contact:'Rajiv K',    phone:'9988776655',email:'rajiv@buildfast.in',service:'ROC,Advisory', source:'Referral', stage:'Won',             value:120000,followUpDate:'',   notes:'Converted — create work order.',      createdAt:now.toISOString()},
+    {id:'p001',name:'Wipro Limited',       contact:'Azim P', phone:'9900112233',email:'azim@wipro.com',    service:'Audit,Advisory', source:'Referral',stage:'Proposal Sent',  value:200000,followUpDate:ad(2), notes:'Large audit. Met at CII event.',       createdAt:now.toISOString()},
+    {id:'p002',name:'Sharma Textiles Pvt', contact:'Vikas S',phone:'9123456789',email:'vikas@sharmatex.in',service:'GST,Bookkeeping',source:'Website',  stage:'Initial Contact',value:60000, followUpDate:ad(-1),notes:'Startup, needs full accounting setup.', createdAt:now.toISOString()},
+    {id:'p003',name:'Preeti Aggarwal',     contact:'Preeti A',phone:'9876001122',email:'preeti@gmail.com', service:'ITR Filing',     source:'WhatsApp', stage:'New Lead',        value:8000,  followUpDate:ad(1), notes:'Individual ITR.',                      createdAt:now.toISOString()},
+    {id:'p004',name:'BuildFast Infra LLP', contact:'Rajiv K', phone:'9988776655',email:'rajiv@buildfast.in',service:'ROC,Advisory',  source:'Referral', stage:'Won',             value:120000,followUpDate:'',   notes:'Converted — create work order.',       createdAt:now.toISOString()},
   ];
-
+  CACHE.tasks={
+    'w001':[{id:'t1',text:'Gather trial balance',done:true},{id:'t2',text:'Bank reconciliation',done:true},{id:'t3',text:'Fixed assets review',done:false},{id:'t4',text:'Draft audit report',done:false}],
+    'w002':[{id:'t1',text:'Collect Form 26AS & AIS',done:true},{id:'t2',text:'Compute taxable income — check old vs new regime',done:true},{id:'t3',text:'Prepare ITR-6 for FY 2025-26',done:false}],
+    'w004':[{id:'t1',text:'Reconcile GSTR-1 vs 3B',done:false},{id:'t2',text:'Prepare GSTR-9 draft',done:false}],
+  };
   CACHE.comments={
     'w001':[{id:'cm1',author:'emp002',authorName:'Priya Sharma',text:'Please ensure depreciation schedule matches last year.',ts:ad(-3)},{id:'cm2',author:'emp003',authorName:'Arjun Patel',text:'Noted. Will verify with client.',ts:ad(-2)}],
     'w003':[{id:'cm1',author:'emp002',authorName:'Priya Sharma',text:'Follow up with Sunita for Form 130 (salary TDS cert) urgently — employer must issue by 15 Jun.',ts:ad(-1)}],
   };
-
   CACHE.documents={
     'c001':[{id:'d1',name:'PAN Card',type:'Identity',date:ad(-30),size:'2.4 MB'},{id:'d2',name:'Last Year ITR',type:'Returns',date:ad(-10),size:'1.1 MB'}],
     'c002':[{id:'d1',name:'Certificate of Incorporation',type:'Registration',date:ad(-60),size:'800 KB'}],
   };
-
   CACHE.templates={};
   Object.entries(SVC_TEMPLATES).forEach(([svc,steps])=>{CACHE.templates[svc]=steps.map(t=>({id:genId(),text:t}));});
+
+  // ── Save to localStorage first (instant) ─────────────────────
   saveLS();
+
+  // ── Then push to Firestore if connected (India region) ───────
+  if(fbReady && DB){
+    await pushDemoToFirestore();
+  }
+}
+
+// ── Push all demo data to Firestore ─────────────────────────────
+async function pushDemoToFirestore(){
+  const flag=localStorage.getItem('ca_firebase_seeded');
+  if(flag==='1'){console.log('ℹ️ Firebase already seeded — skipping');return;}
+
+  console.log('🔥 Seeding demo data to Firestore (India region)...');
+  const batch=[];
+
+  // Push all collections
+  const toPush=[
+    {col:'employees',  data:CACHE.employees},
+    {col:'clients',    data:CACHE.clients},
+    {col:'workOrders', data:CACHE.workOrders},
+    {col:'invoices',   data:CACHE.invoices},
+    {col:'timesheets', data:CACHE.timesheets},
+    {col:'leaves',     data:CACHE.leaves},
+    {col:'prospects',  data:CACHE.prospects},
+  ];
+
+  try{
+    for(const {col,data} of toPush){
+      for(const rec of data){
+        const {id,...rest}=rec;
+        await DB.collection(col).doc(id).set(rest,{merge:true});
+      }
+      console.log(`  ✅ ${col}: ${data.length} records pushed`);
+    }
+
+    // Push tasks, comments, documents as subcollections
+    for(const [woId,tasks] of Object.entries(CACHE.tasks)){
+      for(const task of tasks){
+        await DB.collection('tasks').doc(`${woId}_${task.id}`).set({woId,...task},{merge:true});
+      }
+    }
+    for(const [woId,comments] of Object.entries(CACHE.comments)){
+      for(const c of comments){
+        await DB.collection('comments').doc(`${woId}_${c.id}`).set({woId,...c},{merge:true});
+      }
+    }
+    for(const [clientId,docs] of Object.entries(CACHE.documents)){
+      for(const d of docs){
+        await DB.collection('documents').doc(`${clientId}_${d.id}`).set({clientId,...d},{merge:true});
+      }
+    }
+
+    // Mark as seeded so we never run again
+    localStorage.setItem('ca_firebase_seeded','1');
+    console.log('🎉 Firebase seeding complete! All demo data now in Firestore (India region: asia-south1)');
+    showToast('✅ Demo data synced to Firebase — India region');
+  }catch(e){
+    console.error('Firebase seed error:',e.message);
+    showToast('⚠️ Firebase sync error — working offline');
+  }
 }
 
 // ══════════════════════════════════════════
@@ -2499,10 +2591,18 @@ function clientSignOff(woId){
 
 function renderMore(){
   document.getElementById('content').innerHTML=`
+    <div style="background:${fbReady?'#D1FAE5':'#FEF3C7'};border:1px solid ${fbReady?'#10B981':'#F59E0B'};border-radius:10px;padding:11px 14px;font-size:13px;color:${fbReady?'#065F46':'#92400E'};margin-bottom:12px">
+      ${fbReady
+        ?`🔥 <b>Firebase: CONNECTED</b> &nbsp;·&nbsp; Project: ca-firm-os &nbsp;·&nbsp; Region: asia-south1 (Mumbai — India data residency ✅)`
+        :`💾 <b>Firebase: OFFLINE</b> &nbsp;·&nbsp; Using localStorage. Check internet connection or Firebase config at line 442.`}
+    </div>
     <div class="card"><div class="card-header"><div class="card-title">⚙ Settings & Tools</div></div><div class="card-body">
       <div style="display:grid;gap:9px;margin-bottom:20px">
         ${currentUser.role==='Admin'?`<button class="btn btn-secondary" onclick="openEmpModal()">+ Add Team Member</button>`:''}
         <button class="btn btn-secondary" onclick="exportData()">📤 Export All Data (JSON)</button>
+        ${fbReady
+          ?`<button class="btn btn-secondary" onclick="reseedFirebase()" style="border-color:#10B981;color:#065F46">🔥 Re-sync All Data → Firebase (India)</button>`
+          :`<button class="btn btn-secondary" style="opacity:.5;cursor:not-allowed" disabled>🔥 Firebase Offline — check config</button>`}
         <button class="btn btn-secondary" onclick="navigateTo('taxcalc')">🧮 Tax Calculator & IT Act 2025 Reference</button>
         <button class="btn btn-secondary" onclick="navigateTo('filingstatus')">📊 Filing Status Tracker</button>
         <button class="btn btn-secondary" onclick="navigateTo('approvals')">✅ Approval Workflow</button>
@@ -2574,8 +2674,27 @@ service cloud.firestore {
     }
   }
 }`;}
-function exportData(){const blob=new Blob([JSON.stringify({clients:CACHE.clients,workOrders:CACHE.workOrders,employees:CACHE.employees,invoices:CACHE.invoices,timesheets:CACHE.timesheets,leaves:CACHE.leaves,prospects:CACHE.prospects},null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='ca-firm-os-export.json';a.click();}
-function resetDemo(){if(!confirm('Reset all data to demo defaults?'))return;['clients','workOrders','employees','invoices','timesheets','leaves','prospects'].forEach(k=>{localStorage.removeItem('ca_'+k);CACHE[k]=[];});['tasks','comments','documents','templates'].forEach(k=>{localStorage.removeItem('ca_'+k);CACHE[k]={};});seedDemo();renderMore();buildNav();showToast('Demo data reset');}
+function exportData(){
+  const blob=new Blob([JSON.stringify({clients:CACHE.clients,workOrders:CACHE.workOrders,employees:CACHE.employees,invoices:CACHE.invoices,timesheets:CACHE.timesheets,leaves:CACHE.leaves,prospects:CACHE.prospects},null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='ca-firm-os-export-'+new Date().toISOString().slice(0,10)+'.json';a.click();
+}
+
+function resetDemo(){
+  if(!confirm('Reset all data to demo defaults? This will also re-sync to Firebase if connected.'))return;
+  ['clients','workOrders','employees','invoices','timesheets','leaves','prospects'].forEach(k=>{localStorage.removeItem('ca_'+k);CACHE[k]=[];});
+  ['tasks','comments','documents','templates'].forEach(k=>{localStorage.removeItem('ca_'+k);CACHE[k]={};});
+  localStorage.removeItem('ca_firebase_seeded'); // allow Firebase re-seed
+  seedDemo().then(()=>{renderMore();buildNav();showToast('✅ Demo data reset and re-synced');});
+}
+
+async function reseedFirebase(){
+  if(!fbReady){showToast('Firebase not connected');return;}
+  if(!confirm('This will push all current demo data to Firebase Firestore (India region). Continue?'))return;
+  localStorage.removeItem('ca_firebase_seeded'); // force re-seed
+  await pushDemoToFirestore();
+  showToast('✅ All data re-synced to Firebase India');
+  renderMore();
+}
 
 // ══════════════════════════════════════════
 //  MODAL, TOAST, PWA
